@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 36" width="24" height="36">
+  <defs>
+    <filter id="pin-shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="3" stdDeviation="2.5" flood-color="#000" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#pin-shadow)">
+    <!-- Outer pin shape (will be tinted) -->
+    <path d="M12 0C7 0 3.2 3.8 3.2 8.8
+             C3.2 16.5 12 29.5 12 29.5
+             S20.8 16.5 20.8 8.8
+             C20.8 3.8 17 0 12 0z"
+          fill="CURRENT_COLOR"
+          stroke="#fff"
+          stroke-width="1"/>
+    
+    <!-- Inner white circle -->
+    <circle cx="12" cy="9" r="3.2" fill="#ffffff" opacity="0.95" data-no-tint="true"/>
+  </g>
+</svg>
