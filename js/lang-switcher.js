@@ -42,9 +42,6 @@
   }
 
   window.googleTranslateElementInit = function () {
-    if (!window.google || !window.google.translate || !window.google.translate.TranslateElement) {
-      return;
-    }
 
     injectGoogleTranslate();
 
