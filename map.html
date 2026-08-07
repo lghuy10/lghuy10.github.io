@@ -20,7 +20,7 @@
 
 <script defer="" src="/js/music-overlay.js"></script>
 
-<title>Bản đồ Di tích lịch sử TPHCM</title>
+<title>Bản đồ Lễ hội - TP Hồ Chí Minh (sáp nhập Bình Dương, Bà Rịa-Vũng Tàu)</title>
 
 <!--[if lt IE 9]>
 
@@ -282,21 +282,15 @@
 
 /* colored variants */
 
-.marker-cat-thanhpho { background: #ff7043; }
+.marker-cat-nongnghiep { background: #65a30d; }
 
-.marker-cat-quocgia   { background: #d32f2f; }
+.marker-cat-tamlinh { background: #8b5cf6; }
 
-.marker-cat-kientruc  { background: #2196f3; }
+.marker-cat-tuongniem { background: #dc2626; }
 
-.marker-cat-baotang    { background: #f59e0b; }
+.marker-cat-ngunghiep { background: #0ea5e9; }
 
-.marker-cat-khaoco     { background: #10b981; }
-
-.marker-cat-dacbiet    { background: #8b5cf6; }
-
-.marker-cat-default    { background: #6b7280; }
-
-.market-cat-phivat     { background: #9c27b0; }
+.marker-cat-default { background: #6b7280; }
 
 
 
@@ -680,21 +674,15 @@
 
 }
 
-.marker-cat-thanhpho { background:#ff7043; }
+.marker-cat-nongnghiep { background:#65a30d; }
 
-.marker-cat-quocgia  { background:#d32f2f; }
+.marker-cat-tamlinh { background:#8b5cf6; }
 
-.marker-cat-kientruc { background:#2196f3; }
+.marker-cat-tuongniem { background:#dc2626; }
 
-.marker-cat-baotang  { background:#f59e0b; }
+.marker-cat-ngunghiep { background:#0ea5e9; }
 
-.marker-cat-khaoco   { background:#10b981; }
-
-.marker-cat-dacbiet  { background:#8b5cf6; }
-
-.marker-cat-default  { background:#6b7280; }
-
-.market-cat-phivat   { background: #9c27b0; }
+.marker-cat-default { background:#6b7280; }
 
 
 
@@ -798,21 +786,15 @@
 
 
 
-.marker-cat-thanhpho { background:#ff7043 !important; }
+.marker-cat-nongnghiep { background:#65a30d !important; }
 
-.marker-cat-quocgia  { background:#d32f2f !important; }
+.marker-cat-tamlinh { background:#8b5cf6 !important; }
 
-.marker-cat-kientruc { background:#2196f3 !important; }
+.marker-cat-tuongniem { background:#dc2626 !important; }
 
-.marker-cat-baotang  { background:#f59e0b !important; }
+.marker-cat-ngunghiep { background:#0ea5e9 !important; }
 
-.marker-cat-khaoco   { background:#10b981 !important; }
-
-.marker-cat-dacbiet  { background:#8b5cf6 !important; }
-
-.marker-cat-default  { background:#6b7280 !important; }
-
-.marker-cat-phivat   { background:#9c27b0 !important; }
+.marker-cat-default { background:#6b7280 !important; }
 
 
 
@@ -1676,23 +1658,13 @@
 
 <button onclick="applyFilter('all')">Tất cả</button>
 
-<button onclick="applyFilter('thanhpho')">Di tích cấp thành phố</button>
+<button onclick="applyFilter('nongnghiep')">Lễ hội nông nghiệp</button>
 
-<button onclick="applyFilter('quocgia')">Di tích cấp quốc gia</button>
+<button onclick="applyFilter('tamlinh')">Lễ hội tâm linh</button>
 
-<button onclick="applyFilter('dacbiet')">Di tích quốc gia đặc biệt</button>
+<button onclick="applyFilter('tuongniem')">Lễ hội tưởng niệm danh nhân</button>
 
-<button onclick="applyFilter('kientruc')">Di tích kiến trúc – nghệ thuật</button>
-
-<button onclick="applyFilter('cachmang')">Di tích lịch sử – văn hóa cách mạng</button>
-
-<button onclick="applyFilter('baotang')">Bảo tàng chuyên đề</button>
-
-<button onclick="applyFilter('khaoco')">Di tích khảo cổ</button>
-
-<button onclick="applyFilter('phivat')">Di sản văn hóa Phi vật thể</button>
-
-<button onclick="applyFilter('khac')">Khác</button>
+<button onclick="applyFilter('ngunghiep')">Lễ hội ngư nghiệp</button>
 
 </div>
 
@@ -1706,7 +1678,7 @@
 
 <div>
 
-<p style="margin-bottom:0; color:#333;">- Các di tích gần vị trí nhau sẽ được gộp thành một nút, nhấn vào nút đó để xem các di tích trong khu vực đó.<br/>- Nút bên góc phải trên sẽ bật chế độ toàn màn hình.<br/>- Nút bộ lọc có chức nằng dùng để lọc ra các di tích theo loại.<br/>- Mỗi địa điểm sẽ có một bài viết và hướng dẫn chỉ đường gắn vào. <br/>- Một số địa điểm có chức năng VR360.</p>
+<p style="margin-bottom:0; color:#333;">- Các lễ hội gần vị trí nhau sẽ được gộp thành một nút, nhấn vào nút đó để xem các lễ hội trong khu vực đó.<br/>- Nút bên góc phải trên sẽ bật chế độ toàn màn hình.<br/>- Nút bộ lọc có chức năng dùng để lọc ra các lễ hội theo loại.<br/>- Mỗi địa điểm sẽ có một bài viết và hướng dẫn chỉ đường gắn vào. <br/>- Một số địa điểm có chức năng VR360.</p>
 
 </div>
 
@@ -1728,23 +1700,15 @@ function escapeHtml(str){ return (str||'').replace(/[&<>"']/g,c=>({'&':'&amp;','
 
 const CATEGORY_COLORS = {
 
-  thanhpho: '#ff7043',
+  nongnghiep: '#65a30d',
 
-  quocgia:  '#d32f2f',
+  tamlinh: '#8b5cf6',
 
-  kientruc: '#2196f3',
+  tuongniem: '#dc2626',
 
-  baotang:  '#f59e0b',
+  ngunghiep: '#0ea5e9',
 
-  khaoco:   '#10b981',
-
-  dacbiet:  '#8b5cf6',
-
-  cachmang: '#ef4444',
-
-  phivat:  '#9c27b0',
-
-  default:  '#6b7280'
+  default: '#6b7280'
 
 };
 
@@ -1886,23 +1850,15 @@ function getTintedIcon(color = '#ff0000', size = 38) {
 
 const LEGEND_LABELS = {
 
-  thanhpho: 'Di tích cấp thành phố',
+  nongnghiep: 'Lễ hội nông nghiệp',
 
-  quocgia:  'Di tích cấp quốc gia',
+  tamlinh: 'Lễ hội tâm linh',
 
-  kientruc: 'Kiến trúc - Nghệ thuật',
+  tuongniem: 'Lễ hội tưởng niệm danh nhân',
 
-  baotang:  'Bảo tàng',
+  ngunghiep: 'Lễ hội ngư nghiệp',
 
-  khaoco:   'Di tích khảo cổ',
-
-  dacbiet:  'Di tích quốc gia đặc biệt',
-
-  cachmang: 'Di tích lịch sử – văn hóa cách mạng',
-
-  phivat: 'Di sản văn hóa Phi vật thể',
-
-  default:  'Khác'
+  default: 'Khác'
 
 };
 
@@ -2242,11 +2198,11 @@ function setActiveMarker(m) {
 
     minZoom: 7,
 
-    maxZoom: 16,
+    maxZoom: 17,
 
     zoomControl: false
 
-  }).setView([10.7769, 106.7009], 10);
+  }).setView([10.78, 106.95], 9);
 
   L.control.zoom({ position: 'bottomleft'
 
@@ -2726,7 +2682,7 @@ window.__dimmer = {
 
 /* --- Fetch boundary and wire dimmer (REPLACE your current fetch block with this) --- */
 
-fetch('js/hcmc-boundary.geojson')
+fetch('js/hcmc-binhduong-baria.geojson')
 
   .then(r => {
 
@@ -2747,6 +2703,9 @@ fetch('js/hcmc-boundary.geojson')
         style: { color: "#ff5733", weight: 3, fill: false }
 
       }).addTo(map);
+
+      try { map.fitBounds(boundaryLayer.getBounds().pad(0.05)); }
+      catch (e2) { console.warn('fitBounds skipped:', e2); }
 
     } catch (e) {
 
@@ -2804,65 +2763,55 @@ fetch('js/hcmc-boundary.geojson')
 
 const data = [
 
-  { name: "Bảo Tàng TPHCM", coords: [10.776069676733153, 106.6995407994018], category: "thanhpho", page: "baotangtphcm.html", vr: "https://www.360view.vn/gallery/data/projects/vietnam/tp_hcm/baotangtp__05022011/", image: "images/bttpchm1.jpg" },
+  { name: "Lễ hội Khai Hạ - Cầu An", coords:[10.80188, 106.69691], category:"tuongniem", page:"lehoikhahacauan.html", vr:true,
+    vrCoords:[10.80188, 106.69691],
+    image:"/images/khca1.jpg",
+    snippet: "Tại Lăng Tả quân Lê Văn Duyệt (số 1 Vũ Tùng, Phường Gia Định - cũ Phường 1 Bình Thạnh). Lễ hội tưởng niệm danh nhân cầu bình an, quốc thái dân an." },
 
-  { name: "Bảo Tàng Hồ Chí Minh", coords: [10.768159642716595,106.70684673309313], category: "kientruc", page: "baotanghcm.html", vr: "non", image: "images/bthcm.png" },
+  { name: "Lễ hội Nghinh Ông Cần Giờ", coords:[10.588077394763685, 106.85587799205318], category:"ngunghiep", page:"lehoinghinong.html", vr:true,
+    vrCoords:[10.588077394763685, 106.85587799205318],
+    image:"/images/ngongcg.jpg",
+    snippet: "Đặc sản văn hóa ngư dân Nam Bộ tại Thị trấn Cần Giờ, xã Bình Khánh, An Thới Đông. Tôn vinh Cá Ông (cá voi) và cầu nguyện biển yên sóng lặng." },
 
-  { name: "Bảo tàng Chứng tích Chiến tranh", coords: [10.779508902885842, 106.69208968489555], category: "baotang", page: "baotangchungtichchientranh.html", vr: "https://map3d.visithcmc.vn/?startscene=scene_btctct_view_3&startactions=lookat(1.89,0.29,120,0,0);", image: "images/btctcc2.jpg" },
+  { name: "Lễ hội Nguyên Tiêu", coords:[10.75490, 106.67230], category:"tamlinh", page:"lehoinguyentieu.html", vr:true,
+    vrCoords:[10.75490, 106.67230],
+    image:"/images/ngtieu1.jpg",
+    snippet: "Tết rằm tháng Giêng của người Việt gốc Hoa, thu hút đông đảo người dân tham gia rước đèn ở khu vực Phường An Đông - Chợ Lớn (Quận 5 - Quận 6)." },
 
-  { name: "Chùa Giác Lâm", coords: [10.778770,106.649202], category: "quocgia", page: "chuagiaclam.html", vr: "https://map3d.visithcmc.vn/?startscene=scene_13-chua-giac-lam&startactions=lookat(104.09,-1.68,100.93,0,0);", image: "images/cgl1.jpg"},
+  { name: "Lễ hội Thần Rừng", coords:[10.904953259336603, 106.61472667039584], category:"tamlinh", page:"lehoithanrung.html", vr:true,
+    vrCoords:[10.904953259336603, 106.61472667039584],
+    image:"/images/tr1.jpg",
+    snippet: "Lễ hội lớn của người Chơ-Ro, tạ ơn Thần Rừng. Gặp gỡ cộng đồng Chơ-Ro tại Khu vực 32/5 Đường Trung Đông 7, Ấp Trung Đông, Đông Thạnh, Hóc Môn." },
 
-  { name: "Chợ Bình Tây", coords: [10.749373657444895,106.65105450437837], category: "thanhpho", page: "chobinhtay.html", vr: "https://map3d.visithcmc.vn/?startscene=scene_4_6_2_cho-binh-tay_(1)&startactions=lookat(-98.2,4.81,134.39,0,0);", image: "images/cbtt1.jpg" },
+  { name: "Lễ hội Chùa Bà Thiên Hậu", coords:[11.065402730352945, 106.6872265726053], category:"tamlinh", page:"lehoichuabathienhau.html", vr:true,
+    vrCoords:[11.065402730352945, 106.6872265726053],
+    image:"/images/cbth1.png",
+    snippet: "Lễ hội lớn nhất Bình Dương. Miếu Bà Thiên Hậu Thánh Mẫu - Cơ sở Lê Hoàn (3M8P+4VX Lê Hoàn, Thủ Dầu Một) + Cơ sở 4 Nguyễn Du, Phú Cường." },
 
-  { name: "Chợ Bến Thành", coords: [10.772562285042808,106.69800620687107], category: "thanhpho", page: "chobenthanh.html", vr: "https://360view.vn/gallery/data/projects/vietnam/tp_hcm/chobenthanh__022011/index.html?", image: "images/cbt2.jpg" },
+  { name: "Lễ hội Cúng Thần Lúa", coords:[10.679158835001111, 107.26008218748035], category:"nongnghiep", page:"lehoicungthanlua.html", vr:true,
+    vrCoords:[10.679158835001111, 107.26008218748035],
+    image:"/images/tl1.jpg",
+    snippet: "Người Chơ-ro tạ ơn Thần Lúa, cầu mùa màng bội thu. Tổ chức trọng thể tại Nhà văn hóa dân tộc Châu Ro Bàu Chinh (M7H6+J5C, xã Kim Long)." },
 
-  { name: "Căn Cứ Rừng Sác", coords: [10.407547,106.888519], category: "quocgia", page: "cancurungsac.html", vr: "non", image: "images/ccrs1.jpg" },
+  { name: "Lễ hội Mùa Trái Chín Lái Thiêu", coords:[10.935862632634228, 106.68647638488417], category:"nongnghiep", page:"lehoimuatraichin.html", vr:true,
+    vrCoords:[10.935862632634228, 106.68647638488417],
+    image:"/images/mtc1.jpg",
+    snippet: "Lễ hội trái cây đặc sản Lái Thiêu, Thuận An (cũ Bình Dương). Tọa lạc tại WMPP+7JM, Đường tỉnh 745, Phường Thuận An - Phường Lái Thiêu." },
 
-  { name: "Hầm giấu vũ khí biệt động", coords: [10.77215547871409,106.68593350431848], category: "quocgia", page: "cosogiauvukhi.html", vr: "non", image: "images/csgv3.webp"},
+  { name: "Lễ Hội Dinh Cô Long Hải", coords:[10.386574440470264, 107.23415626276024], category:"tamlinh", page:"lehoidincolonghai.html", vr:true,
+    vrCoords:[10.386574440470264, 107.23415626276024],
+    image:"/images/dc1.jpg",
+    snippet: "Lễ hội ngư dân Long Hải, Bà Rịa-Vũng Tàu. Dinh Cô tọa lạc tại 39 Đường Hai Bà Trưng, Thị trấn Long Hải (huyện Long Điền cũ)." },
 
-  { name: "Khu trại giam Bệnh Viện Chợ Quán", coords: [10.75329276787438,106.67915915593466], category: "quocgia", page: "khugiamtraibenhvientroquan.html", vr: "non", image : "images/ktg5.jpg" },
+  { name: "Lễ Hội Nghinh Ông Tam Thắng Vũng Tàu", coords:[10.34028, 107.08306], category:"ngunghiep", page:"lehoinghinongtamthang.html", vr:true,
+    vrCoords:[10.34028, 107.08306],
+    image:"/images/ngongtt1.jpg",
+    snippet: "Lễ hội Cá Ông lớn bậc nhất Vũng Tàu. Di tích Đình Thần Thắng Tam tại 77A Hoàng Hoa Thám, Phường Vũng Tàu (78210). Lưu giữ 12-13 sắc phong triều Nguyễn." },
 
-  { name: "Lăng Lê Văn Duyệt", coords: [10.802218698128923,106.69712355857787], category: "quocgia", page: "langlevanduyet.html", vr: "non", image: "images/llvd.png" },
-
-  { name: "Lăng mộ Phan Châu Trinh", coords: [10.804371552261498,106.661775396652], category: "quocgia", page: "mophanchautrinh.html", vr: "non", image: "images/mpc1.jpg" },
-
-  { name: "Nhà Thờ Đức Bà", coords: [10.779792558304973,106.69901819638865], category: "thanhpho", page: "nhathoducba.html", vr: "https://360view.vn/gallery/data/projects/vietnam/tp_hcm/nhathoducba__022011/?", image: "images/ntdb1.jpg" },
-
-  { name: "Tịnh xá Ngọc Phương", coords: [10.81534827804912,106.68978491518055], category: "quocgia", page: "tinhxangocphuong.html", vr: "non", image : "images/txn1.jpg" },
-
-  { name: "Đình Phong Phú", coords: [10.832183577842558,106.78359777687334], category: "cachmang", page: "dinhphongphu.html", vr: "https://map3d.visithcmc.vn/?startscene=scene_37-dinh-tho-dinh-phong-phu-(2)&startactions=lookat(-4.65,2.37,127.05,0,0);", image: "images/dpp1.jpg" },
-
-  { name: "Đình Thông Tây Hội", coords: [10.840034114033681,106.66492442289332], category: "kientruc", page: "dingthongtayhoi.html", vr: "https://map3d.visithcmc.vn/?startscene=scene_16-dinh-thong-tay-hoi-(2)&startactions=lookat(-99.4,-0.87,127.9,0,0);", image: "images/dtth1.jpg" },
-
-  { name: "Địa đạo Củ Chi", coords: [11.141789146277686,106.46135436902648], category: "dacbiet", page: "diadaocuchi.html", vr: "https://map3d.visithcmc.vn/?startscene=scene_1_1_2_dia-dao-cu-chi_(1)&startactions=lookat(125.09,-1.77,119.92,0,0);", image: "images/ddcc1.jpg"},
-
-  { name: "Địa đạo Phú Thọ Hòa", coords: [10.783885492854845,106.63090098482986], category: "quocgia", page: "diadaophuthohoa.html", vr: "non", image: "images/ddpth1.jpg"},
-
-  { name: "Nhà hát TPHCM", coords: [10.776713503847871,106.7031885226206], category: "kientruc", page: "nhahattphcm.html", vr: "https://map3d.visithcmc.vn/?startscene=scene_nhahattp_view4&startactions=lookat(85.37,-13.8,119.23,0,0);", image: "images/nht1.jpg" },
-
-  { name: "Dinh Độc Lập", coords: [10.777067977226276,106.69528064173029], category: "dacbiet", page: "dinhdoclap.html", vr: "https://vr360.com.vn/projects/dinhdoclap/", image: "images/ddl1.jpg" },
-
-  { name: "Đình Chí Hòa", coords: [10.78144580194108,106.67316163457637], category: "kientruc", page: "dinhchihoa.html", vr: "non", image: "images/dch2.jpg" },
-
-  { name: "Chùa Giác Viên", coords: [10.76318460966222,106.6398107945002], category: "kientruc", page: "chuagiacvien.html", vr: "non", image: "images/cgv1.jpg" },
-
-  { name: "Lò Gốm Cổ Hưng Lợi", coords: [10.725087405329568,106.62630157120653], category: "khaoco", page: "logom.html", vr: "non", image: "images/lg3.jpg" },
-
-  { name: "Ngã Ba Giồng", coords: [10.868358706057167,106.56114532344505], category: "quocgia", page: "ngabagiong.html", vr: "https://map3d.visithcmc.vn/?startscene=scene_20-di-tich-lich-su-nga-ba-giong-(1)&startactions=lookat(103.33,-7.81,91.29,0,0);", image: "images/nbg1.jpg" },
-
-  { name: "Trụ sở UBND", coords: [10.776564644610339,106.70090517485895], category: "kientruc", page: "trusoubndtphcm.html", vr: "https://map3d.visithcmc.vn/?startscene=scene_ubnd_view1&startactions=lookat(0.9,-20.39,119.83,0,0);", image: "images/ubnd1.jpg" },
-
-  { name: "Đình Bình Đông", coords: [10.727827252842598,106.64129241658803], category: "quocgia", page: "dinhbinhdong.html", vr: "non", image: "images/dbd1.jpg" },
-
-  { name: "Lễ hội khai Hạ cầu An", coords:[10.801923121412305, 106.6973082610739], category:"phivat", page:"lehoik.html", vr:"non", image:"images/lhkh1.jpg"},
-
-  { name: "Lễ hội Nghinh Ông", coords:[10.417327494477863, 106.97143908049047], category:"phivat", page:"lehoinghinhong.html", vr:"non", image:"images/lhno.jpg"},
-
-  { name: "Lân, sư, rồng", coords:[10.750761668714038, 106.65748097186062], category:"phivat", page:"lansurong.html", vr:"non", image:"images/lsr3.jpg"},
-
-  { name: "Tết Nguyên tiêu", coords:[10.754221271423617, 106.66855561662278], category:"phivat", page:"lehoinguyentieu.html", vr:"non", image:"images/lhnt1.jpg"},
-
-  { name: "Vovinam", coords:[10.776409653730894, 106.66354428342531], category:"phivat", page:"vovinam.html", vr:"non", image:"images/vvn1.jpg"}
+  { name: "Lễ Hội Giỗ Tổ Trần Hưng Đạo", coords:[10.791069989916952, 106.69447774546703], category:"tuongniem", page:"lehoitranhungdao.html", vr:true,
+    vrCoords:[10.791069989916952, 106.69447774546703],
+    image:"/images/thd1.jpg",
+    snippet: "Lễ hội tưởng nhớ Đức Thánh Trần Hưng Đạo - anh hùng dân tộc. Tại Đền thờ số 36 Võ Thị Sáu, Phường Tân Định, Quận 1, Thành phố Hồ Chí Minh." }
 
 ];
 
@@ -2872,19 +2821,13 @@ function categoryClass(cat){
 
   return {
 
-    thanhpho: 'marker-cat-thanhpho',
+    nongnghiep: 'marker-cat-nongnghiep',
 
-    quocgia:  'marker-cat-quocgia',
+    tamlinh: 'marker-cat-tamlinh',
 
-    kientruc: 'marker-cat-kientruc',
+    tuongniem: 'marker-cat-tuongniem',
 
-    baotang:  'marker-cat-baotang',
-
-    khaoco:   'marker-cat-khaoco',
-
-    dacbiet:  'marker-cat-dacbiet',
-
-    phivat:  'marker-cat-phivat'
+    ngunghiep: 'marker-cat-ngunghiep'
 
   }[cat] || 'marker-cat-default';
 
@@ -2942,13 +2885,13 @@ function buildPopupHtml(item) {
 
   const borderColor = CATEGORY_COLORS[cat] || CATEGORY_COLORS.default || '#9ca3af';
 
-  const decoPath = 'images/badges/kientruc.png'; // change path if needed
+  const decoPath = 'images/badges/default.png'; // change path if needed
 
-  // Build actions dynamically so we can conditionally omit the "Chỉ đường" button
+  // Build actions dynamically — order: Xem thêm → VR360 → Chỉ đường
 
   const buttons = [];
 
-  // "Xem thêm" always shown (escape URL)
+  // 1. "Xem thêm" always shown (escape URL)
 
   buttons.push(
 
@@ -2956,11 +2899,57 @@ function buildPopupHtml(item) {
 
   );
 
-  // Only add "Chỉ đường" if category is NOT "phivat" (case-insensitive)
+  // 2. VR button — Ngay kế bên "Xem thêm"
 
-  const isPhiVat = item.category && String(item.category).toLowerCase() === 'phivat';
+  if (item.vr && item.vr !== 'non') {
 
-  if (!isPhiVat && item.coords && item.coords.length >= 2) {
+    const hasCoords = item.coords && item.coords.length >= 2;
+
+    if (typeof item.vr === 'string' && item.vr.startsWith('http')) {
+
+      // Link VR tùy chỉnh (ví dụ link 360 tự chụp, matterport…)
+
+      buttons.push(
+
+        `<a class="popup-btn sv" href="${escapeHtml(item.vr)}" target="_blank" rel="noopener noreferrer" title="Xem 360 tại địa điểm">🎥 VR360</a>`
+
+      );
+
+    } else if (hasCoords) {
+
+      // Dùng Google Street View — TẤT CẢ 10 lễ hội dùng luồng này
+      // Ưu tiên vrCoords (trên đường, có pano Street View) nếu có, fallback về coords marker
+      const useVr = item.vrCoords && item.vrCoords.length >= 2 ? item.vrCoords : item.coords;
+
+      const lat = useVr[0];
+
+      const lng = useVr[1];
+
+      const svName = item.name ? JSON.stringify(item.name) : 'null';
+
+      // Chiến lược: NHẤT ĐỊNH mở tab mới (ĐẢM BẢO 100% vào được Street View)
+
+      // Đồng thời mở modal fallback để dùng thử iframe nếu Google cho phép
+
+      const svU1 = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${encodeURIComponent(lat)}%2C${encodeURIComponent(lng)}&heading=-45&pitch=0&fov=90`;
+
+      const svU2 = `https://www.google.com/maps?q=${encodeURIComponent(item.name || '')}&layer=c&cbll=${encodeURIComponent(lat + ',' + lng)}&cbp=11,0,0,0,0`;
+
+      const modalCall = `(window._openStreetViewModal && window._openStreetViewModal(${lat},${lng},${svName})); return false;`;
+
+      buttons.push(
+
+        `<a class="popup-btn sv" href="${svU1}" target="_blank" rel="noopener noreferrer" onclick="${modalCall}" title="Xem 360 tại vị trí lễ hội — Google Street View">🎥 VR360</a>`
+
+      );
+
+    }
+
+  }
+
+  // 3. "Chỉ đường" luôn hiển thị cho lễ hội (địa điểm thật)
+
+  if (item.coords && item.coords.length >= 2) {
 
     const lat = encodeURIComponent(item.coords[0]);
 
@@ -2968,19 +2957,7 @@ function buildPopupHtml(item) {
 
     buttons.push(
 
-      `<a class="popup-btn" href="https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}" target="_blank" rel="noopener noreferrer">Chỉ đường (Google maps)</a>`
-
-    );
-
-  }
-
-  // VR button if present
-
-  if (item.vr && item.vr !== 'non') {
-
-    buttons.push(
-
-      `<a class="popup-btn" href="${escapeHtml(item.vr)}" target="_blank" rel="noopener noreferrer">VR360</a>`
+      `<a class="popup-btn" href="https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}" target="_blank" rel="noopener noreferrer">🧭 Chỉ đường</a>`
 
     );
 
@@ -2996,17 +2973,27 @@ function buildPopupHtml(item) {
 
   if (item.vr && item.vr !== 'non') {
 
-    try {
+    if (typeof item.vr === 'boolean' && item.vr === true) {
 
-      const urlObj = new URL(item.vr, window.location.origin);
+      vrSourceHtml = `<div style="margin-top:8px;font-size:0.97em;color:#666;">VR: Google Street View (vị trí gần nhất)</div>`;
 
-      vrSourceHtml = `<div style="margin-top:8px;font-size:0.97em;color:#666;">Nguồn VR: ${urlObj.hostname.replace(/^www\./, '')}</div>`;
+    } else if (typeof item.vr === 'string') {
 
-    } catch (e) {
+      try {
 
-      // fallback if URL parsing fails
+        const urlObj = new URL(item.vr, window.location.origin);
 
-      vrSourceHtml = `<div style="margin-top:8px;font-size:0.97em;color:#666;">Nguồn VR: ${item.vr}</div>`;
+        vrSourceHtml = `<div style="margin-top:8px;font-size:0.97em;color:#666;">VR: ${urlObj.hostname.replace(/^www\./, '')}</div>`;
+
+      } catch (e) {
+
+        vrSourceHtml = `<div style="margin-top:8px;font-size:0.97em;color:#666;">VR: ${escapeHtml(item.vr)}</div>`;
+
+      }
+
+    } else {
+
+      vrSourceHtml = `<div style="margin-top:8px;font-size:0.97em;color:#666;">VR: Có sẵn</div>`;
 
     }
 
@@ -3216,7 +3203,7 @@ marker.bindPopup(buildPopupHtml(item), {
 
 console.log('categoryIcons keys:', Object.keys(window.categoryIcons || {}));
 
-console.log('example icon options:', window.categoryIcons?.thanhpho?.options);
+console.log('example icon options:', window.categoryIcons?.nongnghiep?.options);
 
 // check a marker just added
 
@@ -3234,19 +3221,13 @@ console.log('marker count in cluster:', markerCluster.getLayers().length);
 
 const LEGEND_ORDER = [
 
-  'dacbiet',
+  'nongnghiep',
 
-  'quocgia',
+  'tamlinh',
 
-  'thanhpho',
+  'tuongniem',
 
-  'kientruc',
-
-  'baotang',
-
-  'khaoco',
-
-  'phivat',
+  'ngunghiep',
 
   'default'
 
@@ -3354,13 +3335,19 @@ const LEGEND_ORDER = [
 
 })();
 
-  /* ----------------- Street View (no API key) — embed with fallback ----------------- */
+  /* ----------------- Street View VR360 — Google Maps URL chuẩn ----------------- */
 
-  /* This code uses public Google Maps URLs (no API key). It will try to embed in a modal iframe.
+  /*  Do Google hạn chế nhúng Street View trực tiếp vào iframe (thường trả về bản đồ
 
-     If Google blocks embedding, we fall back to opening the URL in a new tab. */
+      thế giới thay vì panorama), nên chiến lược an toàn nhất là:
 
-  /* create modal once */
+      1) ƯU TIÊN #1: mở tab mới trực tiếp Street View — hoạt động 100% mọi khi
+
+      2) ƯU TIÊN #2: nếu người dùng muốn xem ngay trong trang → cung cấp nút "nhúng"
+
+         với URL format 3 lớp backup theo thứ tự đáng tin cậy.
+
+  */
 
   (function(){
 
@@ -3372,21 +3359,51 @@ const LEGEND_ORDER = [
 
       #sv-modal { position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:14000; }
 
-      #sv-modal .sv-backdrop { position:absolute; inset:0; background:rgba(0,0,0,0.6); }
+      #sv-modal .sv-backdrop { position:absolute; inset:0; background:rgba(0,0,0,0.68); }
 
-      #sv-modal .sv-panel { position:relative; width:min(1100px,94vw); height:min(720px,86vh); background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 30px 80px rgba(0,0,0,.5); display:flex; flex-direction:column; }
+      #sv-modal .sv-panel { position:relative; width:min(1100px,94vw); max-height:92vh; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 30px 80px rgba(0,0,0,.55); display:flex; flex-direction:column; }
 
-      #sv-modal .sv-header { display:flex; justify-content:space-between; align-items:center; padding:8px 12px; background:#0b1220; color:#fff; font-weight:700; }
+      #sv-modal .sv-header { display:flex; justify-content:space-between; align-items:center; padding:10px 14px; background:linear-gradient(135deg,#0b1220,#1e3a8a); color:#fff; font-weight:700; }
 
-      #sv-modal .sv-body { flex:1; background:#000; display:flex; }
+      #sv-modal .sv-header .sv-title { display:flex; align-items:center; gap:8px; }
 
-      #sv-modal iframe { width:100%; height:100%; border:0; display:block; }
+      #sv-modal .sv-actions { display:flex; gap:6px; align-items:center; }
 
-      #sv-modal .sv-close { background:transparent; color:#fff; border:0; font-size:20px; cursor:pointer; padding:6px 10px; }
+      #sv-modal .sv-actions a, #sv-modal .sv-actions button { font-size:13px; padding:6px 10px; border-radius:6px; border:0; cursor:pointer; text-decoration:none; color:#fff; display:inline-flex; align-items:center; gap:4px; }
 
-      #sv-modal .sv-fallback { padding:10px; text-align:center; font-size:13px; }
+      #sv-modal .btn-open-new { background:#10b981; }
 
-      .popup-btn.sv { background: #2563eb; } /* small visual tweak for the sv button */
+      #sv-modal .btn-open-new:hover { background:#059669; }
+
+      #sv-modal .btn-retry { background:#6366f1; }
+
+      #sv-modal .btn-retry:hover { background:#4f46e5; }
+
+      #sv-modal .sv-close { background:transparent; color:#fff; border:0; font-size:22px; cursor:pointer; padding:4px 10px; border-radius:6px; }
+
+      #sv-modal .sv-close:hover { background:rgba(255,255,255,.15); }
+
+      #sv-modal .sv-body { flex:1; background:#111; min-height:560px; display:flex; position:relative; }
+
+      #sv-modal iframe { width:100%; height:100%; border:0; display:block; min-height:560px; }
+
+      #sv-modal .sv-fallback { padding:24px; text-align:center; font-size:14px; color:#111; background:#f8fafc; display:none; flex-direction:column; gap:12px; align-items:center; justify-content:center; width:100%; }
+
+      #sv-modal .sv-fallback .big-btn { display:inline-block; padding:14px 22px; background:#10b981; color:#fff; border-radius:10px; font-size:16px; font-weight:700; text-decoration:none; box-shadow:0 6px 16px rgba(16,185,129,.35); }
+
+      #sv-modal .sv-fallback .big-btn:hover { background:#059669; transform:translateY(-1px); }
+
+      #sv-modal .sv-hint { margin-top:6px; font-size:12px; color:#475569; }
+
+      #sv-modal .sv-spinner { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:#000; color:#cbd5e1; font-size:14px; pointer-events:none; transition:opacity .3s; }
+
+      .spinner { width:42px; height:42px; border:4px solid rgba(99,102,241,.25); border-top-color:#6366f1; border-radius:50%; animation:sv-spin .9s linear infinite; }
+
+      @keyframes sv-spin { to { transform: rotate(360deg); } }
+
+      .popup-btn.sv { background: linear-gradient(135deg,#2563eb,#7c3aed); box-shadow:0 2px 6px rgba(37,99,235,.35); }
+
+      .popup-btn.sv:hover { filter: brightness(1.08); }
 
     `;
 
@@ -3400,13 +3417,17 @@ const LEGEND_ORDER = [
 
       <div class="sv-backdrop" tabindex="-1"></div>
 
-      <div class="sv-panel" role="dialog" aria-modal="true" aria-label="Street View">
+      <div class="sv-panel" role="dialog" aria-modal="true" aria-label="VR360 Street View">
 
         <div class="sv-header">
 
-          <div class="sv-title">Xem 360</div>
+          <div class="sv-title">🎥 VR360 — Xem tại vị trí lễ hội</div>
 
-          <div>
+          <div class="sv-actions">
+
+            <button type="button" class="btn-retry" title="Thử URL khác">🔄 URL khác</button>
+
+            <a class="btn-open-new sv-open-new" target="_blank" rel="noopener noreferrer">🌐 Mở tab mới (đảm bảo hoạt động)</a>
 
             <button class="sv-close" title="Đóng">✕</button>
 
@@ -3416,13 +3437,29 @@ const LEGEND_ORDER = [
 
         <div class="sv-body">
 
-          <iframe sandbox="allow-scripts allow-same-origin allow-popups" src="about:blank" referrerpolicy="no-referrer"></iframe>
+          <div class="sv-spinner"><div class="spinner"></div></div>
 
-        </div>
+          <iframe sandbox="allow-scripts allow-same-origin allow-popups allow-forms" src="about:blank" allowfullscreen loading="eager" referrerpolicy="no-referrer-when-downgrade"></iframe>
 
-        <div class="sv-fallback" style="display:none">
+          <div class="sv-fallback">
 
-          Xem 360 không thể nhúng ở đây — <a class="sv-open-new" target="_blank" rel="noopener">Mở ở tab mới</a>
+            <div style="font-size:46px">🌍</div>
+
+            <h3 style="margin:4px 0 2px 0; font-size:18px;">Google Street View đang mở…</h3>
+
+            <p style="margin:0; color:#475569; max-width:520px;">
+
+              Do Google thường chặn nhúng trực tiếp, vui lòng nhấn nút bên dưới để mở <strong>VR360 ở tab mới</strong>.
+
+              Bạn sẽ có thể kéo góc nhìn 360° xem xung quanh tại vị trí lễ hội.
+
+            </p>
+
+            <a class="big-btn sv-open-new-big" target="_blank" rel="noopener noreferrer">🎬 Mở VR360 Xem 360 Ngay Bây Giờ</a>
+
+            <div class="sv-hint">Sau khi mở, kéo ảnh bằng chuột hoặc dùng các mũi tên để di chuyển xung quanh.</div>
+
+          </div>
 
         </div>
 
@@ -3436,11 +3473,55 @@ const LEGEND_ORDER = [
 
     const closeBtn = modal.querySelector('.sv-close');
 
+    const retryBtn = modal.querySelector('.btn-retry');
+
     const iframe = modal.querySelector('iframe');
+
+    const spinner = modal.querySelector('.sv-spinner');
 
     const fallback = modal.querySelector('.sv-fallback');
 
     const openNewLink = modal.querySelector('.sv-open-new');
+
+    const openNewLinkBig = modal.querySelector('.sv-open-new-big');
+
+    let _currentUrls = [];   // list of candidate URL strings
+
+    let _currentIndex = 0;
+
+    /* ---- Tạo 3 URL backup theo thứ tự đáng tin cậy nhất ---- */
+
+    function buildStreetViewUrls(lat, lng, name) {
+
+      const nameEnc = name ? encodeURIComponent(name) : '';
+
+      const coordEnc = encodeURIComponent(lat + ',' + lng);
+
+      const latEnc = encodeURIComponent(lat);
+
+      const lngEnc = encodeURIComponent(lng);
+
+      // Format 1 (CHÍNH) — Google Maps URL API / map_action=pano
+
+      const u1 = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${latEnc}%2C${lngEnc}&heading=-45&pitch=0&fov=90`;
+
+      // Format 2 (backup cổ điển) — layer=c + cbll (rất phổ biến, hoạt động mở tab mới)
+
+      const u2 = `https://www.google.com/maps?q=${nameEnc || ''}&layer=c&cbll=${coordEnc}&cbp=11,0,0,0,0`;
+
+      // Format 3 — Maps with @ coords + tilt data for pano
+
+      const u3 = `https://www.google.com/maps/place/${coordEnc}/@${latEnc},${lngEnc},3a,75y,90h,90t/data=!3m7!1e1!3m5!1s0!2e0!7i16384!8i8192`;
+
+      // Format 4 — instantstreetview (3rd party, không bị block nhúng) – backup cuối
+
+      const u4 = `https://www.instantstreetview.com/@${latEnc},${lngEnc},0h,0p,1z`;
+
+      return [u1, u2, u3, u4];
+
+    }
+
+    /* ---- Đóng modal ---- */
 
     function closeModal(){
 
@@ -3448,45 +3529,73 @@ const LEGEND_ORDER = [
 
       fallback.style.display = 'none';
 
+      spinner.style.opacity = '0';
+
+      setTimeout(()=>{ spinner.style.display='flex'; spinner.style.opacity='1'; }, 300);
+
       modal.style.display = 'none';
 
     }
 
-    function openModalWithUrl(url){
+    /* ---- Tải URL thứ N ---- */
 
-      // try to embed
+    function loadIndex(n, opts){
 
-      modal.style.display = 'flex';
+      opts = opts || {};
 
-      iframe.src = url + '&output=embed';
+      if (n < 0 || n >= _currentUrls.length) return;
 
-      // set fallback link
+      _currentIndex = n;
+
+      const url = _currentUrls[n];
 
       openNewLink.href = url;
 
-      // after a short delay check if the iframe rendered a Google page or got blocked.
+      openNewLinkBig.href = url;
 
-      // There is no reliable cross-origin check; do a pragmatic fallback: after 900ms if iframe
+      spinner.style.display = 'flex';
 
-      // still has about:blank (rare) or user agent prevents rendering, show fallback.
+      spinner.style.opacity = '1';
+
+      fallback.style.display = 'none';
+
+      iframe.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'output=svembed';
+
+      // Sau 1.4s nếu iframe vẫn chưa load được (Google chặn) → hiện fallback ngay
 
       setTimeout(() => {
 
-        // if iframe still 'about:blank' or has obvious block, show fallback — user can open new tab
+        try {
 
-        if (!iframe.src || iframe.src.indexOf('about:blank') !== -1) {
+          // không thể đọc cross-origin → dựa vào src attribute đã được set hay chưa
 
-          fallback.style.display = 'block';
+          if (iframe.src && iframe.src.indexOf('about:blank') === -1) {
 
-        } else {
+            // giả sử đã load được, ẩn spinner
 
-          // sometimes Google will display a page that visually says "Sorry — we can't show" — user can close and open new tab
+            spinner.style.opacity = '0';
+
+            setTimeout(()=>{ spinner.style.display='none'; }, 400);
+
+          }
+
+        } catch (e) {}
+
+        // Luôn luôn hiển thị panel fallback "Mở tab mới" — đảm bảo user có cách xem 360 ngay cả khi Google chặn
+
+        // Chỉ ẩn nếu đây là instantstreetview (URL thứ 3 trong mảng build ở index 3)
+
+        if (url.indexOf('instantstreetview.com') !== -1) {
 
           fallback.style.display = 'none';
 
+        } else {
+
+          fallback.style.display = 'flex';
+
         }
 
-      }, 900);
+      }, opts.delay || 1500);
 
     }
 
@@ -3494,33 +3603,47 @@ const LEGEND_ORDER = [
 
     closeBtn.addEventListener('click', closeModal);
 
+    retryBtn.addEventListener('click', () => {
+
+      const next = (_currentIndex + 1) % _currentUrls.length;
+
+      loadIndex(next, { delay: 2000 });
+
+    });
+
     // escape key
 
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.style.display === 'flex') closeModal(); });
 
-    // expose helper
+    // expose helper — mặc định mở TAB MỚI (chắc chắn 100%), người dùng có thể mở modal nếu muốn
 
-    window._openStreetViewModal = (lat, lng) => {
+    window._openStreetViewModal = (lat, lng, name) => {
 
-      // build a friendly Google Maps URL that opens at the nearest Street View pano:
+      _currentUrls = buildStreetViewUrls(lat, lng, name);
 
-      // use `layer=c&cbll=lat,lng&cbp=11,0,0,0,0`
+      _currentIndex = 0;
 
-      // also provide non-embed variant (without &output=embed) as fallback open-in-new
-
-      const base = `https://www.google.com/maps?q=&layer=c&cbll=${encodeURIComponent(lat + ',' + lng)}&cbp=11,0,0,0,0`;
+      // Bước 1: mở tab mới Street View URL chính (U1) — hoạt động ĐẢM BẢO 100%
 
       try {
 
-        openModalWithUrl(base);
+        window.open(_currentUrls[0], '_blank', 'noopener,noreferrer');
 
-      } catch (err) {
+      } catch (e) {}
 
-        // fallback: just open new tab
+      // Bước 2: đồng thời hiển thị modal với fallback và nút thử URL khác
 
-        window.open(base, '_blank', 'noopener');
+      modal.style.display = 'flex';
 
-      }
+      loadIndex(0, { delay: 1500 });
+
+    };
+
+    // helper tĩnh: build URL dùng cho link trực tiếp (không mở modal)
+
+    window._buildStreetViewUrl = (lat, lng, name) => {
+
+      return buildStreetViewUrls(lat, lng, name)[0];
 
     };
 
@@ -3532,21 +3655,15 @@ const LEGEND_ORDER = [
 
 const CATEGORY_DECOS = {
 
-  thanhpho:  'images/deco/thanhpho.png',
+  nongnghiep: 'images/deco/nongnghiep.png',
 
-  quocgia:   'images/deco/quocgia.png',
+  tamlinh: 'images/deco/tamlinh.png',
 
-  kientruc:  'images/deco/kientruc.png',
+  tuongniem: 'images/deco/tuongniem.png',
 
-  baotang:   'images/deco/baotang.png',
+  ngunghiep: 'images/deco/ngunghiep.png',
 
-  khaoco:    'images/deco/khaoco.png',
-
-  dacbiet:   'images/deco/dacbiet.png',
-
-  phivat:   'images/deco/phivat.png',
-
-  default:   'images/deco/default.png'
+  default: 'images/deco/default.png'
 
 };
 

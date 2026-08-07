@@ -8,6 +8,7 @@ import commentsRouter from "./comments.js";
 import http from "http";
 import { Server } from "socket.io";
 import pool from "./db.js";
+import DEFAULT_QUIZZES from "../js/default_quizzes.js";
 
 dotenv.config();
 const app = express();
@@ -64,10 +65,39 @@ app.get("/", (_req, res) => {
   res.send("Backend is running ✅");
 });
 
+async function getQuizzesData() {
+  if (process.env.DATABASE_URL) {
+    try {
+      const { rows } = await pool.query("SELECT id, title FROM quizzes ORDER BY id");
+      if (rows && rows.length > 0) return rows;
+    } catch (e) {
+      console.warn("DB query for quizzes failed, using DEFAULT_QUIZZES fallback:", e.message);
+    }
+  }
+  return DEFAULT_QUIZZES.map(q => ({ id: q.id, title: q.title }));
+}
+
+async function getQuestionsForQuiz(quizId) {
+  if (process.env.DATABASE_URL) {
+    try {
+      const qRes = await pool.query(
+        `SELECT id, question_text, option_a, option_b, option_c, option_d, correct_option
+         FROM questions WHERE quiz_id = $1 ORDER BY id`,
+        [quizId]
+      );
+      if (qRes && qRes.rows && qRes.rows.length > 0) return qRes.rows;
+    } catch (e) {
+      console.warn("DB query for questions failed, using DEFAULT_QUIZZES fallback:", e.message);
+    }
+  }
+  const qz = DEFAULT_QUIZZES.find(q => String(q.id) === String(quizId));
+  return qz ? qz.questions : [];
+}
+
 app.get("/api/quizzes", async (_req, res) => {
   try {
-    const { rows } = await pool.query("SELECT id, title FROM quizzes ORDER BY id");
-    res.json(rows);
+    const list = await getQuizzesData();
+    res.json(list);
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
@@ -76,25 +106,18 @@ app.get("/api/quizzes", async (_req, res) => {
 app.get("/api/quizzes/:id", async (req, res) => {
   try {
     const quizId = req.params.id;
+    const rawQuestions = await getQuestionsForQuiz(quizId);
 
-    const qRes = await pool.query(
-      `SELECT id, question_text, option_a, option_b, option_c, option_d, correct_option
-       FROM questions
-       WHERE quiz_id = $1
-       ORDER BY id`,
-      [quizId]
-    );
-
-    const questions = qRes.rows.map(q => ({
+    const questions = rawQuestions.map(q => ({
       id: q.id,
-      question: q.question_text,
+      question: q.question_text || q.question,
       answers: [
         { id: "A", text: q.option_a },
         { id: "B", text: q.option_b },
         { id: "C", text: q.option_c },
         { id: "D", text: q.option_d }
-      ],
-      correctAnswerId: q.correct_option
+      ].filter(x => x.text),
+      correctAnswerId: q.correct_option || q.correctAnswerId
     }));
 
     res.json(questions);
@@ -144,26 +167,22 @@ io.on("connection", (socket) => {
       const quizId = extractField(payload, "quizId", "qid") ?? payload;
       console.log("[createRoom] from", socket.id, "quizId=", quizId);
 
-      const qRes = await pool.query(
-        `SELECT id, question_text, option_a, option_b, option_c, option_d, correct_option
-         FROM questions WHERE quiz_id=$1 ORDER BY id`,
-        [quizId]
-      );
+      const rawQuestions = await getQuestionsForQuiz(quizId);
 
-      if (!qRes.rows.length) {
+      if (!rawQuestions || !rawQuestions.length) {
         socket.emit("error", "No questions found for this quiz");
         return;
       }
 
-      const questions = qRes.rows.map(q => ({
+      const questions = rawQuestions.map(q => ({
         id: q.id,
-        text: q.question_text,
+        text: q.question_text || q.question,
         answers: [
-          { id: "A", text: q.option_a, is_correct: q.correct_option === "A" },
-          { id: "B", text: q.option_b, is_correct: q.correct_option === "B" },
-          { id: "C", text: q.option_c, is_correct: q.correct_option === "C" },
-          { id: "D", text: q.option_d, is_correct: q.correct_option === "D" }
-        ]
+          { id: "A", text: q.option_a, is_correct: (q.correct_option || q.correctAnswerId) === "A" },
+          { id: "B", text: q.option_b, is_correct: (q.correct_option || q.correctAnswerId) === "B" },
+          { id: "C", text: q.option_c, is_correct: (q.correct_option || q.correctAnswerId) === "C" },
+          { id: "D", text: q.option_d, is_correct: (q.correct_option || q.correctAnswerId) === "D" }
+        ].filter(x => x.text)
       }));
 
       const code = Math.random().toString(36).slice(2, 6).toUpperCase();

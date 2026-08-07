@@ -426,6 +426,7 @@
 </div>
 </div>
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script src="/js/default_quizzes.js"></script>
 <script>
 
 const API_URL = "https://baldandbadgithubio-production-4f3f.up.railway.app";
@@ -636,14 +637,91 @@ function attachSocketHandlers() {
   socket.on('error', (e) => { console.warn('[socket] server error', e); showMsg(String(e), 2600); });
 }
 
+function normalizeQuizTitle(value){
+  return String(value || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function isAllowedFestivalQuiz(q){
+  const title = normalizeQuizTitle(q?.title || q?.name || q?.id || '');
+  return [
+    'khai ha',
+    'cau an',
+    'nghinh ong',
+    'nguyen tieu',
+    'than rung',
+    'thien hau',
+    'cung than lua',
+    'than lua',
+    'mua trai chin',
+    'tran hung dao',
+    'dinh co',
+    'op yang'
+  ].some(keyword => title.includes(keyword));
+}
+
+function mergeFestivalQuizzes(apiQuizzes, localQuizzes){
+  const merged = [];
+  const seen = new Set();
+
+  const addQuiz = (quiz) => {
+    if (!quiz) return;
+    const key = quiz?.id != null ? `id:${quiz.id}` : `title:${normalizeQuizTitle(quiz?.title || quiz?.name || '')}`;
+    if (!key || seen.has(key)) return;
+    seen.add(key);
+    merged.push(quiz);
+  };
+
+  (Array.isArray(localQuizzes) ? localQuizzes : []).forEach(addQuiz);
+  (Array.isArray(apiQuizzes) ? apiQuizzes : []).forEach(addQuiz);
+
+  return merged.filter(isAllowedFestivalQuiz);
+}
+
+function findLocalQuiz(qid, title){
+  if (typeof DEFAULT_QUIZZES === 'undefined') return null;
+
+  const normalizedTitle = normalizeQuizTitle(title || '');
+  return DEFAULT_QUIZZES.find(q => {
+    const quizId = String(q?.id ?? '');
+    const quizTitle = normalizeQuizTitle(q?.title || q?.name || '');
+    return String(qid) === quizId || quizTitle === normalizedTitle || quizTitle.includes(normalizedTitle) || normalizedTitle.includes(quizTitle);
+  }) || null;
+}
+
 async function refreshQuizzes(){
   try{
-    const r = await fetch(API_URL + '/api/quizzes');
-    if(!r.ok) throw new Error(await r.text());
-    quizzes = await r.json();
+    let allQuizzes = [];
+    try {
+      const r = await fetch(API_URL + '/api/quizzes');
+      if(r.ok) {
+        allQuizzes = await r.json();
+      }
+    } catch(err) {
+      console.warn("API fetch failed:", err);
+    }
+
+    const localQuizzes = Array.isArray(DEFAULT_QUIZZES) ? DEFAULT_QUIZZES.filter(isAllowedFestivalQuiz) : [];
+    const apiQuizzes = Array.isArray(allQuizzes) ? allQuizzes.filter(isAllowedFestivalQuiz) : [];
+
+    quizzes = mergeFestivalQuizzes(apiQuizzes, localQuizzes);
+    if (!quizzes.length && localQuizzes.length) {
+      quizzes = localQuizzes;
+    }
+
     renderQuizList();
   }catch(e){
-    quizListEl.innerHTML = `<div class="small">Failed to load quizzes: ${escapeHtml(e.message)}</div>`;
+    if (typeof DEFAULT_QUIZZES !== 'undefined') {
+      quizzes = DEFAULT_QUIZZES.filter(isAllowedFestivalQuiz);
+      renderQuizList();
+    } else {
+      quizListEl.innerHTML = `<div class="small">Failed to load quizzes: ${escapeHtml(e.message)}</div>`;
+    }
   }
 }
 
@@ -670,9 +748,27 @@ async function openSolo(qid){
   mode = 'solo';
   await connectSocket(); 
   try{
-    const r = await fetch(`${API_URL}/api/quizzes/${qid}`);
-    if(!r.ok) throw new Error(await r.text());
-    const data = await r.json();
+    let data = null;
+    let targetQuiz = null;
+
+    if (typeof DEFAULT_QUIZZES !== 'undefined') {
+      targetQuiz = findLocalQuiz(qid, (quizzes.find(q => String(q.id) === String(qid)) || {}).title);
+      if (targetQuiz && Array.isArray(targetQuiz.questions) && targetQuiz.questions.length) {
+        data = targetQuiz.questions;
+      }
+    }
+
+    if (!data || !data.length) {
+      try {
+        const r = await fetch(`${API_URL}/api/quizzes/${qid}`);
+        if(r.ok) {
+          data = await r.json();
+        }
+      } catch(err) {
+        console.warn("API fetch detail failed", err);
+      }
+    }
+
     questions = adaptRows(data);
     if(questions.length === 0) { showMsg('Quiz has no questions'); return; }
     currentIndex = 0; score = 0; combo = 0;

@@ -14,7 +14,7 @@
 <link as="style" href="/css/music-overlay.css" rel="preload"/>
 <link href="/css/music-overlay.css" rel="stylesheet"/>
 <script defer="" src="/js/music-overlay.js"></script>
-<link href="/images/favicon.png" rel="shortcut icon"/>
+<link href="/images/newfav.png" rel="shortcut icon"/>
 <link href="/css/bootstrap.min.css" rel="stylesheet"/>
 <link href="/css/font-awesome.min.css" rel="stylesheet"/>
 <link href="/css/linearicons-free.css" rel="stylesheet"/>
@@ -35,25 +35,25 @@
 <section aria-label="Trang chủ - Bản đồ Di tích lịch sử" class="hero-neo">
 <div class="hero-neo__viewport">
 <div class="hero-neo__slides" role="list">
-<article aria-hidden="false" class="hero-neo__slide hero-neo__slide--active" data-bg="/images/use_img/banner1.jpg" role="listitem">
+<article aria-hidden="false" class="hero-neo__slide hero-neo__slide--active" data-bg="/images/use_img/dragon1_banner.jpg" role="listitem">
 <div aria-hidden="true" class="hero-neo__overlay"></div>
 <div class="hero-neo__inner">
-<h1 class="hero-neo__title">Khám phá<br/> Bản đồ Di tích Lịch sử TPHCM</h1>
-<p class="hero-neo__subtitle">Khám phá quá khứ — hiểu rõ hiện tại</p>
+<h1 class="hero-neo__title">Khám phá<br/> Bản đồ lễ hội truyền thống TPHCM</h1>
+<p class="hero-neo__subtitle">Khám phá quá khứ — Thấu tỏ hiện tại - Kiến tạo tương lai</p>
 <div class="hero-neo__actions">
-<a class="hero-neo__btn hero-neo__btn--primary" style = "color: #ffffff" href="/map.html">Xem bản đồ</a>
+<a class="hero-neo__btn hero-neo__btn--primary" style = "color: #ffffff" href="/map.html">Bắt đầu hành trình</a>
 <a class="hero-neo__btn hero-neo__btn--ghost" style = "color: #ffffff" href="/blog.html">Tìm hiểu thêm</a>
 </div>
 </div>
 </article>
-<article aria-hidden="true" class="hero-neo__slide" data-bg="/images/use_img/banner2.jpg" role="listitem">
+<article aria-hidden="true" class="hero-neo__slide" data-bg="/images/use_img/city_banner.jpg" role="listitem">
 <div aria-hidden="true" class="hero-neo__overlay"></div>
 <div class="hero-neo__inner">
-<h1 class="hero-neo__title">Tìm hiểu<br/> Lịch sử Sài Gòn<br/> qua các Di tích</h1>
-<p class="hero-neo__subtitle">Câu chuyện của thành phố — được kể qua từng địa điểm</p>
+<h1 class="hero-neo__title">Tìm hiểu<br/> Đời sống người dân Sài Gòn<br/> qua các Lễ hội</h1>
+<p class="hero-neo__subtitle">Câu chuyện của những giá trị truyền thống — được gìn giữ qua thời gian</p>
 <div class="hero-neo__actions">
-<a class="hero-neo__btn hero-neo__btn--primary" style = "color: #ffffff" href="/blog.html">Bắt đầu</a>
-<a class="hero-neo__btn hero-neo__btn--ghost" style = "color: #ffffff" href="/quiz.html">Tìm hiểu thêm</a>
+<a class="hero-neo__btn hero-neo__btn--primary" style = "color: #ffffff" href="/blog.html">Thông tin chi tiết</a>
+<a class="hero-neo__btn hero-neo__btn--ghost" style = "color: #ffffff" href="/quiz.html">Thử thách bản thân</a>
 </div>
 </div>
 </article>
@@ -189,8 +189,8 @@
   border: none;
   background: rgba(0,0,0,0.45);
   color:#fff;
-  width:44px;
-  height:44px;
+  width:62px;
+  height:62px;
   border-radius:50%;
   display:flex;
   align-items:center;
@@ -198,27 +198,30 @@
   cursor:pointer;
   z-index:5;
   transition: transform .15s ease, background .15s;
+  padding: 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 .hero-neo__nav:hover{ transform: translateY(-50%) scale(1.06); background: rgba(0,0,0,0.6); }
 .hero-neo__nav:active{ transform: translateY(-50%) scale(.98); }
-.hero-neo__nav--prev{ left: 12px; }
-.hero-neo__nav--next{ right: 12px; }
+.hero-neo__nav--prev{ left: 16px; }
+.hero-neo__nav--next{ right: 16px; }
 /* dots */
 .hero-neo__dots{
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  bottom: 10px;
+  bottom: 14px;
   display:flex;
-  gap:.45rem;
+  gap:.6rem;
   z-index:5;
 }
 .hero-neo__dots button{
-  width:10px; height:10px; border-radius:50%;
-  border:none; background: rgba(255,255,255,0.28); cursor:pointer;
-  transition: transform .16s, background .16s;
+  width:30px; height:30px; border-radius:50%;
+  border: 1px solid #111; background: #111; cursor:pointer;
+  padding: 0; opacity: .85;
+  transition: transform .16s, background .16s, opacity .16s;
 }
-.hero-neo__dots button[aria-selected="true"]{ background: #fff; transform: scale(1.25); }
+.hero-neo__dots button[aria-selected="true"]{ background: #000; opacity: 1; transform: scale(1.2); }
 /* animation keyframes */
 @keyframes heroTitleIn{
   from{ transform: translateY(10%); opacity:0; }
@@ -355,11 +358,11 @@
 <span>GIỚI THIỆU</span>
 </h3>
 <h4 class="intro-text">
-    Nhằm góp phần giáo dục truyền thống lịch sử, khơi dậy tinh thần “Uống nước nhớ nguồn” và ứng dụng công nghệ thông tin trong kỷ nguyên số, trang web này được xây dựng như một không gian trực tuyến để giới thiệu, lưu giữ và lan tỏa hình ảnh các di tích lịch sử – văn hóa tiêu biểu tại TP. Hồ Chí Minh.
+    Nhằm góp phần giáo dục truyền thống lịch sử, khơi dậy tinh thần “Uống nước nhớ nguồn” và ứng dụng công nghệ thông tin trong kỷ nguyên số, trang web này được xây dựng như một không gian trực tuyến để giới thiệu, lưu giữ và lan tỏa hình ảnh các lễ hội tiêu biểu tại TP. Hồ Chí Minh.
     <br/><br/>
-    Các địa danh được thể hiện qua bài viết, hình ảnh và thông tin chi tiết, giúp người xem có trải nghiệm gần gũi, trực quan và sinh động, như thể đang trực tiếp bước vào không gian lịch sử của thành phố.
+    Các lễ hội được thể hiện qua bài viết, hình ảnh và thông tin chi tiết, giúp người xem có trải nghiệm gần gũi, trực quan và sinh động, như thể đang trực tiếp bước hòa mình vào bầu không khí của các lễ hội.
     <br/><br/>
-    Thông qua kho tư liệu này, thế hệ trẻ có cơ hội tiếp cận gần hơn với những giá trị truyền thống, hiểu thêm về những chặng đường đấu tranh, xây dựng và phát triển của dân tộc, từ đó nuôi dưỡng tình yêu quê hương đất nước và ý thức trách nhiệm gìn giữ, bảo tồn di sản.
+    Thông qua kho tư liệu này, thế hệ trẻ có cơ hội tiếp cận gần hơn với những giá trị truyền thống, hiểu thêm về những lễ hội thú vị, xây dựng và phát triển của dân tộc, từ đó nuôi dưỡng tình yêu quê hương đất nước và ý thức trách nhiệm gìn giữ, bảo tồn các di sản văn hóa.
   </h4>
 </div>
 </div>
@@ -368,12 +371,12 @@
 <ul class="slides">
 <li>
 <a href="/home-1.html">
-<img alt="" src="/images/use_img/about-g1.jpg"/>
+<img alt="" src="/images/khca1.jpg"/>
 </a>
 </li>
 <li>
 <a href="/home-1.html">
-<img alt="" src="/images/use_img/about-g2.jpg"/>
+<img alt="" src="/images/ngongtt1.jpg"/>
 </a>
 </li>
 </ul>
@@ -397,21 +400,21 @@
 <i class="lnr lnr-graduation-hat"></i>
 <h3>Bản Đồ</h3>
 <h4 class="intro-text">
-    Khám phá TP.HCM dễ dàng hơn với bản đồ trực quan, giúp bạn nhanh chóng tìm được vị trí các di tích nổi bật và định hướng cho chuyến tham quan.
+    Khám phá TP.HCM dễ dàng hơn với bản đồ trực quan, giúp bạn nhanh chóng tìm được vị trí các lễ hội nổi bật và định hướng cho chuyến tham quan.
   </h4>
 </div>
 <div class="col-xs-12 col-sm-4 feature wow bounceInLeft">
 <i class="lnr lnr-graduation-hat"></i>
 <h3>Kho thông tin</h3>
 <h4 class="intro-text">
-    Mỗi di tích đều có phần mô tả ngắn gọn, hình ảnh minh họa và câu chuyện gắn liền với lịch sử – văn hóa, giúp bạn hiểu rõ hơn giá trị của từng địa điểm.
+    Mỗi lễ hội đều có phần mô tả ngắn gọn, hình ảnh minh họa và câu chuyện gắn liền với lịch sử – văn hóa, giúp bạn hiểu rõ hơn giá trị của từng lễ hội.
   </h4>
 </div>
 <div class="col-xs-12 col-sm-4 feature wow bounceInLeft">
 <i class="lnr lnr-smile"></i>
-<h3>Quiz</h3>
+<h3>Quiz & AR</h3>
 <h4 class="intro-text">
-    Sau khi tìm hiểu, bạn có thể thử sức với những câu hỏi nhỏ để ôn lại kiến thức, vừa vui vừa giúp ghi nhớ thông tin thú vị về các di tích.
+    Sau khi tìm hiểu, bạn có thể thử sức với những câu hỏi nhỏ để ôn lại kiến thức hoặc trải nghiệm công nghệ AR để khám phá linh vật của các lễ hội, vừa vui vừa giúp ghi nhớ thông tin thú vị về các lễ hội.
   </h4>
 </div>
 <div class="text-center col-xs-12">
@@ -501,14 +504,14 @@
 </style>
 <section class="custom-gallery-section">
 <div class="custom-gallery-grid">
-<img alt="Ảnh 1" src="/images/cbtt3.jpg"/>
-<img alt="Ảnh 2" src="/images/ddl3.jpg"/>
-<img alt="Ảnh 3" src="/images/bttpchm1.jpg"/>
-<img alt="Ảnh 4" src="/images/cgv2.jpg"/>
-<img alt="Ảnh 5" src="/images/csgv2.jpg"/>
-<img alt="Ảnh 6" src="/images/dtth3.jpg"/>
-<img alt="Ảnh 7" src="/images/dpp1.jpg"/>
-<img alt="Ảnh 8" src="/images/ddpth1.jpg"/>
+<img alt="Ảnh 1" src="/images/ngongcg.jpg"/>
+<img alt="Ảnh 2" src="/images/ngtieu1.jpg"/>
+<img alt="Ảnh 3" src="/images/tr2.jpg"/>
+<img alt="Ảnh 4" src="/images/tl1.jpg"/>
+<img alt="Ảnh 5" src="/images/thd1.jpg"/>
+<img alt="Ảnh 6" src="/images/khca3.jpg"/>
+<img alt="Ảnh 7" src="/images/ngongtt2.jpg"/>
+<img alt="Ảnh 8" src="/images/cbth1.png"/>
 </div>
 </section>
 <!-- Lightbox -->
@@ -599,21 +602,21 @@
 <div class="owl-carousel" id="owl-classes">
 <div class="col-xs-12 zoom">
 <div class="classes">
-<a class="img-thumb" href="/diadaocuchi.html">
+<a class="img-thumb" href="/lehoichuabathienhau.html">
 <figure>
-<img alt="" src="/images/use_img/course_img1.jpg"/>
+<img alt="" src="/images/cbth2.jpg"/>
 </figure>
 </a>
 <div class="classes-info">
 <div class="price">1 <small></small>
 </div>
 <h3>
-<a href="/diadaocuchi.html"> Địa Đạo Củ Chi</a>
+<a href="/lehoichuabathienhau.html"> Chùa Bà Thiên Hậu</a>
 </h3>
-<p>Địa đạo Củ Chi là di tích quốc gia đặc biệt, biểu tượng cho ý chí kiên cường, sáng tạo của quân dân Củ Chi, là công trình phòng thủ ngầm nổi tiếng thế giới, thu hút hàng triệu du khách mỗi năm.</p>
+<p>Lễ hội Chùa Bà Thiên Hậu là sự kiện tâm linh lớn ở Nam Bộ nhằm cầu bình an với lễ rước kiệu và múa lân hoành tráng. Lễ hội đặc biệt độc đáo nhờ tinh thần nghĩa tình, nổi bật với các dịch vụ hỗ trợ miễn phí cho khách thập phương.</p>
 <ul class="classes-time">
 <li>
-<span>Loại</span> Di tích quốc gia đặc biệt
+<span>Loại</span> Lễ hội tâm linh
                       </li>
 </ul>
 </div>
@@ -621,21 +624,21 @@
 </div>
 <div class="col-xs-12 zoom">
 <div class="classes">
-<a class="img-thumb" href="/nhathoducba.html">
+<a class="img-thumb" href="/lehoicungthanlua.html">
 <figure>
-<img alt="" src="/images/use_img/course_img2.jpg"/>
+<img alt="" src="/images/tl2.jpg"/>
 </figure>
 </a>
 <div class="classes-info">
 <div class="price">2 <small></small>
 </div>
 <h3>
-<a href="/nhathoducba.html">Nhà Thờ Đức Bà</a>
+<a href="/lehoicungthanlua.html">Lễ Hội Cúng Thần Lúa</a>
 </h3>
-<p>Nhà thờ Đức Bà Sài Gòn là biểu tượng kiến trúc, tôn giáo và lịch sử của TP.HCM, nổi bật với phong cách Romanesque – Gothic, là trung tâm sinh hoạt Công giáo và điểm đến văn hóa, du lịch nổi tiếng của thành phố.</p>
+<p>Lễ hội Cúng Thần Lúa là một trong những lễ hội truyền thống quan trọng của người Chơ-ro, thể hiện lòng biết ơn và sự kính trọng đối với đất đai và nông nghiệp của người Chơ-ro.</p>
 <ul class="classes-time">
 <li>
-<span>Loại</span> Di tích cấp thành phố
+<span>Loại</span> Lễ hội nông nghiệp
                       </li>
 </ul>
 </div>
@@ -643,21 +646,21 @@
 </div>
 <div class="col-xs-12 zoom">
 <div class="classes">
-<a class="img-thumb" href="/baotangchungtichchientranh.html">
+<a class="img-thumb" href="/lehoidincolonghai.html">
 <figure>
-<img alt="" src="/images/use_img/course_img3.jpg"/>
+<img alt="" src="/images/dc1.jpg"/>
 </figure>
 </a>
 <div class="classes-info">
 <div class="price">3 <small></small>
 </div>
 <h3>
-<a href="/baotangchungtichchientranh.html">Bảo Tàng Chứng Tích Chiến Tranh</a>
+<a href="/lehoidincolonghai.html">Lễ Hội Dinh Cô Long Hải</a>
 </h3>
-<p>Bảo tàng Chứng tích Chiến tranh là bảo tàng chuyên đề lớn nhất về chiến tranh tại Việt Nam, lưu giữ hơn 20.000 hiện vật, là nơi giáo dục lịch sử, tưởng niệm và truyền cảm hứng về hòa bình, nhân quyền cho các thế hệ và du khách quốc tế.</p>
+<p>Lễ hội Dinh Cô là một trong những lễ hội nước lớn nhất vùng biển Nam Bộ, mang ý nghĩa cầu quốc thái dân an, mưa thuận gió hòa, tri ân công đức của Cô và gìn giữ nét đẹp văn hóa biển đặc trưng của ngư dân.</p>
 <ul class="classes-time">
 <li>
-<span>Loại</span> Bảo Tàng Chuyên Đề
+<span>Loại</span> Lễ hội tâm linh
                       </li>
 </ul>
 </div>
@@ -665,21 +668,21 @@
 </div>
 <div class="col-xs-12 zoom">
 <div class="classes">
-<a class="img-thumb" href="/chobenthanh.html">
+<a class="img-thumb" href="/lehoimuatraichin.html">
 <figure>
-<img alt="" src="/images/use_img/course_img4.jpg"/>
+<img alt="" src="/images/mtc1.jpg"/>
 </figure>
 </a>
 <div class="classes-info">
 <div class="price">4 <small></small>
 </div>
 <h3>
-<a href="/chobenthanh.html">Chợ Bến Thành</a>
+<a href="/lehoimuatraichin.html">Lễ Hội Mùa Trái Chín</a>
 </h3>
-<p>Chợ Bến Thành là biểu tượng văn hóa, thương mại và du lịch của TP.HCM, nổi bật với kiến trúc thuộc địa Pháp kết hợp Á Đông, là nơi giao lưu kinh tế – văn hóa và bảo tồn nét sinh hoạt truyền thống của người Sài Gòn.</p>
+<p>Lễ hội Mùa Trái Chín được tổ chức hằng năm để tôn vinh giá trị lao động, thúc đẩy mô hình nông nghiệp sinh thái tuần hoàn. Bảo tồn, khôi phục thương hiệu lịch sử "Vườn trái cây cổ Lái Thiêu".</p>
 <ul class="classes-time">
 <li>
-<span>Loại</span> Di tích cấp thành phố
+<span>Loại</span> Lễ hội nông nghiệp
                       </li>
 </ul>
 </div>
@@ -687,21 +690,21 @@
 </div>
 <div class="col-xs-12 zoom">
 <div class="classes">
-<a class="img-thumb" href="/dinhdoclap.html">
+<a class="img-thumb" href="/lehoinghinong.html">
 <figure>
-<img alt="" src="/images/use_img/course_img5.jpg"/>
+<img alt="" src="/images/ngongcg.jpg"/>
 </figure>
 </a>
 <div class="classes-info">
 <div class="price">5 <small></small>
 </div>
 <h3>
-<a href="/dinhdoclap.html">Dinh Độc Lập</a>
+<a href="/lehoinghinong.html">Lễ Hội Nginh Ông Cần Giờ</a>
 </h3>
-<p>Dinh Độc Lập là di tích quốc gia đặc biệt, biểu tượng lịch sử của ngày thống nhất đất nước 30/4/1975, nổi bật với kiến trúc hiện đại kết hợp truyền thống, là điểm tham quan, giáo dục lịch sử và văn hóa tiêu biểu của TP.HCM.</p>
+<p>Lễ hội Nghinh Ông Cần Giờ mang ý nghĩa cầu mong sự an bình, hạnh phúc và cuộc sống ấm no cho các ngư dân, là dịp để ngư dân thể hiện tấm lòng thành kính, biết ơn, tạ ơn thần biển.</p>
 <ul class="classes-time">
 <li>
-<span>Loại</span> Di tích quốc gia đặc biệt
+<span>Loại</span> Lễ hội ngư nghiệp
                       </li>
 </ul>
 </div>
@@ -709,21 +712,21 @@
 </div>
 <div class="col-xs-12 zoom">
 <div class="classes">
-<a class="img-thumb" href="/lehoikhaihacauan.html">
+<a class="img-thumb" href="/lehoikhahacauan.html">
 <figure>
-<img alt="" src="/images/use_img/course_img6.jpg"/>
+<img alt="" src="/images/khca3.jpg"/>
 </figure>
 </a>
 <div class="classes-info">
 <div class="price">6 <small></small>
 </div>
 <h3>
-<a href="/lehoikhaihacauan.html">Lễ Hội Khai Hạ - Cầu An</a>
+<a href="/lehoikhahacauan.html">Lễ Hội Khai Hạ - Cầu An</a>
 </h3>
 <p>Lễ hội Khai hạ - Cầu an tại Lăng Tả quân Lê Văn Duyệt là di sản văn hóa phi vật thể quốc gia, sự kiện truyền thống lớn đầu năm của Sài Gòn, mang ý nghĩa cầu an, tri ân tiền nhân, giữ gìn bản sắc văn hóa Nam Bộ.</p>
 <ul class="classes-time">
 <li>
-<span>Loại</span> Di sản văn hóa phi vật thể quốc gia.
+<span>Loại</span> Lễ hội tưởng niệm danh nhân
                       </li>
 </ul>
 </div>
@@ -753,255 +756,6 @@
 </div>
 </div>
 </div>
-<div class="footer-bottom">
-<div class="container">
-<div class="row"></div>
-</div>
-</div>
-<!-- Chatbox HTML -->
-<!-- Chatbox Container -->
-<button id="chatbox-toggle">TRỢ LÝ AI</button>
-<div aria-hidden="true" id="chatbox-container">
-<div id="chatbox-header"> Trợ lý AI <button id="chatbox-close">✖</button>
-</div>
-<div aria-live="polite" id="chatbox-messages">
-<!-- sample messages -->
-<div class="chat-message chat-ai">Xin chào!</div>
-</div>
-<div id="chatbox-input-area">
-<input id="chatbox-input" placeholder="Type your message..." type="text"/>
-<button id="chatbox-send">Send</button>
-</div>
-</div>
-<style>
-      /* Use a very high z-index to ensure the chat sits above other UI.
-     If another element still covers it, make sure that element doesn't
-     create a new stacking context with transform/opacity/position and a higher z-index. */
-      #chatbox-container {
-        position: fixed;
-        bottom: 80px;
-        right: 20px;
-        width: 300px;
-        height: 400px;
-        background: white;
-        border-radius: 12px;
-        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-        /* z-index high    it sits above most site elements */
-        z-index: 2147483647;
-        /* Hidden (off-screen) state using transform for smooth GPU animation */
-        transform: translateX(380px);
-        opacity: 0;
-        pointer-events: none;
-        transition: transform .38s cubic-bezier(.2, .9, .2, 1), opacity .28s;
-        will-change: transform, opacity;
-      }
-      /* show state -> visible & interactive */
-      #chatbox-container.show {
-        transform: translateX(0);
-        opacity: 1;
-        pointer-events: auto;
-      }
-      #chatbox-header {
-        flex: 0 0 50px;
-        background: #0078ff;
-        color: white;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px;
-      }
-      /* Messages area fills the available middle space and is scrollable */
-      #chatbox-messages {
-        flex: 1;
-        height: 280px;
-        padding: 10px;
-        overflow-y: auto;
-        box-sizing: border-box;
-        gap: 8px;
-        display: flex;
-        flex-direction: column;
-      }
-      .message {
-        max-width: 75%;
-        padding: 8px 12px;
-        border-radius: 12px;
-      }
-      .message.sent {
-        align-self: flex-end;
-        /* moves your messages to the right */
-        background-color: #007bff;
-        color: white;
-      }
-      .message.received {
-        align-self: flex-start;
-        /* moves other messages to the left */
-        background-color: #e5e5ea;
-        color: black;
-      }
-      /* If you want the newest messages to appear at the bottom visually,
-     use JS to auto-scroll to bottom on open/new message. */
-      /* Chat bubbles must NOT flex-grow */
-      .chat-message {
-        flex: 0 0 auto;
-        max-width: 75%;
-        padding: 8px 12px;
-        border-radius: 15px;
-        word-wrap: break-word;
-        animation: msgIn .18s ease;
-      }
-      .chat-user {
-        align-self: flex-end;
-        background: #0078ff;
-        color: white;
-        border-bottom-right-radius: 0;
-      }
-      .chat-ai {
-        align-self: flex-start;
-        background: #e5e5ea;
-        color: black;
-        border-bottom-left-radius: 0;
-      }
-      #chatbox-input-area {
-        flex: 0 0 56px;
-        display: flex;
-        gap: 8px;
-        align-items: center;
-        padding: 8px;
-        border-top: 1px solid #eee;
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(250, 250, 250, 0.9));
-      }
-      #chatbox-input {
-        flex: 1;
-        padding: 8px;
-        border-radius: 8px;
-        border: 1px solid #ddd;
-        outline: none;
-      }
-      #chatbox-send {
-        background: #0078ff;
-        color: white;
-        border: none;
-        padding: 8px 12px;
-        border-radius: 8px;
-        cursor: pointer;
-      }
-      /* toggle button z-index should also be high so it's clickable */
-      #chatbox-toggle {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        z-index: 2147483647;
-      }
-      @keyframes msgIn {
-        from {
-          opacity: 0;
-          transform: translateY(6px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-    </style>
-<script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const toggleBtn = document.getElementById("chatbox-toggle");
-        const chatbox = document.getElementById("chatbox-container");
-        const closeBtn = document.getElementById("chatbox-close");
-        const sendBtn = document.getElementById("chatbox-send");
-        const input = document.getElementById("chatbox-input");
-        const messages = document.getElementById("chatbox-messages");
-        // Ensure chatbox is direct child of body to avoid stacking context issues
-        if (chatbox && chatbox.parentElement !== document.body) {
-          document.body.appendChild(chatbox);
-        }
-        // open/close helpers
-        function openChat() {
-          chatbox.classList.add("show");
-          chatbox.setAttribute('aria-hidden', 'false');
-          input.focus();
-          // ensure latest messages visible
-          requestAnimationFrame(() => {
-            messages.scrollTop = messages.scrollHeight;
-          });
-        }
-        function closeChat() {
-          chatbox.classList.remove("show");
-          chatbox.setAttribute('aria-hidden', 'true');
-          toggleBtn.focus();
-        }
-        // Toggle button
-        toggleBtn.addEventListener('click', () => {
-          if (chatbox.classList.contains('show')) closeChat();
-          else openChat();
-        });
-        // Close button
-        closeBtn.addEventListener('click', closeChat);
-        // Close on Escape
-        document.addEventListener('keydown', (e) => {
-          if (e.key === "Escape" && chatbox.classList.contains("show")) closeChat();
-        });
-        // Send message handlers
-        sendBtn.addEventListener('click', sendMessage);
-        input.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter') {
-            e.preventDefault();
-            sendMessage();
-          }
-        });
-        // single addMessage function (no duplicates)
-        function addMessage(text, sender) {
-          const div = document.createElement("div");
-          div.classList.add("chat-message", sender === "user" ? "chat-user" : "chat-ai");
-          div.textContent = text;
-          messages.appendChild(div);
-          requestAnimationFrame(() => {
-            messages.scrollTop = messages.scrollHeight;
-          });
-        }
-        // sendMessage (keeps your fetch)
-        async function sendMessage() {
-  const text = input.value.trim();
-  if (!text) return;
-  addMessage(text, "user");
-  input.value = "";
-  console.log("Sending message:", text);
-  try {
-    const res = await fetch("https://baldandbadgithubio-production-4f3f.up.railway.app/ask", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: text })
-    });
-    console.log("Fetch complete. status:", res.status, res.statusText);
-    console.log("Response headers:", Array.from(res.headers.entries()));
-    const raw = await res.text();                 // read raw text first
-    console.log("Raw response:", raw);
-    // try parse JSON if content-type suggests JSON
-    let data;
-    const ct = res.headers.get("content-type") || "";
-    if (ct.includes("application/json")) {
-      try { data = JSON.parse(raw); }
-      catch (err) {
-        console.error("JSON parse error:", err);
-        addMessage("Server returned invalid JSON. Check response in Network tab.", "ai");
-        return;
-      }
-    } else {
-      addMessage(`Non-JSON response (status ${res.status}). See Console/Network.`, "ai");
-      return;
-    }
-    console.log("Parsed JSON:", data);
-    addMessage(data.reply || "(No reply)", "ai");
-  } catch (err) {
-    console.error("Fetch error:", err);
-    addMessage("Error: " + err.message, "ai");
-  }
-}
-      });
-    </script>
 <script src="/js/jquery.min.js"></script><script src="/js/lang-switcher.js"></script>
 <script src="/js/bootstrap.min.js"></script>
 <script src="/vendor/flexslider/jquery.flexslider-min.js"></script>

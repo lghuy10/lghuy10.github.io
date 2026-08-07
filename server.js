@@ -6,56 +6,240 @@ import bodyParser from "body-parser";
 import fetch from "node-fetch";
 import commentsRouter from "./comments.js";
 import http from "http";
+import path from "path";
+import { fileURLToPath } from "url";
 import { Server } from "socket.io";
 import pool from "./db.js";
+import DEFAULT_QUIZZES from "./js/default_quizzes.js";
 
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.resolve(__dirname, ".env") });
+
+function getGeminiConfig() {
+  dotenv.config({ path: path.resolve(__dirname, ".env") });
+  return {
+    key: (process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || "").trim(),
+    model: process.env.GEMINI_MODEL || "gemini-1.5-flash"
+  };
+}
+
+function isValidGeminiKey(key) {
+  if (!key) return false;
+  if (key.length < 20) return false;
+  const k = String(key).trim();
+  // Chặn các chuỗi placeholder rõ ràng
+  if (/^(your-|xxx-|xxxxx|YOUR_|<|PLACEHOLDER|changeme|changethis|example|sample-key)/i.test(k)) return false;
+  if (k.includes("YOUR_GOOGLE") || k.includes("API_KEY_HERE")) return false;
+  // Chấp nhận cả 2 định dạng:
+  //   - Cũ: AIza...  (traffic key, hợp lệ đến tháng 9/2026 nếu có cấu hình restrict)
+  //   - Mới: AQ....   (authentication key, từ tháng 6/2026+)
+  const okOld = /^AIza[a-zA-Z0-9_\-]{20,}$/.test(k);
+  const okNew = /^AQ\.[a-zA-Z0-9_\-]{20,}$/.test(k);
+  return okOld || okNew;
+}
+
+const ALLOWED_ORIGINS = [
+  "https://baldandbad.github.io",
+  "https://baldandbadgithubio-production-4f3f.up.railway.app",
+  "https://baldandbadgithubio-production.up.railway.app",
+  "http://localhost:5173",
+  "http://localhost:5500",
+  "http://127.0.0.1:5500",
+  "http://localhost:3000",
+  "http://localhost:3001",
+  "http://localhost:8080",
+  "http://127.0.0.1:3000",
+  "http://127.0.0.1:8080"
+];
+
 const app = express();
-app.use(cors());
-app.use(express.json());
-app.use(bodyParser.json());
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || ALLOWED_ORIGINS.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.warn("⚠️ CORS blocked origin:", origin);
+      callback(null, true);
+    }
+  },
+  methods: ["GET", "POST", "OPTIONS"],
+  credentials: true
+}));
+app.use(express.json({ limit: "1mb" }));
+app.use(bodyParser.json({ limit: "1mb" }));
 
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    // adjust origins for your frontend deployment(s)
-    origin: ["https://baldandbad.github.io", "http://localhost:5173", "http://localhost:3000"],
+    origin: ALLOWED_ORIGINS,
     methods: ["GET", "POST"],
     credentials: true
   }
 });
 
-/* ---------------- REST endpoints (unchanged) ---------------- */
+/* ---------------- GEMINI DIRECT REST API ---------------- */
 
-const API_URL = "https://openrouter.ai/api/v1/chat/completions";
-const API_KEY = process.env.OPENROUTER_API_KEY;
+// Danh sách model và API version được hỗ trợ theo thứ tự ưu tiên
+// Thứ tự ưu tiên: model mới > bản ổn định > bản flash nhẹ
+const GEMINI_MODEL_CANDIDATES = [
+  { name: "gemini-2.0-flash",        version: "v1"     },
+  { name: "gemini-2.0-flash-lite",    version: "v1"     },
+  { name: "gemini-1.5-flash",         version: "v1"     },
+  { name: "gemini-1.5-flash-8b",      version: "v1"     },
+  { name: "gemini-1.5-pro",           version: "v1"     },
+  { name: "gemini-2.0-flash-exp",    version: "v1beta" },
+  { name: "gemini-1.5-flash",         version: "v1beta" }
+];
+
+function buildModelPayload(userMsg) {
+  return {
+    contents: [{ parts: [{ text: userMsg }] }],
+    generationConfig: { temperature: 0.7, maxOutputTokens: 1024 },
+    systemInstruction: {
+      parts: [{ text: "Bạn là một Trợ lý AI giúp học sinh tìm hiểu về các di tích lịch sử, lễ hội và văn hóa ở TP.HCM. Hãy phản hồi ngắn gọn (tối đa 3 câu), sinh động, lịch sự và chính xác bằng tiếng Việt. Nếu không chắc chắn, hãy nói rõ bạn không biết thay vì bịa." }]
+    }
+  };
+}
+
+function extractGeminiReply(data) {
+  return String(
+    (
+      data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+      data?.choices?.[0]?.message?.content ||
+      data?.reply ||
+      data?.message ||
+      ""
+    ) || ""
+  ).trim();
+}
 
 app.post("/ask", async (req, res) => {
-  const userMsg = req.body.message;
-  const payload = {
-    model: "z-ai/glm-4.5-air:free",
-    messages: [
-      { role: "system", content: "Bạn là một Trợ lý AI giúp học sinh về các di tích lịch sử trong TPHCM" },
-      { role: "user", content: userMsg }
-    ]
-  };
+  const userMsg = String(req.body?.message || "").trim();
+  const { key: GEMINI_KEY, model: PREFERRED_MODEL } = getGeminiConfig();
 
-  try {
-    const openRes = await fetch(API_URL, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
-
-    const data = await openRes.json();
-    res.json({ reply: data.choices?.[0]?.message?.content || "No reply." });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Error talking to OpenRouter" });
+  if (!userMsg) {
+    return res.status(400).json({ error: "Vui lòng nhập câu hỏi trước khi gửi." });
   }
+
+  if (!GEMINI_KEY) {
+    console.error("❌ Gemini API key chưa được cấu hình. Hãy thêm GEMINI_API_KEY vào file .env");
+    return res.status(500).json({
+      error: "AI chưa được cấu hình API key.",
+      hint: "Vui lòng mở file .env và điền GEMINI_API_KEY bằng khóa thật từ Google AI Studio (định dạng mới AQ.... hoặc cũ AIza...)."
+    });
+  }
+
+  if (!isValidGeminiKey(GEMINI_KEY)) {
+    console.error("❌ Gemini API key trông không hợp lệ (định dạng sai):", GEMINI_KEY.substring(0, 12) + "...");
+    return res.status(500).json({
+      error: "API key trông không hợp lệ (có thể là placeholder).",
+      hint: "Hãy kiểm tra lại khóa trong file .env. Định dạng đúng: mới = AQ.xxx, cũ = AIza... Lấy từ https://aistudio.google.com/app/apikey"
+    });
+  }
+
+  // Xây dựng danh sách thử model: ưu tiên user đặt trước, sau đó các model khác
+  const tried = [];
+  const candidates = [];
+  if (PREFERRED_MODEL) {
+    for (const v of ["v1", "v1beta"]) {
+      candidates.push({ name: PREFERRED_MODEL, version: v, preferred: true });
+    }
+  }
+  for (const c of GEMINI_MODEL_CANDIDATES) {
+    if (!candidates.some(x => x.name === c.name && x.version === c.version)) {
+      candidates.push(c);
+    }
+  }
+
+  const payload = buildModelPayload(userMsg);
+  let lastErrorStatus = 0;
+  let lastErrorDetail = "";
+
+  for (const cand of candidates) {
+    const keyLabel = `${cand.version}/models/${cand.name}`;
+    tried.push(keyLabel);
+    const url =
+      `https://generativelanguage.googleapis.com/${cand.version}/models/${encodeURIComponent(cand.name)}:generateContent?key=${encodeURIComponent(GEMINI_KEY)}`;
+    try {
+      console.log(`🧪 Thử kết nối Gemini endpoint: ${keyLabel}...`);
+      const googleRes = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-goog-api-key": GEMINI_KEY,
+          "x-goog-api-client": "trae-backend/3.0"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await googleRes.json();
+
+      if (!googleRes.ok) {
+        const status = googleRes.status;
+        const message = (data && data.error && data.error.message) || "No details";
+        lastErrorStatus = status;
+        lastErrorDetail = message;
+        console.warn(`   ↳ ${keyLabel} trả về ${status}: ${message.substring(0, 120)}`);
+        // Model 404 -> thử model tiếp theo (không trả về lỗi ngay)
+        if (status === 404 || /not found|not supported for generateContent/i.test(message) || /model.*not found/i.test(message)) {
+          continue;
+        }
+        // Lỗi khác (401/403/429/5xx) -> xử lý tốt hơn nhưng vẫn thử 1-2 model khác tùy lỗi
+        if (status === 429 || status >= 500) continue;
+        // 400/401/403 -> trả về lỗi luôn (thường do key sai)
+        let userFriendly = message;
+        if (status === 400) userFriendly = "Request sai định dạng hoặc API key không hợp lệ với endpoint này. Kiểm tra lại GEMINI_API_KEY.";
+        else if (status === 401 || status === 403) userFriendly = "API key không có quyền truy cập hoặc bị khóa. Hãy kiểm tra khóa tại Google AI Studio.";
+        else if (status === 429) userFriendly = "Quá nhiều yêu cầu trong thời gian ngắn. Thử lại sau vài phút.";
+        else if (status >= 500) userFriendly = "Máy chủ Google AI đang gặp sự cố, thử lại sau.";
+        return res.status(status).json({
+          error: userFriendly,
+          details: message,
+          tried: tried
+        });
+      }
+
+      // Thành công -> trích xuất câu trả lời
+      const reply = extractGeminiReply(data);
+      const finishReason = data && data.candidates && data.candidates[0] && data.candidates[0].finishReason;
+
+      if (reply) {
+        console.log(`✅ ${keyLabel} phản hồi thành công: ${reply.substring(0, 60)}...`);
+        return res.json({
+          reply,
+          model: cand.name,
+          version: cand.version,
+          tried
+        });
+      }
+
+      // Không có nội dung text nhưng finishReason khác STOP
+      if (!reply && finishReason && finishReason !== "STOP") {
+        console.warn(`   ↳ ${keyLabel} finishReason=${finishReason}, thử tiếp...`);
+        lastErrorDetail = `finishReason=${finishReason}`;
+        continue;
+      }
+    } catch (err) {
+      lastErrorDetail = err.message || String(err);
+      console.warn(`   ↳ ${keyLabel} network error: ${lastErrorDetail}`);
+      // Network lỗi -> thử model tiếp
+      continue;
+    }
+  }
+
+  // Đã thử hết model vẫn không được
+  console.error("❌ Đã thử tất cả model/version, không có endpoint nào hoạt động. Tried:", tried);
+  return res.status(502).json({
+    error:
+      lastErrorStatus === 404
+        ? "Không tìm thấy model phù hợp (404). Có thể tài khoản Google AI Studio của bạn chưa được bật quyền dùng model Gemini, hoặc khóa 'AQ.' cần đăng ký thêm quyền 'AI Platform / Generative Language' trên Google Cloud Console."
+        : "Không thể nhận phản hồi từ bất kỳ endpoint Gemini nào.",
+    details: lastErrorDetail,
+    tried,
+    hint: lastErrorStatus === 404 ? "👉 Bước 1: Vào https://aistudio.google.com → tạo key mới → thử copy key đó. 👉 Bước 2: Nếu vẫn 404, thử đăng ký thêm 'Vertex AI' / 'Generative AI' trên Google Cloud Console project tương ứng với key AQ. của bạn." : undefined
+  });
 });
 
 app.use("/comments", commentsRouter);
@@ -64,10 +248,39 @@ app.get("/", (_req, res) => {
   res.send("Backend is running ✅");
 });
 
+async function getQuizzesData() {
+  if (process.env.DATABASE_URL) {
+    try {
+      const { rows } = await pool.query("SELECT id, title FROM quizzes ORDER BY id");
+      if (rows && rows.length > 0) return rows;
+    } catch (e) {
+      console.warn("DB query for quizzes failed, using DEFAULT_QUIZZES fallback:", e.message);
+    }
+  }
+  return DEFAULT_QUIZZES.map(q => ({ id: q.id, title: q.title }));
+}
+
+async function getQuestionsForQuiz(quizId) {
+  if (process.env.DATABASE_URL) {
+    try {
+      const qRes = await pool.query(
+        `SELECT id, question_text, option_a, option_b, option_c, option_d, correct_option
+         FROM questions WHERE quiz_id = $1 ORDER BY id`,
+        [quizId]
+      );
+      if (qRes && qRes.rows && qRes.rows.length > 0) return qRes.rows;
+    } catch (e) {
+      console.warn("DB query for questions failed, using DEFAULT_QUIZZES fallback:", e.message);
+    }
+  }
+  const qz = DEFAULT_QUIZZES.find(q => String(q.id) === String(quizId));
+  return qz ? qz.questions : [];
+}
+
 app.get("/api/quizzes", async (_req, res) => {
   try {
-    const { rows } = await pool.query("SELECT id, title FROM quizzes ORDER BY id");
-    res.json(rows);
+    const list = await getQuizzesData();
+    res.json(list);
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
@@ -76,25 +289,18 @@ app.get("/api/quizzes", async (_req, res) => {
 app.get("/api/quizzes/:id", async (req, res) => {
   try {
     const quizId = req.params.id;
+    const rawQuestions = await getQuestionsForQuiz(quizId);
 
-    const qRes = await pool.query(
-      `SELECT id, question_text, option_a, option_b, option_c, option_d, correct_option
-       FROM questions
-       WHERE quiz_id = $1
-       ORDER BY id`,
-      [quizId]
-    );
-
-    const questions = qRes.rows.map(q => ({
+    const questions = rawQuestions.map(q => ({
       id: q.id,
-      question: q.question_text,
+      question: q.question_text || q.question,
       answers: [
         { id: "A", text: q.option_a },
         { id: "B", text: q.option_b },
         { id: "C", text: q.option_c },
         { id: "D", text: q.option_d }
-      ],
-      correctAnswerId: q.correct_option
+      ].filter(x => x.text),
+      correctAnswerId: q.correct_option || q.correctAnswerId
     }));
 
     res.json(questions);
@@ -144,26 +350,22 @@ io.on("connection", (socket) => {
       const quizId = extractField(payload, "quizId", "qid") ?? payload;
       console.log("[createRoom] from", socket.id, "quizId=", quizId);
 
-      const qRes = await pool.query(
-        `SELECT id, question_text, option_a, option_b, option_c, option_d, correct_option
-         FROM questions WHERE quiz_id=$1 ORDER BY id`,
-        [quizId]
-      );
+      const rawQuestions = await getQuestionsForQuiz(quizId);
 
-      if (!qRes.rows.length) {
+      if (!rawQuestions || !rawQuestions.length) {
         socket.emit("error", "No questions found for this quiz");
         return;
       }
 
-      const questions = qRes.rows.map(q => ({
+      const questions = rawQuestions.map(q => ({
         id: q.id,
-        text: q.question_text,
+        text: q.question_text || q.question,
         answers: [
-          { id: "A", text: q.option_a, is_correct: q.correct_option === "A" },
-          { id: "B", text: q.option_b, is_correct: q.correct_option === "B" },
-          { id: "C", text: q.option_c, is_correct: q.correct_option === "C" },
-          { id: "D", text: q.option_d, is_correct: q.correct_option === "D" }
-        ]
+          { id: "A", text: q.option_a, is_correct: (q.correct_option || q.correctAnswerId) === "A" },
+          { id: "B", text: q.option_b, is_correct: (q.correct_option || q.correctAnswerId) === "B" },
+          { id: "C", text: q.option_c, is_correct: (q.correct_option || q.correctAnswerId) === "C" },
+          { id: "D", text: q.option_d, is_correct: (q.correct_option || q.correctAnswerId) === "D" }
+        ].filter(x => x.text)
       }));
 
       const code = Math.random().toString(36).slice(2, 6).toUpperCase();
@@ -447,5 +649,28 @@ io.on("connection", (socket) => {
 });
 
 /* -------------------- start server -------------------- */
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => console.log(`Server listening on ${PORT}`));
+const requestedPort = Number(process.env.PORT) || 5500;
+const fallbackPorts = [requestedPort, 3001, 3002, 3003, 3004, 3005];
+
+function startServer(port) {
+  server.listen(port, () => {
+    console.log(`Server listening on ${port}`);
+  });
+
+  server.once("error", (err) => {
+    if (err.code === "EADDRINUSE") {
+      const nextPort = fallbackPorts[fallbackPorts.indexOf(port) + 1];
+      if (nextPort) {
+        console.warn(`⚠️ Cổng ${port} đã bị chiếm, đang thử cổng ${nextPort}...`);
+        server.close();
+        startServer(nextPort);
+      } else {
+        console.error("❌ Không thể mở bất kỳ cổng nào phù hợp.");
+      }
+    } else {
+      console.error("❌ Lỗi server:", err);
+    }
+  });
+}
+
+startServer(requestedPort);

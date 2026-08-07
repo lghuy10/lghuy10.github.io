@@ -1,0 +1,89 @@
+Checking first 60 paragraphs:
+[0] I. LỄ HỘI TẾT NGUYÊN TIÊU (10 câu)
+   BOLD: ['I. ', 'LỄ HỘI TẾT NGUYÊN TIÊU (10 ', 'câu', ')']
+   COLOR: ['EE0000', 'EE0000', 'EE0000', 'EE0000']
+[1] Câu 1. Lễ hội Tết Nguyên tiêu của cộng đồng người Hoa diễn ra chủ yếu tại
+   BOLD: ['Câu', ' 1.', ' ', 'Lễ', ' ', 'hội', ' ', 'Tết', ' Nguyên ', 'tiêu', ' ', 'của', ' ', 'cộng', ' ', 'đồng', ' ', 'người', ' Hoa ', 'diễn', ' ', 'ra', ' ', 'chủ', ' ', 'yếu', ' ', 'tại']
+[2] A. các lăng thờ Cá Ông ven biển.
+[3] B. hệ thống hội quán và các cơ sở tín ngưỡng của người Hoa.
+   UNDERLINE: ['B']
+[4] C. các đền thờ danh tướng thời Trần.
+[5] D. các đình làng gắn với tín ngưỡng Thành hoàng.
+[6] Câu 2. Đặc trưng nổi bật của Lễ hội Tết Nguyên tiêu là
+   BOLD: ['Câu', ' 2.', ' ', 'Đặc', ' ', 'trưng', ' ', 'nổi', ' ', 'bật', ' ', 'của', ' ', 'Lễ', ' ', 'hội', ' ', 'Tết', ' Nguyên ', 'tiêu', ' ', 'là']
+[7] A. nghi thức nghinh rước trên biển cầu ngư.
+[8] B. lễ tế tưởng niệm các bậc tiền hiền khai khẩn.
+[9] C. các hoạt động văn hóa, tín ngưỡng của cộng đồng người Hoa vào Rằm tháng Giêng.
+   UNDERLINE: ['C']
+[10] D. nghi thức khai hạ và dựng nêu đầu năm.
+[11] Câu 3. Lễ hội Tết Nguyên tiêu đã được ghi danh là
+   BOLD: ['Câu', ' 3.', ' ', 'Lễ', ' ', 'hội', ' ', 'Tết', ' Nguyên ', 'tiêu', ' ', 'đã', ' ', 'được', ' ', 'ghi', ' ', 'danh', ' ', 'là']
+[12] A. Di tích quốc gia đặc biệt.
+[13] B. Bảo vật quốc gia.
+[14] C. Di sản tư liệu quốc gia.
+[15] D. Di sản văn hóa phi vật thể quốc gia.
+   UNDERLINE: ['D']
+[16] Câu 4. Lễ hội Tết Nguyên tiêu khác với Lễ hội Nghinh Ông ở điểm nào?
+   BOLD: ['Câu', ' 4.', ' ', 'Lễ', ' ', 'hội', ' ', 'Tết', ' Nguyên ', 'tiêu', ' ', 'khác', ' ', 'với', ' ', 'Lễ', ' ', 'hội', ' ', 'Nghinh', ' ', 'Ông', ' ở ', 'điểm', ' ', 'nào', '?']
+[17] A. Đều hướng tới cầu bình an và hạnh phúc cho cộng đồng.
+[18] B. Đều gắn với tín ngưỡng của cư dân vùng biển.
+[19] C. Gắn với văn hóa cộng đồng người Hoa và hệ thống hội quán.
+   BOLD: ['C.']
+[20] D. Gắn với nghi thức rước Nam Hải Đại Tướng Quân.
+[21] Câu 5. Giá trị cộng đồng của Lễ hội Tết Nguyên tiêu được thể hiện rõ nhất qua việc
+   BOLD: ['Câu', ' 5.', ' ', 'Giá', ' ', 'trị', ' ', 'cộng', ' ', 'đồng', ' ', 'của', ' ', 'Lễ', ' ', 'hội', ' ', 'Tết', ' Nguyên ', 'tiêu', ' ', 'được', ' ', 'thể', ' ', 'hiện', ' ', 'rõ', ' ', 'nhất', ' qua ', 'việc']
+[22] A. bảo tồn nghề đánh bắt hải sản truyền thống.
+[23] B. tăng cường giao lưu văn hóa giữa cộng đồng người Hoa với các dân tộc khác.
+   BOLD: ['B']
+[24] C. tưởng niệm các anh hùng chống ngoại xâm.
+[25] D. duy trì nghi thức tế Thành hoàng tại đình làng.
+[26] Câu 6. Việc duy trì các nghi lễ truyền thống trong Lễ hội Tết Nguyên tiêu có ý nghĩa chủ yếu là
+   BOLD: ['Câu', ' 6.', ' ', 'Việc', ' ', 'duy', ' ', 'trì', ' ', 'các', ' ', 'nghi', ' ', 'lễ', ' ', 'truyền', ' ', 'thống', ' ', 'trong', ' ', 'Lễ', ' ', 'hội', ' ', 'Tết', ' Nguyên ', 'tiêu', ' ', 'có', ' ý ', 'nghĩa', ' ', 'chủ', ' ', 'yếu', ' ', 'là']
+[27] A. gìn giữ bản sắc văn hóa và tín ngưỡng của cộng đồng người Hoa.
+   UNDERLINE: ['A.']
+[28] B. mở rộng hoạt động thương mại đầu xuân.
+[29] C. phát triển các loại hình vui chơi giải trí.
+[30] D. quảng bá các sản phẩm thủ công truyền thống.
+[31] Câu 7. Điểm giống nhau giữa Lễ hội Tết Nguyên tiêu và Lễ hội Chùa Bà Thiên Hậu là
+   BOLD: ['Câu 7.', ' ', 'Điểm giống nhau giữa Lễ hội Tết Nguyên tiêu và Lễ hội Chùa Bà Thiên Hậu là']
+[32] A. đều gắn với tín ngưỡng thờ Cá Ông của cư dân vùng biển.
+[33] B. đều tưởng niệm danh tướng thời Trần.
+[34] C. đều phản ánh đời sống tín ngưỡng của cộng đồng người Hoa.
+   UNDERLINE: ['C']
+[35] D. đều tổ chức nghi thức khai hạ đầu năm.
+[36] Câu 8. Một trường THPT tổ chức Ngày hội "Sắc màu văn hóa Thành phố Hồ Chí Minh". Nhóm của em muốn giới thiệu nét văn hóa của cộng đồng người Hoa. Lễ hội nào phù hợp nhất để lựa chọn?
+   BOLD: ['Câu', ' 8.', ' ', 'Một', ' ', 'trường', ' THPT ', 'tổ', ' ', 'chức', ' ', 'Ngày', ' ', 'hội', ' "', 'Sắc', ' ', 'màu', ' ', 'văn', ' ', 'hóa', ' Thành ', 'phố', ' ', 'Hồ', ' Chí Minh". ', 'Nhóm', ' ', 'của', ' ', 'em', ' ', 'muốn', ' ', 'giới', ' ', 'thiệu', ' ', 'nét', ' ', 'văn', ' ', 'hóa', ' ', 'của', ' ', 'cộng', ' ', 'đồng', ' ', 'người', ' Hoa. ', 'Lễ', ' ', 'hội', ' ', 'nào', ' ', 'phù', ' ', 'hợp', ' ', 'nhất', ' ', 'để', ' ', 'lựa', ' ', 'chọn', '?']
+[37] A. Lễ hội Nghinh Ông.
+[38] B. Lễ hội Trần Hưng Đạo.
+[39] C. Lễ hội Tết Nguyên tiêu.
+   UNDERLINE: ['C']
+[40] D. Lễ hội Khai hạ - Cầu an.
+[41] Câu 9. Trong quá trình tham gia Lễ hội Tết Nguyên tiêu, việc làm nào góp phần phát huy giá trị của lễ hội?
+   BOLD: ['Câu 9.', ' ', 'Trong quá trình tham gia Lễ hội Tết Nguyên tiêu, việc làm nào góp phần phát huy giá trị của lễ hội?']
+[42] A. Tôn trọng không gian tín ngưỡng, thực hiện đúng quy định và giữ gìn vệ sinh chung.
+   UNDERLINE: ['A']
+[43] B. Quay phim tại mọi khu vực để thu hút người xem trên mạng xã hội.
+[44] C. Tự ý sắp xếp lại đồ thờ cúng để chụp ảnh đẹp hơn.
+[45] D. Đốt nhiều vàng mã nhằm thể hiện lòng thành kính.
+[46] Câu 10. Để quảng bá Lễ hội Tết Nguyên tiêu trên nền tảng số, sản phẩm nào dưới đây phù hợp nhất?
+   BOLD: ['Câu 10.', ' ', 'Để quảng bá Lễ hội Tết Nguyên tiêu trên nền tảng số, sản phẩm nào dưới đây phù hợp nhất?']
+[47] A. Video giới thiệu nguồn gốc, nghi lễ và giá trị văn hóa của lễ hội.
+   UNDERLINE: ['A']
+[48] B. Video tổng hợp các trò chơi giải trí hiện đại trong dịp lễ.
+[49] C. Video giới thiệu các địa điểm du lịch biển của thành phố.
+[50] D. Video quảng bá các khu mua sắm và trung tâm thương mại.
+[51] II. LỄ HỘI CHÙA BÀ THIÊN HẬU
+   BOLD: ['II. ', 'LỄ HỘI CHÙA BÀ THIÊN HẬU']
+   COLOR: ['EE0000', 'EE0000']
+[52] Câu 1. Lễ hội Chùa Bà Thiên Hậu gắn liền với tín ngưỡng của cộng đồng
+   BOLD: ['Câu 1.', ' ', 'Lễ hội Chùa Bà Thiên Hậu gắn liền với tín ngưỡng của cộng đồng']
+[53] A. người Chăm.
+[54] B. người Kinh.
+[55] C. người Hoa.
+   UNDERLINE: ['C']
+[56] D. người Khơ-me.
+[57] Câu 2. Không gian văn hóa đặc trưng của Lễ hội Chùa Bà Thiên Hậu là
+   BOLD: ['Câu 2.', ' ', 'Không gian văn hóa đặc trưng của Lễ hội Chùa Bà Thiên Hậu là']
+[58] A. đình làng và miếu Thành hoàng.
+[59] B. hội quán và chùa của cộng đồng người Hoa.
+   UNDERLINE: ['B']

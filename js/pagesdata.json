@@ -1,272 +1,92 @@
 [
   {
-    "title": "Bảo tàng Chứng tích Chiến tranh",
-    "url": "/baotangchungtichchientranh.html",
-    "image": "/images/use_img/blog_img1.jpg",
-    "description": "Bảo tàng nổi tiếng tại TP.HCM trưng bày hiện vật và hình ảnh về chiến tranh Việt Nam.",
+    "title": "Lễ hội Khai hạ - Cầu an",
+    "url": "/lehoikhahacauan.html",
+    "image": "/images/khca1.jpg",
+    "description": "Lễ hội tưởng niệm danh nhân nhằm cầu bình an và tri ân công lao của người dân tại Lăng Tả quân Lê Văn Duyệt.",
     "categories": [
-      "Bảo tàng chuyên đề"
+      "Lễ hội tưởng niệm danh nhân"
     ]
   },
   {
-    "title": "Bảo tàng Thành phố Hồ Chí Minh",
-    "url": "/baotangtphcm.html",
-    "image": "/images/use_img/blog_img2.jpg",
-    "description": "Bảo tàng giới thiệu lịch sử hình thành và phát triển của Sài Gòn – TP.HCM.",
-    "categories": [
-      "Di tích kiến trúc – nghệ thuật"
-    ]
-  },
-  {
-    "title": "Bến nhà Rồng (Bảo tàng Hồ Chí Minh)",
-    "url": "/baotanghcm.html",
-    "image": "/images/bthcm.png",
-    "description": "Bến Nhà Rồng được du khách và người dân địa phương thường xuyên đến tham quan. Nơi đây lưu giữ lại nhiều di tích lịch sử, trưng bày hình ảnh về cuộc sống và hoạt động của Chủ tịch Hồ Chí Minh.",
-    "categories": [
-      "Di tích cấp thành phố"
-    ]
-  },
-  {
-    "title": "Căn cứ Rừng Sác",
-    "url": "/cancurungsac.html",
-    "image": "/images/use_img/blog_img3.jpg",
-    "description": "Di tích căn cứ cách mạng trong rừng ngập mặn Cần Giờ thời kháng chiến.",
-    "categories": [
-      "Di tích lịch sử – văn hóa cách mạng"
-    ]
-  },
-  {
-    "title": "Chợ Bến Thành",
-    "url": "/chobenthanh.html",
-    "image": "/images/use_img/blog_img4.jpg",
-    "description": "Biểu tượng nổi tiếng của Sài Gòn, nơi buôn bán sầm uất và thu hút du khách.",
-    "categories": [
-      "Di tích cấp thành phố"
-    ]
-  },
-  {
-    "title": "Chợ Bình Tây",
-    "url": "/chobinhtay.html",
-    "image": "/images/use_img/blog_img5.jpg",
-    "description": "Khu chợ lớn tại Quận 6 mang kiến trúc Á Đông cổ kính, trung tâm thương mại của người Hoa.",
-    "categories": [
-      "Di tích cấp thành phố"
-    ]
-  },
-  {
-    "title": "Chùa Giác Lâm",
-    "url": "/chuagiaclam.html",
-    "image": "/images/use_img/blog_img6.jpg",
-    "description": "Ngôi chùa cổ nhất Sài Gòn, được xây dựng vào năm 1744 với kiến trúc truyền thống.",
-    "categories": [
-      "Di tích cấp quốc gia"
-    ]
-  },
-  {
-    "title": "Chùa Giác Viên",
-    "url": "/chuagiacvien.html",
-    "image": "/images/use_img/blog_img7.jpg",
-    "description": "Chùa nổi tiếng với kiến trúc gỗ cổ và những pho tượng Phật quý giá.",
-    "categories": [
-      "Di tích kiến trúc – nghệ thuật"
-    ]
-  },
-  {
-    "title": "Cơ sở Giấu vũ khí",
-    "url": "/cosogiauvukhi.html",
-    "image": "/images/use_img/blog_img8.jpg",
-    "description": "Di tích cách mạng, nơi cất giấu vũ khí bí mật phục vụ chiến đấu tại Sài Gòn.",
-    "categories": [
-      "Di tích cấp quốc gia"
-    ]
-  },
-  {
-    "title": "Địa đạo Củ Chi",
-    "url": "/diadaocuchi.html",
-    "image": "/images/use_img/blog_img9.jpg",
-    "description": "Mạng lưới địa đạo ngầm nổi tiếng thể hiện tinh thần kiên cường của quân dân Việt Nam.",
-    "categories": [
-      "Di tích quốc gia đặc biệt"
-    ]
-  },
-  {
-    "title": "Địa đạo Phú Thọ Hòa",
-    "url": "/diadaophuthohoa.html",
-    "image": "/images/use_img/blog_img10.jpg",
-    "description": "Di tích lịch sử cách mạng với hệ thống địa đạo được đào từ kháng chiến chống Pháp.",
-    "categories": [
-      "Di tích lịch sử – văn hóa cách mạng"
-    ]
-  },
-  {
-    "title": "Đình Thông Tây Hội",
-    "url": "/dingthongtayhoi.html",
-    "image": "/images/use_img/blog_img11.jpg",
-    "description": "Ngôi đình cổ nhất TP.HCM, mang kiến trúc truyền thống Nam Bộ đặc sắc.",
-    "categories": [
-      "Di tích kiến trúc – nghệ thuật"
-    ]
-  },
-  {
-    "title": "Đình Bình Đông",
-    "url": "/dinhbinhdong.html",
-    "image": "/images/use_img/blog_img12.jpeg",
-    "description": "Ngôi đình lâu đời ở Quận 8, gắn liền với lịch sử cộng đồng người Hoa.",
-    "categories": [
-      "Di tích cấp quốc gia"
-    ]
-  },
-  {
-    "title": "Đình Chí Hòa",
-    "url": "/dinhchihoa.html",
-    "image": "/images/use_img/blog_img13.jpg",
-    "description": "Đình cổ kính mang giá trị văn hóa và tín ngưỡng dân gian tại Sài Gòn.",
-    "categories": [
-      "Di tích kiến trúc – nghệ thuật"
-    ]
-  },
-  {
-    "title": "Dinh Độc Lập",
-    "url": "/dinhdoclap.html",
-    "image": "/images/use_img/blog_img14.jpg",
-    "description": "Công trình lịch sử – kiến trúc, nơi gắn liền với sự kiện 30/4/1975.",
-    "categories": [
-      "Di tích quốc gia đặc biệt"
-    ]
-  },
-  {
-    "title": "Đình Phong Phú",
-    "url": "/dinhphongphu.html",
-    "image": "/images/use_img/blog_img15.jpg",
-    "description": "Ngôi đình cổ kính gắn với truyền thống văn hóa tín ngưỡng của người dân địa phương.",
-    "categories": [
-      "Di tích lịch sử – văn hóa cách mạng"
-    ]
-  },
-  {
-    "title": "Khu giam trại Bệnh viện Trợ Quán",
-    "url": "/khugiamtraibenhvientroquan.html",
-    "image": "/images/ktg5.jpg",
-    "description": "Di tích cách mạng từng là nơi giam giữ và tra tấn các chiến sĩ yêu nước.",
-    "categories": [
-      "Di tích cấp quốc gia"
-    ]
-  },
-  {
-    "title": "Lăng Lê Văn Duyệt",
-    "url": "/langlevanduyet.html",
-    "image": "/images/use_img/blog_img17.jpg",
-    "description": "Khu lăng mộ vị Tổng trấn Gia Định Thành, di tích lịch sử nổi bật tại TP.HCM.",
-    "categories": [
-      "Di tích cấp quốc gia"
-    ]
-  },
-  {
-    "title": "Lân Sư Rồng",
-    "url": "/lansurong.html",
-    "image": "/images/use_img/blog_img18.jpg",
-    "description": "Múa lân sư rồng là nét văn hóa đặc trưng trong các dịp lễ hội và Tết Nguyên Đán.",
-    "categories": [
-      "Di sản văn hóa Phi vật thể"
-    ]
-  },
-  {
-    "title": "Lễ hội Khai hạ cầu an",
-    "url": "/lehoikhaihacauan.html",
-    "image": "/images/use_img/blog_img19.jpg",
-    "description": "Lễ hội truyền thống nhằm cầu bình an, mùa màng thuận lợi cho người dân.",
-    "categories": [
-      "Di sản văn hóa Phi vật thể"
-    ]
-  },
-  {
-    "title": "Lễ hội Nghinh Ông",
-    "url": "/lehoinghinhong.html",
-    "image": "/images/use_img/blog_img20.jpg",
+    "title": "Lễ hội Nghinh Ông Cần Giờ",
+    "url": "/lehoinghinong.html",
+    "image": "/images/ngongcg.jpg",
     "description": "Lễ hội đặc sắc của ngư dân Nam Bộ nhằm tôn vinh cá Ông và cầu ngư lộc.",
     "categories": [
-      "Di sản văn hóa Phi vật thể"
+      "Lễ hội ngư nghiệp"
     ]
   },
   {
-    "title": "Lễ hội Nguyên Tiêu",
+    "title": "Lễ hội Nguyên tiêu",
     "url": "/lehoinguyentieu.html",
-    "image": "/images/use_img/blog_img21.jpg",
-    "description": "Lễ hội truyền thống của cộng đồng người Hoa với rước đèn và múa lân.",
+    "image": "/images/ngtieu1.jpg",
+    "description": "Lễ hội tâm linh của cộng đồng người Hoa với rước đèn và múa lân.",
     "categories": [
-      "Di sản văn hóa Phi vật thể"
+      "Lễ hội tâm linh"
     ]
   },
   {
-    "title": "Lò gốm cổ Hưng Lợi",
-    "url": "/logom.html",
-    "image": "/images/use_img/blog_img22.jpg",
-    "description": "Lò gốm cổ Hưng Lợi — di tích khảo cổ quốc gia tại Quận 8, TP.HCM, là khu gò cổ chứa phế tích ba lò gốm nối tiếp với nhiều mảnh lu, khạp, siêu… thể hiện nghề thủ công gốm Sài Gòn xưa.",
+    "title": "Lễ hội Thần Rừng",
+    "url": "/lehoithanrung.html",
+    "image": "/images/tr1.jpg",
+    "description": "Lễ hội tôn vinh thần rừng, giữ gìn bản sắc văn hóa dân tộc thiểu số.",
     "categories": [
-      "Di tích khảo cổ"
+      "Lễ hội tâm linh"
     ]
   },
   {
-    "title": "Mộ Phan Châu Trinh",
-    "url": "/mophanchautrinh.html",
-    "image": "/images/use_img/blog_img23.jpg",
-    "description": "Nơi an nghỉ của chí sĩ yêu nước Phan Châu Trinh tại TP.HCM.",
+    "title": "Lễ hội Chùa Bà Thiên Hậu",
+    "url": "/lehoichuabathienhau.html",
+    "image": "/images/cbth1.png",
+    "description": "Lễ hội lớn tại Bình Dương tôn vinh Bà Thiên Hậu, thu hút đông đảo người dân và du khách.",
     "categories": [
-      "Di tích cấp quốc gia"
+      "Lễ hội tâm linh"
     ]
   },
   {
-    "title": "Ngã ba Giồng",
-    "url": "/ngabagiong.html",
-    "image": "/images/use_img/blog_img24.jpg",
-    "description": "Di tích lịch sử, nơi ghi dấu sự hy sinh của nhiều chiến sĩ cách mạng.",
+    "title": "Lễ hội Cúng Thần Lúa",
+    "url": "/lehoicungthanlua.html",
+    "image": "/images/tl1.jpg",
+    "description": "Lễ hội nông nghiệp của người Chơ-ro nhằm tạ ơn thần lúa và cầu mùa màng bội thu.",
     "categories": [
-      "Di tích cấp quốc gia"
+      "Lễ hội nông nghiệp"
     ]
   },
   {
-    "title": "Nhà hát Thành phố Hồ Chí Minh",
-    "url": "/nhahattphcm.html",
-    "image": "/images/use_img/blog_img25.jpg",
-    "description": "Công trình kiến trúc Pháp cổ, trung tâm biểu diễn nghệ thuật lớn của thành phố.",
+    "title": "Lễ hội Mùa Trái Chín",
+    "url": "/lehoimuatraichin.html",
+    "image": "/images/mtc1.jpg",
+    "description": "Lễ hội tôn vinh trái cây đặc sản, thúc đẩy du lịch và thương mại nông nghiệp.",
     "categories": [
-      "Di tích kiến trúc – nghệ thuật"
+      "Lễ hội nông nghiệp"
     ]
   },
   {
-    "title": "Nhà thờ Đức Bà Sài Gòn",
-    "url": "/nhathoducba.html",
-    "image": "/images/use_img/blog_img26.jpg",
-    "description": "Biểu tượng kiến trúc Pháp cổ kính giữa lòng TP.HCM.",
+    "title": "Lễ Hội Dinh Cô Long Hải",
+    "url": "/lehoidincolonghai.html",
+    "image": "/images/dc1.jpg",
+    "description": "Lễ hội tâm linh của ngư dân Long Hải với nghi lễ thờ Bà Cô, cầu nguyện biển yên sóng lặng, cuộc sống ấm no.",
     "categories": [
-      "Di tích cấp thành phố"
+      "Lễ hội tâm linh"
     ]
   },
   {
-    "title": "Tịnh xá Ngọc Phương",
-    "url": "/tinhxangocphuong.html",
-    "image": "/images/use_img/blog_img27.jpg",
-    "description": "Ngôi tịnh xá nổi tiếng với kiến trúc thanh tịnh và nét đặc trưng của Phật giáo Nam tông.",
+    "title": "Lễ Hội Nghinh Ông Tam Thắng",
+    "url": "/lehoinghinongtamthang.html",
+    "image": "/images/ngongtt1.jpg",
+    "description": "Lễ hội Cá Ông lớn bậc nhất Vũng Tàu, lưu giữ 12 sắc phong triều Nguyễn, được công nhận Di sản văn hóa phi vật thể Quốc gia.",
     "categories": [
-      "Di tích cấp quốc gia"
+      "Lễ hội ngư nghiệp"
     ]
   },
   {
-    "title": "Trụ sở UBND TP.HCM",
-    "url": "/trusoubndtphcm.html",
-    "image": "/images/use_img/blog_img28.jpg",
-    "description": "Công trình kiến trúc Pháp nổi bật, hiện là nơi làm việc của chính quyền thành phố.",
+    "title": "Lễ Hội Trần Hưng Đạo",
+    "url": "/lehoitranhungdao.html",
+    "image": "/images/thd1.jpg",
+    "description": "Lễ hội tưởng nhớ công đức Đức Thánh Trần - anh hùng dân tộc, giáo dục lòng yêu nước và truyền thống uống nước nhớ nguồn.",
     "categories": [
-      "Di tích kiến trúc – nghệ thuật"
-    ]
-  },
-  {
-    "title": "Vovinam",
-    "url": "/vovinam.html",
-    "image": "/images/use_img/blog_img29.jpg",
-    "description": "Môn võ cổ truyền Việt Nam nổi tiếng với tinh thần thượng võ và kỹ thuật đa dạng.",
-    "categories": [
-      "Di sản văn hóa Phi vật thể"
+      "Lễ hội tưởng niệm danh nhân"
     ]
   }
 ]

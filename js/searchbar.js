@@ -108,6 +108,16 @@ function applyFilters() {
   displayResults(filtered);
 }
 
+function getCategoryStyle(category) {
+  const styles = {
+    'Lễ hội nông nghiệp': { bg: '#65a30d', color: '#fff' },
+    'Lễ hội tâm linh': { bg: '#8b5cf6', color: '#fff' },
+    'Lễ hội tưởng niệm danh nhân': { bg: '#dc2626', color: '#fff' },
+    'Lễ hội ngư nghiệp': { bg: '#0ea5e9', color: '#fff' }
+  };
+  return styles[category] || { bg: '#6b7280', color: '#fff' };
+}
+
 function displayResults(results) {
   currentResults = results;
   const totalPages = Math.ceil(results.length / resultsPerPage);
@@ -116,7 +126,13 @@ function displayResults(results) {
   const paginated = results.slice(start, end);
 
   if (!container) return;
-  container.innerHTML = paginated.map(item => `
+  container.innerHTML = paginated.map(item => {
+    const badges = (Array.isArray(item.categories) ? item.categories : []).map(cat => {
+      const style = getCategoryStyle(cat);
+      return `<span style="display:inline-block;padding:4px 10px;border-radius:999px;background:${style.bg};color:${style.color};font-size:0.8rem;font-weight:600;margin:0 6px 6px 0;">${cat}</span>`;
+    }).join('');
+
+    return `
     <article class="post sticky hentry">
       <a href="${item.url}" class="post-thumb">
         <figure><img src="${item.image || 'images/placeholder.png'}" alt="${item.title}"></figure>
@@ -125,9 +141,11 @@ function displayResults(results) {
         <h2 class="entry-title"><a href="${item.url}">${item.title}</a></h2>
       </header>
       <div class="entry-content"><p>${item.description || ''}</p></div>
+      <div style="margin-bottom:10px;">${badges}</div>
       <a class="btn btn-medium read-more" href="${item.url}">Tìm hiểu thêm <i class="lnr lnr-arrow-right"></i></a>
     </article>
-  `).join('');
+  `;
+  }).join('');
 
   renderPagination(totalPages);
 }
