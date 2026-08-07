@@ -5,15 +5,15 @@
   function setLanguageButton(lang) {
     const btnFlag = document.getElementById('lang-btn-flag');
     const btn = document.getElementById('lang-btn');
-
     if (!btnFlag || !btn) return;
-
+    
+    // ĐÃ SỬA: Bỏ dấu "/" ở đầu đường dẫn hình ảnh để chạy chuẩn trên GitHub Pages
     if (lang === ALT_LANG) {
-      btnFlag.src = '/images/flag-en.svg';
+      btnFlag.src = 'images/flag-en.svg';
       btnFlag.alt = 'English';
       btn.setAttribute('title', 'English');
     } else {
-      btnFlag.src = '/images/flag-vi.svg';
+      btnFlag.src = 'images/flag-vi.svg';
       btnFlag.alt = 'Tiếng Việt';
       btn.setAttribute('title', 'Tiếng Việt');
     }
@@ -23,7 +23,6 @@
     if (document.getElementById('google_translate_element')) {
       return;
     }
-
     const container = document.createElement('div');
     container.id = 'google_translate_element';
     container.style.position = 'absolute';
@@ -42,9 +41,7 @@
   }
 
   window.googleTranslateElementInit = function () {
-
-    injectGoogleTranslate();
-
+    // ĐÃ SỬA: Xóa bỏ dòng injectGoogleTranslate() ở đây để tránh bị vòng lặp vô hạn
     new window.google.translate.TranslateElement({
       pageLanguage: 'vi',
       includedLanguages: 'en,ja,zh-CN',
@@ -64,7 +61,6 @@
   function switchGoogleTranslate(lang) {
     const targetLang = lang === ALT_LANG ? 'en' : 'vi';
     const combo = document.querySelector('.goog-te-combo');
-
     setLanguageButton(targetLang);
 
     if (combo) {
@@ -72,7 +68,6 @@
       combo.dispatchEvent(new Event('change'));
       return true;
     }
-
     window.__pendingGoogleLang = targetLang;
     injectGoogleTranslate();
     return false;
@@ -83,11 +78,9 @@
     const menu = document.querySelector('.lang-menu');
     const items = document.querySelectorAll('.lang-item');
     const sel = document.getElementById('lang-select');
-
     if (!btn || !menu) return;
 
     setLanguageButton(DEFAULT_LANG);
-
     if (sel) {
       sel.value = DEFAULT_LANG;
     }
@@ -109,9 +102,7 @@
       item.addEventListener('click', function () {
         const lang = item.getAttribute('data-lang');
         if (!lang) return;
-
         switchGoogleTranslate(lang);
-
         btn.setAttribute('aria-expanded', 'false');
         menu.style.display = 'none';
       });
