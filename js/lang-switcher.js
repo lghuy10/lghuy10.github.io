@@ -1,13 +1,15 @@
 (function () {
   const DEFAULT_LANG = 'vi';
   const ALT_LANG = 'en';
-
+ 
+  let gtSelect = null;       // cache <select> do GTranslate tạo ra
+  let pendingLang = null;    // ngôn ngữ đang chờ áp dụng nếu select chưa sẵn sàng
+ 
   function setLanguageButton(lang) {
     const btnFlag = document.getElementById('lang-btn-flag');
     const btn = document.getElementById('lang-btn');
     if (!btnFlag || !btn) return;
-    
-    // ĐÃ SỬA: Bỏ dấu "/" ở đầu đường dẫn hình ảnh để chạy chuẩn trên GitHub Pages
+ 
     if (lang === ALT_LANG) {
       btnFlag.src = 'images/flag-en.svg';
       btnFlag.alt = 'English';
@@ -18,97 +20,108 @@
       btn.setAttribute('title', 'Tiếng Việt');
     }
   }
-
-  function injectGoogleTranslate() {
-    if (document.getElementById('google_translate_element')) {
+ 
+  // Tìm <select> mà GTranslate sinh ra bên trong .gtranslate_wrapper.
+  // Dùng MutationObserver thay vì setTimeout cố định để không bị race condition
+  // như code Google Translate cũ (bấm sớm quá, script Google chưa kịp tạo combo).
+  function waitForGtSelect(callback) {
+    const wrapper = document.querySelector('.gtranslate_wrapper');
+    if (!wrapper) {
+      console.error('Không tìm thấy .gtranslate_wrapper trong DOM');
       return;
     }
-    const container = document.createElement('div');
-    container.id = 'google_translate_element';
-    container.style.position = 'absolute';
-    container.style.left = '-9999px';
-    container.style.top = '-9999px';
-    container.style.visibility = 'hidden';
-    document.body.appendChild(container);
-
-    if (!document.getElementById('google-translate-script')) {
-      const script = document.createElement('script');
-      script.id = 'google-translate-script';
-      script.type = 'text/javascript';
-      script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-      document.body.appendChild(script);
+ 
+    const existing = wrapper.querySelector('select');
+    if (existing) {
+      callback(existing);
+      return;
     }
-  }
-
-  window.googleTranslateElementInit = function () {
-    // ĐÃ SỬA: Xóa bỏ dòng injectGoogleTranslate() ở đây để tránh bị vòng lặp vô hạn
-    new window.google.translate.TranslateElement({
-      pageLanguage: 'vi',
-      includedLanguages: 'en,ja,zh-CN',
-      layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE
-    }, 'google_translate_element');
-
-    setTimeout(function () {
-      const combo = document.querySelector('.goog-te-combo');
-      if (combo && window.__pendingGoogleLang) {
-        combo.value = window.__pendingGoogleLang;
-        combo.dispatchEvent(new Event('change'));
-        window.__pendingGoogleLang = null;
+ 
+    const observer = new MutationObserver(function () {
+      const select = wrapper.querySelector('select');
+      if (select) {
+        observer.disconnect();
+        callback(select);
       }
-    }, 1200);
-  };
-
-  function switchGoogleTranslate(lang) {
-    const targetLang = lang === ALT_LANG ? 'en' : 'vi';
-    const combo = document.querySelector('.goog-te-combo');
-    setLanguageButton(targetLang);
-
-    if (combo) {
-      combo.value = targetLang;
-      combo.dispatchEvent(new Event('change'));
-      return true;
-    }
-    window.__pendingGoogleLang = targetLang;
-    injectGoogleTranslate();
-    return false;
+    });
+ 
+    observer.observe(wrapper, { childList: true, subtree: true });
+ 
+    // Phòng trường hợp script GTranslate load lỗi / bị chặn (ad-block, mạng chậm...)
+    // -> báo lỗi rõ ràng thay vì im lặng không làm gì, để dễ debug hơn code cũ.
+    setTimeout(function () {
+      if (!wrapper.querySelector('select')) {
+        observer.disconnect();
+        console.error(
+          'GTranslate widget không khởi tạo được sau 8s. ' +
+          'Kiểm tra: 1) script flags.js có load được không (tab Network), ' +
+          '2) domain đã được cấu hình đúng trong dashboard GTranslate chưa, ' +
+          '3) có bị ad-blocker chặn cdn.gtranslate.net không.'
+        );
+      }
+    }, 8000);
   }
-
+ 
+  function switchLanguage(lang) {
+    const targetLang = lang === ALT_LANG ? 'en' : 'vi';
+    setLanguageButton(targetLang);
+ 
+    if (gtSelect) {
+      applyLang(gtSelect, targetLang);
+      return;
+    }
+ 
+    pendingLang = targetLang;
+    waitForGtSelect(function (select) {
+      gtSelect = select;
+      if (pendingLang) {
+        applyLang(gtSelect, pendingLang);
+        pendingLang = null;
+      }
+    });
+  }
+ 
+  function applyLang(select, targetLang) {
+    select.value = targetLang;
+    select.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+ 
   function init() {
     const btn = document.getElementById('lang-btn');
     const menu = document.querySelector('.lang-menu');
     const items = document.querySelectorAll('.lang-item');
     const sel = document.getElementById('lang-select');
     if (!btn || !menu) return;
-
+ 
     setLanguageButton(DEFAULT_LANG);
     if (sel) {
       sel.value = DEFAULT_LANG;
     }
-
+ 
     btn.addEventListener('click', function () {
       const expanded = btn.getAttribute('aria-expanded') === 'true';
       btn.setAttribute('aria-expanded', String(!expanded));
       menu.style.display = expanded ? 'none' : 'block';
     });
-
+ 
     document.addEventListener('click', function (e) {
       if (!menu.contains(e.target) && !btn.contains(e.target)) {
         btn.setAttribute('aria-expanded', 'false');
         menu.style.display = 'none';
       }
     });
-
+ 
     items.forEach(function (item) {
       item.addEventListener('click', function () {
         const lang = item.getAttribute('data-lang');
         if (!lang) return;
-        switchGoogleTranslate(lang);
+        switchLanguage(lang);
         btn.setAttribute('aria-expanded', 'false');
         menu.style.display = 'none';
       });
     });
   }
-
+ 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
