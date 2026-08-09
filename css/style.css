@@ -6446,3 +6446,62 @@ a.fav-load {
     order: initial; /* Reset the order so the logo comes first */
   }
 }
+.intro-text {
+    color: #4c3a2e !important;
+}
+/* 1. Đổi chữ to, màu đậm và IN ĐẬM */
+#categoryList li {
+    font-size: 16px !important;
+    font-weight: 700 !important; /* Đã nâng độ đậm của chữ lên 700 */
+    color: #4c3a2e !important;
+    list-style: none !important;
+}
+
+#categoryList li a,
+#categoryList li span,
+#categoryList li button {
+    font-size: 16px !important;
+    font-weight: 700 !important; /* Chữ in đậm */
+    color: inherit !important;
+}
+
+/* 2. Thêm dấu chấm tròn IN ĐẬM */
+#categoryList li::before {
+    content: "• " !important;
+    color: #c94848 !important;
+    font-size: 1.4em !important; /* Tăng kích thước dấu chấm cho to rõ hơn */
+    font-weight: 900 !important; /* Dấu chấm in cực đậm */
+    margin-right: 6px !important;
+}
+
+/* 3. Ẩn mục "Tất cả" */
+#categoryList li:first-child {
+    display: none !important;
+}
+/* Chỉ đổi màu cho tiêu đề: Bản Đồ, Kho thông tin, Quiz & AR */
+.feature-box h3,
+.feature-box h4,
+.single-feature h3,
+.single-feature h4,
+.icon-box h3,
+.icon-box h4,
+.service-item h3,
+.service-item h4 {
+    color: #c94848 !important; /* Đổi màu tiêu đề thành nâu đậm (hoặc mã màu bạn muốn) */
+    font-weight: 700 !important;
+}
+
+/* Giữ nguyên đoạn văn bên dưới màu đen nhạt tự nhiên */
+.feature-box p,
+.single-feature p,
+.icon-box p,
+.service-item p {
+    color: #333333 !important;
+}
+/* Đổi màu khi di chuột vào (Hover) */
+.navigation a:hover,
+.nav a:hover,
+.navbar a:hover,
+.custom-navbar a:hover {
+    color: #c94848 !important;
+}
