@@ -193,8 +193,8 @@ th {
     color: #000 !important;
     text-shadow: none !important;
     background: 0 0 !important;
-    -webkit-box-shadow: none !important;
-    box-shadow: none !important;
+    box-shadow: 3px 3px 0px var(--color-indigo);
+    box-shadow: 3px 3px 0px var(--color-indigo);
   }
   a,
   a:visited {
@@ -1545,15 +1545,15 @@ kbd {
   color: #fff;
   background-color: #333;
   border-radius: 3px;
-  -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.25);
-  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.25);
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 }
 kbd kbd {
   padding: 0;
   font-size: 100%;
   font-weight: 700;
-  -webkit-box-shadow: none;
-  box-shadow: none;
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 }
 pre {
   display: block;
@@ -2648,8 +2648,8 @@ output {
   background-image: none;
   border: 1px solid #ccc;
   border-radius: 4px;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  box-shadow: 3px 3px 0px var(--color-indigo);
   -webkit-transition: border-color ease-in-out 0.15s,
     -webkit-box-shadow ease-in-out 0.15s;
   -o-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
@@ -2658,10 +2658,8 @@ output {
 .form-control:focus {
   border-color: #66afe9;
   outline: 0;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
-    0 0 8px rgba(102, 175, 233, 0.6);
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
-    0 0 8px rgba(102, 175, 233, 0.6);
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 }
 .form-control::-moz-placeholder {
   color: #999;
@@ -2917,13 +2915,13 @@ textarea.input-lg {
 }
 .has-success .form-control {
   border-color: #3c763d;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 }
 .has-success .form-control:focus {
   border-color: #2b542c;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #67b168;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #67b168;
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 }
 .has-success .input-group-addon {
   color: #3c763d;
@@ -2947,13 +2945,13 @@ textarea.input-lg {
 }
 .has-warning .form-control {
   border-color: #8a6d3b;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 }
 .has-warning .form-control:focus {
   border-color: #66512c;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #c0a16b;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #c0a16b;
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 }
 .has-warning .input-group-addon {
   color: #8a6d3b;
@@ -2977,13 +2975,13 @@ textarea.input-lg {
 }
 .has-error .form-control {
   border-color: #a94442;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 }
 .has-error .form-control:focus {
   border-color: #843534;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #ce8483;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #ce8483;
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 }
 .has-error .input-group-addon {
   color: #a94442;
@@ -3133,16 +3131,16 @@ textarea.input-lg {
 .btn:active {
   background-image: none;
   outline: 0;
-  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 }
 .btn.disabled,
 .btn[disabled],
 fieldset[disabled] .btn {
   cursor: not-allowed;
   filter: alpha(opacity=65);
-  -webkit-box-shadow: none;
-  box-shadow: none;
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  box-shadow: 3px 3px 0px var(--color-indigo);
   opacity: 0.65;
 }
 a.btn.disabled,
@@ -3502,8 +3500,8 @@ fieldset[disabled] .btn-danger:hover {
 .btn-link[disabled],
 fieldset[disabled] .btn-link {
   background-color: transparent;
-  -webkit-box-shadow: none;
-  box-shadow: none;
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 }
 .btn-link,
 .btn-link:active,
@@ -3629,8 +3627,8 @@ tbody.collapse.in {
   border: 1px solid #ccc;
   border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 4px;
-  -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 }
 .dropdown-menu.pull-right {
   right: 0;
@@ -3818,12 +3816,12 @@ tbody.collapse.in {
   padding-left: 12px;
 }
 .btn-group.open .dropdown-toggle {
-  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 }
 .btn-group.open .dropdown-toggle.btn-link {
-  -webkit-box-shadow: none;
-  box-shadow: none;
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 }
 .btn .caret {
   margin-left: 0;
@@ -4282,8 +4280,8 @@ textarea.input-group-sm > .input-group-btn > .btn {
   overflow-x: visible;
   -webkit-overflow-scrolling: touch;
   border-top: 1px solid transparent;
-  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 }
 .navbar-collapse.in {
   overflow-y: auto;
@@ -4292,8 +4290,8 @@ textarea.input-group-sm > .input-group-btn > .btn {
   .navbar-collapse {
     width: auto;
     border-top: 0;
-    -webkit-box-shadow: none;
-    box-shadow: none;
+    box-shadow: 3px 3px 0px var(--color-indigo);
+    box-shadow: 3px 3px 0px var(--color-indigo);
   }
   .navbar-collapse.collapse {
     display: block !important;
@@ -4433,8 +4431,8 @@ textarea.input-group-sm > .input-group-btn > .btn {
     margin-top: 0;
     background-color: transparent;
     border: 0;
-    -webkit-box-shadow: none;
-    box-shadow: none;
+    box-shadow: 3px 3px 0px var(--color-indigo);
+    box-shadow: 3px 3px 0px var(--color-indigo);
   }
   .navbar-nav .open .dropdown-menu .dropdown-header,
   .navbar-nav .open .dropdown-menu > li > a {
@@ -4469,10 +4467,8 @@ textarea.input-group-sm > .input-group-btn > .btn {
   margin-left: -15px;
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
-  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    0 1px 0 rgba(255, 255, 255, 0.1);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 }
 @media (min-width: 768px) {
   .navbar-form .form-group {
@@ -4540,8 +4536,8 @@ textarea.input-group-sm > .input-group-btn > .btn {
     margin-right: 0;
     margin-left: 0;
     border: 0;
-    -webkit-box-shadow: none;
-    box-shadow: none;
+    box-shadow: 3px 3px 0px var(--color-indigo);
+    box-shadow: 3px 3px 0px var(--color-indigo);
   }
 }
 .navbar-nav > li > .dropdown-menu {
@@ -5228,8 +5224,8 @@ a.thumbnail:hover {
   overflow: hidden;
   background-color: #f5f5f5;
   border-radius: 4px;
-  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 }
 .progress-bar {
   float: left;
@@ -5240,8 +5236,8 @@ a.thumbnail:hover {
   color: #fff;
   text-align: center;
   background-color: #337ab7;
-  -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
-  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  box-shadow: 3px 3px 0px var(--color-indigo);
   -webkit-transition: width 0.6s ease;
   -o-transition: width 0.6s ease;
   transition: width 0.6s ease;
@@ -5686,8 +5682,8 @@ button.list-group-item-danger.active:hover {
   background-color: #fff;
   border: 1px solid transparent;
   border-radius: 4px;
-  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 }
 .panel-body {
   padding: 15px;
@@ -6164,8 +6160,8 @@ button.list-group-item-danger.active:hover {
   background-color: #f5f5f5;
   border: 1px solid #e3e3e3;
   border-radius: 4px;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 }
 .well blockquote {
   border-color: #ddd;
@@ -6252,8 +6248,8 @@ button.close {
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 6px;
   outline: 0;
-  -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
-  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 }
 .modal-backdrop {
   position: fixed;
@@ -6315,8 +6311,8 @@ button.close {
     margin: 30px auto;
   }
   .modal-content {
-    -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    box-shadow: 3px 3px 0px var(--color-indigo);
+    box-shadow: 3px 3px 0px var(--color-indigo);
   }
   .modal-sm {
     width: 300px;
@@ -6470,8 +6466,8 @@ button.close {
   border: 1px solid #ccc;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 6px;
-  -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  box-shadow: 3px 3px 0px var(--color-indigo);
   line-break: auto;
 }
 .popover.top {
@@ -7129,3 +7125,4 @@ button.close {
   }
 }
 /*# sourceMappingURL=bootstrap.min.css.map */
+

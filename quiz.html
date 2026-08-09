@@ -18,9 +18,10 @@
     letter-spacing: 0.2px;    
     text-transform: none;     
   }
+  body { background-color: #e6e6e6;   }
 </style>
 <style>
-  :root{
+:root{
     --bg1:#0b1220; --bg2:#08132b;
     --card: rgba(255,255,255,0.03);
     --accentA:#ff7ab6; --accentB:#ffd86b;
@@ -57,8 +58,8 @@
   @media(max-width:520px){ .options{grid-template-columns:1fr} }
   .opt{padding:12px;border-radius:12px;background:rgba(255,255,255,0.02);cursor:pointer;border:1px solid rgba(255,255,255,0.02);font-weight:800;transition:transform .12s, box-shadow .12s, opacity .12s}
   .opt:hover{transform:translateY(-6px)}
-  .opt.correct{box-shadow:0 10px 30px rgba(52,211,153,0.12);border-color: rgba(52,211,153,0.2);background:rgba(52,211,153,0.06)}
-  .opt.wrong{box-shadow:0 10px 30px rgba(251,113,133,0.12);border-color: rgba(251,113,133,0.12);background:rgba(251,113,133,0.04)}
+  .opt.correct{box-shadow: 3px 3px 0px var(--color-indigo);border-color: rgba(52,211,153,0.2);background:rgba(52,211,153,0.06)}
+  .opt.wrong{box-shadow: 3px 3px 0px var(--color-indigo);border-color: rgba(251,113,133,0.12);background:rgba(251,113,133,0.04)}
   .meta-row{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
 
   .time-wrap{height:10px;background:rgba(255,255,255,0.03);border-radius:8px;overflow:hidden;margin-top:12px}
@@ -89,7 +90,7 @@
     position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:40;
     background: rgba(20,24,40,0.98); 
     padding:16px;border-radius:12px;
-    box-shadow:0 18px 40px rgba(0,0,0,0.6);
+    box-shadow: 3px 3px 0px var(--color-indigo);
     min-width:260px;
     border: 1.5px solid #ffd86b;
   }

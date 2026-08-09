@@ -55,9 +55,9 @@ nav.meta-login ul li i {
   min-height: 570px;
   max-height: 635px;
   position: relative;
-  -moz-box-shadow: 0 0 5px #bfc3c9;
-  -webkit-box-shadow: 0 0 5px #bfc3c9;
-  box-shadow: 0 0 5px #bfc3c9;
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 }
 .course h3 {
   font-size: 17px;
@@ -377,9 +377,9 @@ h1 .instructors-name a:hover {
   border: 1px solid #e4e8ee;
   border-top: none;
   margin-bottom: 30px;
-  -moz-box-shadow: none;
-  -webkit-box-shadow: none;
-  box-shadow: none;
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 }
 .course-thumbnail figure {
   width: 370px;
@@ -543,7 +543,7 @@ h1 .instructors-name a:hover {
 .well {
   background: 0 0;
   border: none;
-  box-shadow: none;
+  box-shadow: 3px 3px 0px var(--color-indigo);
 }
 .well .btn-group {
   float: right;
@@ -1292,7 +1292,7 @@ li.comment {
   margin-bottom: 20px;
   background: #fff;
   border-radius: 4px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  box-shadow: 3px 3px 0px var(--color-indigo);
   transition: margin 0.3s ease;
 }
 
@@ -1326,7 +1326,7 @@ li.comment {
 }
 
 .comment:hover {
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 }
 #comments .reply .btn-default:hover {
   color: #ff5722 !important;
@@ -1556,7 +1556,7 @@ li.comment {
   position: relative;
   background-color: #e4e8ee;
   border-radius: 4px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+  box-shadow: 3px 3px 0px var(--color-indigo);
   width: 70px;
   -webkit-border-radius: 35px;
   -moz-border-radius: 35px;
@@ -3164,9 +3164,9 @@ nav.meta-login ul li i {
   min-height: 570px;
   max-height: 635px;
   position: relative;
-  -moz-box-shadow: 0 0 5px #bfc3c9;
-  -webkit-box-shadow: 0 0 5px #bfc3c9;
-  box-shadow: 0 0 5px #bfc3c9;
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 }
 .course h3 {
   font-size: 17px;
@@ -3501,9 +3501,9 @@ h1 .instructors-name a:hover {
   border: 1px solid #e4e8ee;
   border-top: none;
   margin-bottom: 30px;
-  -moz-box-shadow: none;
-  -webkit-box-shadow: none;
-  box-shadow: none;
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 }
 .course-thumbnail figure {
   width: 370px;
@@ -3667,7 +3667,7 @@ h1 .instructors-name a:hover {
 .well {
   background: 0 0;
   border: none;
-  box-shadow: none;
+  box-shadow: 3px 3px 0px var(--color-indigo);
 }
 .well .btn-group {
   float: right;
@@ -4628,7 +4628,7 @@ article blockquote.post-quote footer {
   position: relative;
   background-color: #e4e8ee;
   border-radius: 4px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+  box-shadow: 3px 3px 0px var(--color-indigo);
   width: 70px;
   -webkit-border-radius: 35px;
   -moz-border-radius: 35px;
@@ -6147,7 +6147,7 @@ a.fav-load {
   display: none;
   flex-direction: column;
   overflow: hidden;
-  box-shadow: none;
+  box-shadow: 3px 3px 0px var(--color-indigo);
   font-family: sans-serif;
 }
 

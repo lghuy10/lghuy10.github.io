@@ -3,7 +3,7 @@
   --accent: #e53935;
   --accent-dark: #b71c1c;
   --btn-size: 48px;
-  --shadow: 0 6px 18px rgba(2,6,23,0.6);
+  --shadow: 3px 3px 0px var(--color-indigo);
 }
 
 .auto-music-toggle{
@@ -18,7 +18,7 @@
   place-items: center;
   background: linear-gradient(180deg, var(--accent), var(--accent-dark));
   color: #fff;
-  box-shadow: var(--shadow);
+  box-shadow: 3px 3px 0px var(--color-indigo);
   cursor: pointer;
   transition: transform .12s ease, opacity .12s ease;
   user-select: none;
@@ -42,3 +42,4 @@
   :root{ --btn-size:56px; }
   .auto-music-toggle{ left:12px; bottom:12px; }
 }
+

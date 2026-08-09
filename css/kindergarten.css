@@ -4,6 +4,8 @@
 body {
   font-size: 15px;
   font-family: roboto, sans-serif;
+  background-color: var(--bg-sepia);
+  background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
 }
 .inner-pages {
   background: url(../images/header-inner-bg.jpg) no-repeat center;
@@ -94,7 +96,8 @@ a:hover.read-more {
   display: inline-block;
 }
 .header_meta_one {
-  background: #fff;
+  background-color: var(--bg-sepia);
+  background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
   border: none;
 }
 .header_meta_one nav.meta-login ul li {
@@ -403,7 +406,7 @@ a:hover.read-more {
 .about-slide .flex-control-paging li a {
   border: 1px solid #ffffff;
   background: #fff;
-  box-shadow: none;
+  box-shadow: 3px 3px 0px var(--color-indigo);
   width: 10px;
   height: 10px;
   outline: none;
@@ -413,7 +416,8 @@ a:hover.read-more {
   background: #ffffff;
 }
 .our-features {
-  background: #fafafc;
+  background-color: var(--bg-sepia);
+  background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
   padding: 60px 0 90px;
   margin-bottom: 75px;
 }
@@ -454,7 +458,8 @@ a:hover.read-more {
   padding-bottom: 25px;
 }
 .fun-gallery {
-  background: #fff;
+  background-color: var(--bg-sepia);
+  background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
   padding: 20px 0 90px;
 }
 .fun-gallery ul {
@@ -524,7 +529,7 @@ a:hover.read-more {
 }
 .fun-gallery .flex-control-nav li a {
   background: #fff;
-  box-shadow: inherit;
+  box-shadow: 3px 3px 0px var(--color-indigo);
   border: 1px solid #ff5722;
   width: 10px;
   height: 10px;
@@ -578,7 +583,8 @@ a:hover.read-more {
   display: block;
 }
 .classes {
-  background: #fff;
+  background-color: var(--bg-sepia);
+  background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
   display: table;
   width: 100%;
   border-radius: 5px;
@@ -1895,11 +1901,13 @@ a:hover.read-more {
   color: #03a9f4;
 }
 .site-footer {
-  background: #fff;
+  background-color: var(--bg-sepia);
+  background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
   padding-top: 50px;
 }
 .footer-bottom {
-  background: #fff;
+  background-color: var(--bg-sepia);
+  background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
   padding-bottom: 30px;
 }
 .site-footer .widget h3 {
@@ -1915,7 +1923,7 @@ a:hover.read-more {
   float: left;
   border: none;
   background: #f4f4f8;
-  box-shadow: 0 0 0;
+  box-shadow: 3px 3px 0px var(--color-indigo);
   font: 14px Roboto, sans-serif;
   color: #c9d0d6;
   font-weight: 400;
@@ -1953,7 +1961,7 @@ a:hover.read-more {
   margin-top: 0;
 }
 .footer-widget .social li a {
-  color: #c5c5c7;
+  color: var(--color-indigo);
 }
 .footer-widget .social li a:hover {
   color: #262c38;
@@ -1969,10 +1977,10 @@ a:hover.read-more {
   width: 100%;
 }
 .contact-widget p.mobile {
-  color: #fff;
+  color: var(--color-indigo);
 }
 .contact-widget p.email {
-  color: #fff;
+  color: var(--color-indigo);
 }
 .contact-widget i {
   color: #03a9f4;
@@ -2493,9 +2501,89 @@ a:hover.read-more {
   }
 }
 @media (max-width: 320px) {
-  .fun-gallery-slider .slides li .slide-right img {
-    margin: 6px 3px;
-    width: 59px;
-  }
+   .fun-gallery-slider .slides li .slide-right img {
+     margin: 6px 3px;
+     width: 59px;
+   }
+ }
+
+/* Vintage sepia paper background for header navbar elements */
+.custom-navbar,
+.custom-navbar-logo,
+.custom-navbar-logo img,
+.custom-navbar-dropdown,
+.lang-menu {
+  background-color: var(--bg-sepia) !important;
+  background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png') !important;
+  background-repeat: repeat !important;
 }
+
+/* === Vintage Button Style === */
+.btn,
+.btn-default,
+.btn-primary,
+.btn-blue,
+.btn-medium,
+.btn-styled,
+.btn-white,
+.hero-neo__btn,
+.hero-neo__btn--primary,
+.hero-neo__btn--ghost,
+.menu-icon-btn,
+.custom-navbar-toggle,
+.popup-btn,
+.popup-btn.sv,
+.big-btn,
+#filter-btn,
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"] {
+  background: var(--color-terracotta) !important;
+  color: var(--color-bg-sepia) !important;
+  border: none !important;
+  box-shadow: 3px 3px 0px var(--color-indigo) !important;
+  transition: background 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+.btn:hover,
+.btn-default:hover,
+.btn-primary:hover,
+.btn-blue:hover,
+.btn-medium:hover,
+.btn-styled:hover,
+.btn-white:hover,
+.hero-neo__btn:hover,
+.hero-neo__btn--primary:hover,
+.hero-neo__btn--ghost:hover,
+.menu-icon-btn:hover,
+.custom-navbar-toggle:hover,
+.popup-btn:hover,
+.popup-btn.sv:hover,
+.big-btn:hover,
+#filter-btn:hover,
+button:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover {
+  background: var(--color-indigo) !important;
+  box-shadow: 3px 3px 0px var(--color-terracotta) !important;
+  color: var(--color-bg-sepia) !important;
+}
+
+/* Keep music toggle as circular gradient button but with sharp shadow */
+.auto-music-toggle {
+  box-shadow: 3px 3px 0px var(--color-indigo) !important;
+}
+
+/* === Vintage Heading Style (overrides all previous rules) === */
+h1, h2, h3, h4, h5 {
+  font-family: 'Playfair Display', serif !important;
+  color: var(--color-terracotta-light) !important;
+}
+h6 {
+  font-family: 'Lora', serif !important;
+  color: var(--color-indigo) !important;
+}
+
 

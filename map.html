@@ -51,15 +51,16 @@
 <link href="/css/global.css" rel="stylesheet"/>
 
 <link href="/css/style.css" rel="stylesheet"/>
+</head>
+<body>
 
 <style>
 
   body, html {
-
     margin: 0;
-
     height: 100%;
 
+    background-color: #ebe0d0;
   }
 
 
@@ -100,7 +101,7 @@
 
     border-radius: 8px;
 
-    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    box-shadow: 3px 3px 0px var(--color-indigo);
 
     padding: 6px;
 
@@ -142,7 +143,7 @@
 
     border-radius: 8px;
 
-    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    box-shadow: 3px 3px 0px var(--color-indigo);
 
     list-style: none;
 
@@ -198,7 +199,7 @@
 
   border-radius: 8px;
 
-  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 
   padding: 8px 12px;
 
@@ -226,7 +227,7 @@
 
   outline: none; /* remove default outline */
 
-  box-shadow: 0 0 0 4px rgba(33,150,243,0.12); /* visible focus ring */
+  box-shadow: 3px 3px 0px var(--color-indigo); /* visible focus ring */
 
   color: #2196F3;  /* ensure focus doesn't turn text white */
 
@@ -240,7 +241,7 @@
 
   overflow: hidden;
 
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 
 }
 
@@ -272,7 +273,7 @@
 
   border-radius: 50%;
 
-  box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 
   border: 3px solid white;
 
@@ -300,7 +301,7 @@
 
   transform: translate(-50%, -50%) scale(1.6);
 
-  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 
   z-index: 9999;
 
@@ -372,7 +373,7 @@
 
     border-left: 3px solid #2196F3;
 
-    box-shadow: -2px 0 8px rgba(0,0,0,0.2);
+    box-shadow: 3px 3px 0px var(--color-indigo);
 
     transition: right 0.3s ease;
 
@@ -438,7 +439,7 @@
 
     border: 2px solid #4CAF50;
 
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    box-shadow: 3px 3px 0px var(--color-indigo);
 
   }
 
@@ -480,7 +481,7 @@
 
     border: none;
 
-    box-shadow: 0 2px 8px rgba(255,112,67,0.10);
+    box-shadow: 3px 3px 0px var(--color-indigo);
 
     margin-right: 4px;
 
@@ -500,7 +501,7 @@
 
     color: #fff;
 
-    box-shadow: 0 4px 16px rgba(255,112,67,0.18);
+    box-shadow: 3px 3px 0px var(--color-indigo);
 
     transform: translateY(-2px) scale(1.04);
 
@@ -528,7 +529,7 @@
 
   border-radius: 8px;
 
-  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 
   padding: 8px 12px;
 
@@ -654,7 +655,7 @@
 
 <link href="/css/kindergarten.css" rel="stylesheet"/><style>
 
-.custom-navbar { width: 100%; background: #fff; box-shadow: 0 2px 16px rgba(44,62,80,0.07), 0 1.5px 0 #f3f3f3; border-bottom: 1.5px solid #f3f3f3; position: sticky; top: 0; z-index: 1000; font-family: 'Montserrat', 'Open Sans', sans-serif; transition: box-shadow .18s; } .custom-navbar-inner { justify-content: space-between; max-width: 1200px; margin: 0 auto; display: flex; align-items: center; padding: 0 40px; height: 120px; } .custom-navbar-logo { display: flex; align-items: center; gap: 0; text-decoration: none; background: #fff; border-radius: 12px; padding: 0; transition: box-shadow .18s, border .18s; } .custom-navbar-logo img { height: 96px; width: auto; border-radius: 8px; background: #fff; } .custom-navbar-nav { display: flex; align-items: center; gap: 8px; list-style: none; margin: 0; padding: 0; } .custom-navbar-nav > li { position: relative; } .custom-navbar-link { display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px 8px 18px; color: #2f2f2f; font-weight: 600; border-radius: 8px 8px 0 0; background: none; border: none; font-size: 1rem; position: relative; transition: color .18s, background .18s; } .custom-navbar-link::after { content: ''; display: block; position: absolute; left: 18px; right: 18px; bottom: 2px; height: 2.5px; background: linear-gradient(90deg, #e53935 0%, #ff7043 100%); border-radius: 2px; transform: scaleX(0); transition: transform .22s; } .custom-navbar-link:hover, .custom-navbar-link:focus { color: #e53935; background: #f9f9f9; } .custom-navbar-link:hover::after, .custom-navbar-link:focus::after { transform: scaleX(1); } .custom-navbar-dropdown { display: none; position: absolute; left: 0; top: 110%; min-width: 200px; background: #fff; border-radius: 12px; box-shadow: 0 8px 32px rgba(44,62,80,0.13); padding: 8px 0; z-index: 1001; border: 1.5px solid #f3f3f3; animation: fadeIn .18s; } .custom-navbar-nav > li:hover > .custom-navbar-dropdown, .custom-navbar-nav > li:focus-within > .custom-navbar-dropdown { display: block; } .custom-navbar-dropdown a { display: flex; align-items: center; gap: 8px; padding: 11px 28px 11px 22px; color: #e53935; font-weight: 500; text-decoration: none; border-radius: 8px; transition: background .16s, color .16s; font-size: 0.98rem; position: relative; } .custom-navbar-dropdown a:hover { background: #fff3f1; color: transparent; } .custom-navbar-dropdown a::before { content: '2'; color: #ff7043; font-size: 1.2em; margin-right: 8px; opacity: 0.7; } .custom-navbar-toggle { display: none; background: none; border: none; color: #e53935; font-size: 2rem; cursor: pointer; margin-left: 12px; border-radius: 8px; padding: 4px 10px; transition: background .18s; } .custom-navbar-toggle:hover { background: #ffe3de; } /* new: menu toggle specific styles to avoid global button overrides */ .menu-icon-btn { /* reset heavy button rules from global styles */ background: transparent !important; border: none !important; box-shadow: none !important; color: #ff5722 !important; /* site orange */ font-size: 1.9rem; line-height: 1; padding: 6px 10px; display: none; /* hide by default (desktop) */ align-items: center; justify-content: center; border-radius: 8px; cursor: pointer; transition: background .18s, transform .12s; -webkit-appearance: none; } .menu-icon-btn:hover, .menu-icon-btn:focus { background: #fff3f1; color: #d32f2f !important; outline: none; } .menu-icon-btn:active { transform: translateY(1px) scale(.995); } /* keep the old custom-navbar-toggle selector for any other behavior but avoid generic button styling */ .custom-navbar-toggle { /* minimal shim so scripts querying this class still work */ background: none; border: none; padding: 0; } @media (max-width: 900px) { .custom-navbar-inner { flex-wrap: wrap; height: auto; padding: 0 10px; } /* show the menu button on mobile */ .menu-icon-btn { display: inline-flex; } .custom-navbar-nav { flex-direction: column; align-items: flex-start; width: 100%; background: #fff; border-radius: 0 0 16px 16px; box-shadow: 0 8px 32px rgba(44,62,80,0.13); margin-top: 8px; display: none; position: absolute; left: 0; top: 72px; z-index: 1002; border-top: 1.5px solid #f3f3f3; } .custom-navbar-nav.show { display: flex; } .custom-navbar-nav > li { width: 100%; } .custom-navbar-link { color: #e53935; background: none; width: 100%; text-align: left; border-radius: 0; padding: 16px 22px 14px 22px; } .custom-navbar-link::after { left: 22px; right: 22px; bottom: 4px; } .custom-navbar-link:hover { background: #fff3f1; color: #d32f2f; } .custom-navbar-dropdown { position: static; box-shadow: none; background: #fff; border-radius: 0; min-width: 100%; padding: 0; border: none; } .custom-navbar-dropdown a { padding: 13px 32px; } .custom-navbar-toggle { display: block; } } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.custom-navbar { width: 100%; background: #fff; box-shadow: 3px 3px 0px var(--color-indigo); border-bottom: 1.5px solid #f3f3f3; position: sticky; top: 0; z-index: 1000; font-family: 'Montserrat', 'Open Sans', sans-serif; transition: box-shadow .18s; } .custom-navbar-inner { justify-content: space-between; max-width: 1200px; margin: 0 auto; display: flex; align-items: center; padding: 0 40px; height: 120px; } .custom-navbar-logo { display: flex; align-items: center; gap: 0; text-decoration: none; background: #fff; border-radius: 12px; padding: 0; transition: box-shadow .18s, border .18s; } .custom-navbar-logo img { height: 96px; width: auto; border-radius: 8px; background: #fff; } .custom-navbar-nav { display: flex; align-items: center; gap: 8px; list-style: none; margin: 0; padding: 0; } .custom-navbar-nav > li { position: relative; } .custom-navbar-link { display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px 8px 18px; color: #2f2f2f; font-weight: 600; border-radius: 8px 8px 0 0; background: none; border: none; font-size: 1rem; position: relative; transition: color .18s, background .18s; } .custom-navbar-link::after { content: ''; display: block; position: absolute; left: 18px; right: 18px; bottom: 2px; height: 2.5px; background: linear-gradient(90deg, #e53935 0%, #ff7043 100%); border-radius: 2px; transform: scaleX(0); transition: transform .22s; } .custom-navbar-link:hover, .custom-navbar-link:focus { color: #e53935; background: #f9f9f9; } .custom-navbar-link:hover::after, .custom-navbar-link:focus::after { transform: scaleX(1); } .custom-navbar-dropdown { display: none; position: absolute; left: 0; top: 110%; min-width: 200px; background: #fff; border-radius: 12px; box-shadow: 3px 3px 0px var(--color-indigo); padding: 8px 0; z-index: 1001; border: 1.5px solid #f3f3f3; animation: fadeIn .18s; } .custom-navbar-nav > li:hover > .custom-navbar-dropdown, .custom-navbar-nav > li:focus-within > .custom-navbar-dropdown { display: block; } .custom-navbar-dropdown a { display: flex; align-items: center; gap: 8px; padding: 11px 28px 11px 22px; color: #e53935; font-weight: 500; text-decoration: none; border-radius: 8px; transition: background .16s, color .16s; font-size: 0.98rem; position: relative; } .custom-navbar-dropdown a:hover { background: #fff3f1; color: transparent; } .custom-navbar-dropdown a::before { content: '2'; color: #ff7043; font-size: 1.2em; margin-right: 8px; opacity: 0.7; } .custom-navbar-toggle { display: none; background: none; border: none; color: #e53935; font-size: 2rem; cursor: pointer; margin-left: 12px; border-radius: 8px; padding: 4px 10px; transition: background .18s; } .custom-navbar-toggle:hover { background: #ffe3de; } /* new: menu toggle specific styles to avoid global button overrides */ .menu-icon-btn { /* reset heavy button rules from global styles */ background: transparent !important; border: none !important; box-shadow: 3px 3px 0px var(--color-indigo); color: #ff5722 !important; /* site orange */ font-size: 1.9rem; line-height: 1; padding: 6px 10px; display: none; /* hide by default (desktop) */ align-items: center; justify-content: center; border-radius: 8px; cursor: pointer; transition: background .18s, transform .12s; -webkit-appearance: none; } .menu-icon-btn:hover, .menu-icon-btn:focus { background: #fff3f1; color: #d32f2f !important; outline: none; } .menu-icon-btn:active { transform: translateY(1px) scale(.995); } /* keep the old custom-navbar-toggle selector for any other behavior but avoid generic button styling */ .custom-navbar-toggle { /* minimal shim so scripts querying this class still work */ background: none; border: none; padding: 0; } @media (max-width: 900px) { .custom-navbar-inner { flex-wrap: wrap; height: auto; padding: 0 10px; } /* show the menu button on mobile */ .menu-icon-btn { display: inline-flex; } .custom-navbar-nav { flex-direction: column; align-items: flex-start; width: 100%; background: #fff; border-radius: 0 0 16px 16px; box-shadow: 3px 3px 0px var(--color-indigo); margin-top: 8px; display: none; position: absolute; left: 0; top: 72px; z-index: 1002; border-top: 1.5px solid #f3f3f3; } .custom-navbar-nav.show { display: flex; } .custom-navbar-nav > li { width: 100%; } .custom-navbar-link { color: #e53935; background: none; width: 100%; text-align: left; border-radius: 0; padding: 16px 22px 14px 22px; } .custom-navbar-link::after { left: 22px; right: 22px; bottom: 4px; } .custom-navbar-link:hover { background: #fff3f1; color: #d32f2f; } .custom-navbar-dropdown { position: static; box-shadow: 3px 3px 0px var(--color-indigo); background: #fff; border-radius: 0; min-width: 100%; padding: 0; border: none; } .custom-navbar-dropdown a { padding: 13px 32px; } .custom-navbar-toggle { display: block; } } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
   .marker-div {
 
@@ -664,7 +665,7 @@
 
   border-radius: 50%;
 
-  box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 
   border: 3px solid white;
 
@@ -686,13 +687,13 @@
 
 
 
-.marker-active { transform: translate(-50%, -50%) scale(1.6); box-shadow: 0 6px 18px rgba(0,0,0,0.45); z-index:9999; }
+.marker-active { transform: translate(-50%, -50%) scale(1.6); box-shadow: 3px 3px 0px var(--color-indigo); z-index:9999; }
 
 
 
 /* tooltip style (optional) */
 
-.marker-tooltip { background: rgba(255,255,255,0.95); color: #111; border-radius:6px; padding:6px 10px; box-shadow:0 6px 18px rgba(0,0,0,0.16); }
+.marker-tooltip { background: rgba(255,255,255,0.95); color: #111; border-radius:6px; padding:6px 10px; box-shadow: 3px 3px 0px var(--color-indigo); }
 
 
 
@@ -738,7 +739,7 @@
 
   border: 3px solid rgba(255,255,255,0.9);
 
-  box-shadow: 0 8px 20px rgba(0,0,0,0.22);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 
   text-shadow: 0 1px 0 rgba(0,0,0,0.15);
 
@@ -778,7 +779,7 @@
 
   border: 3px solid #fff;
 
-  box-shadow: 0 2px 8px rgba(0,0,0,0.32);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 
   background: #6b7280;
 
@@ -802,7 +803,7 @@
 
   transform: scale(1.45);
 
-  box-shadow: 0 8px 24px rgba(0,0,0,0.42);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 
 }
 
@@ -820,7 +821,7 @@
 
   color: #111;
 
-  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 
   font-weight: 600;
 
@@ -842,7 +843,7 @@
 
   background: #ff7043;
 
-  box-shadow: 0 2px 8px rgba(0,0,0,0.32);
+  box-shadow: 3px 3px 0px var(--color-indigo);
 
   border: 3px solid white;
 
@@ -946,7 +947,7 @@
 
     border-radius: 10px !important;
 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.10) !important;
+    box-shadow: 3px 3px 0px var(--color-indigo);
 
     z-index: 16000 !important;
 
@@ -1112,7 +1113,7 @@
 
     top: 8px;                  /* if you want it a tiny higher */
 
-    box-shadow: 0 6px 22px rgba(0,0,0,0.10);
+    box-shadow: 3px 3px 0px var(--color-indigo);
 
   }
 
@@ -1274,7 +1275,7 @@
 
     right: -180px;
 
-    box-shadow: -1px 0 8px rgba(0,0,0,0.12);
+    box-shadow: 3px 3px 0px var(--color-indigo);
 
   }
 
@@ -1312,7 +1313,7 @@
 
 /* If you want the filter button to never invert text color on hover/focus (you had that bug earlier) */
 
-#filter-btn:hover, #filter-btn:focus { color: #0b66c2; background: #2196F3; box-shadow: 0 6px 18px rgba(11,102,194,0.08); }
+#filter-btn:hover, #filter-btn:focus { color: #0b66c2; background: #2196F3; box-shadow: 3px 3px 0px var(--color-indigo); }
 
 /* === Force popup button text to white (applies to anchors & buttons inside popups) === */
 
@@ -1672,7 +1673,7 @@
 
 <!-- Add Hướng dẫn dùng section below the map -->
 
-<section id="map-guide" style="margin: 24px 0 0 0; padding: 18px 20px; background: #f8fafc; border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,0.04);">
+<section id="map-guide" style="margin: 24px 0 0 0; padding: 18px 20px; background: #f8fafc; border-radius: 10px; box-shadow: 3px 3px 0px var(--color-indigo);">
 
 <h2 style="font-size: 1.18em; font-weight: 700; margin-top: 0; color: #2563eb;">Hướng dẫn dùng:</h2>
 
@@ -2048,7 +2049,7 @@ function injectPopupCategoryCSS_Robust() {
 
     /* general popup improvements */
 
-    .leaflet-popup-content-wrapper { border-radius: 12px !important; box-shadow: 0 12px 40px rgba(0,0,0,0.10) !important; }
+    .leaflet-popup-content-wrapper { border-radius: 12px !important; box-shadow: 3px 3px 0px var(--color-indigo); }
 
     .leaflet-popup-tip { filter: drop-shadow(0 6px 18px rgba(0,0,0,0.06)); }
 
@@ -2062,11 +2063,11 @@ function injectPopupCategoryCSS_Robust() {
 
     @media (max-width:420px) { .popup-actions-inline { flex-wrap:wrap; gap:8px; } }
 
-    .popup-btn { color:#fff; border:none; cursor:pointer; border-radius:22px; padding:10px 16px; font-weight:700; white-space:nowrap; box-shadow:0 10px 30px rgba(0,0,0,0.12); transition: transform .12s, box-shadow .12s; }
+    .popup-btn { color:#fff; border:none; cursor:pointer; border-radius:22px; padding:10px 16px; font-weight:700; white-space:nowrap; box-shadow: 3px 3px 0px var(--color-indigo); transition: transform .12s, box-shadow .12s; }
 
     .popup-btn:active{ transform: translateY(1px) scale(.995); }
 
-    .popup-btn:hover { box-shadow:0 14px 40px rgba(0,0,0,0.14); }
+    .popup-btn:hover { box-shadow: 3px 3px 0px var(--color-indigo); }
 
   `;
 
@@ -3361,7 +3362,7 @@ const LEGEND_ORDER = [
 
       #sv-modal .sv-backdrop { position:absolute; inset:0; background:rgba(0,0,0,0.68); }
 
-      #sv-modal .sv-panel { position:relative; width:min(1100px,94vw); max-height:92vh; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 30px 80px rgba(0,0,0,.55); display:flex; flex-direction:column; }
+      #sv-modal .sv-panel { position:relative; width:min(1100px,94vw); max-height:92vh; background:#fff; border-radius:12px; overflow:hidden; box-shadow: 3px 3px 0px var(--color-indigo); display:flex; flex-direction:column; }
 
       #sv-modal .sv-header { display:flex; justify-content:space-between; align-items:center; padding:10px 14px; background:linear-gradient(135deg,#0b1220,#1e3a8a); color:#fff; font-weight:700; }
 
@@ -3389,7 +3390,7 @@ const LEGEND_ORDER = [
 
       #sv-modal .sv-fallback { padding:24px; text-align:center; font-size:14px; color:#111; background:#f8fafc; display:none; flex-direction:column; gap:12px; align-items:center; justify-content:center; width:100%; }
 
-      #sv-modal .sv-fallback .big-btn { display:inline-block; padding:14px 22px; background:#10b981; color:#fff; border-radius:10px; font-size:16px; font-weight:700; text-decoration:none; box-shadow:0 6px 16px rgba(16,185,129,.35); }
+      #sv-modal .sv-fallback .big-btn { display:inline-block; padding:14px 22px; background:#10b981; color:#fff; border-radius:10px; font-size:16px; font-weight:700; text-decoration:none; box-shadow: 3px 3px 0px var(--color-indigo); }
 
       #sv-modal .sv-fallback .big-btn:hover { background:#059669; transform:translateY(-1px); }
 
@@ -3401,7 +3402,7 @@ const LEGEND_ORDER = [
 
       @keyframes sv-spin { to { transform: rotate(360deg); } }
 
-      .popup-btn.sv { background: linear-gradient(135deg,#2563eb,#7c3aed); box-shadow:0 2px 6px rgba(37,99,235,.35); }
+      .popup-btn.sv { background: linear-gradient(135deg,#2563eb,#7c3aed); box-shadow: 3px 3px 0px var(--color-indigo); }
 
       .popup-btn.sv:hover { filter: brightness(1.08); }
 
@@ -3577,8 +3578,7 @@ const LEGEND_ORDER = [
 
             setTimeout(()=>{ spinner.style.display='none'; }, 400);
 
-          }
-
+}
         } catch (e) {}
 
         // Luôn luôn hiển thị panel fallback "Mở tab mới" — đảm bảo user có cách xem 360 ngay cả khi Google chặn
@@ -4093,4 +4093,5 @@ jQuery('.fancybox').fancybox();
 <!--login23:54  -->
 
 </html>
+
 
