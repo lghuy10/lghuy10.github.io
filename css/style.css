@@ -6505,3 +6505,20 @@ a.fav-load {
 .custom-navbar a:hover {
     color: #c94848 !important;
 }
+/* Đẩy toàn bộ khối nội dung bài viết nhích đều sang phải */
+.post.hentry .entry-content,
+.post.hentry > div,
+article.post > div:not(.post-thumb) {
+    padding-left: 10px !important;
+}
+
+/* Đẩy tất cả các thẻ tag (bất kể màu đỏ hay xanh) nhích sang phải */
+article.post span[style*="inline-block"],
+article.post span[style*="border-radius"] {
+    margin-left: 10px !important;
+}
+article.post .entry-title,
+article.post h2,
+article.post h3 {
+    margin-left: 200px !important;
+}
