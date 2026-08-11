@@ -6539,7 +6539,7 @@ article.post h3 {
 
 /* Định dạng cho chữ tên loại lễ hội (Lễ hội tâm linh, Lễ hội nông nghiệp...) */
 .classes-time li span:last-child {
-    color: #c94848 !important;
+    color: #000000 !important;
     font-size: 17px !important;
     font-weight: bold !important;
     margin-left: 0px !important;
@@ -6597,4 +6597,10 @@ div.classes-info h3 {
 h5 {
     color: #8b2626 !important;
     font-weight: bold !important;
+}
+/* Đổi màu chữ số 5 (hoặc bất kỳ số nào có nền xanh này) sang màu trắng */
+[class*="price"], 
+[class*="number"], 
+[class*="badge"] {
+    color: #ffffff !important; /* Thay màu trắng hoặc màu bạn muốn */
 }
