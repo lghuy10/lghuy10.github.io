@@ -6522,3 +6522,25 @@ article.post h2,
 article.post h3 {
     margin-left: 200px !important;
 }
+/* Căn chỉnh khoảng lùi và cỡ chữ chung cho toàn bộ danh sách loại lễ hội */
+.classes-time {
+    padding-left: 0 !important;
+    margin-left: -12px !important;
+}
+
+.classes-time li {
+    font-size: 16px !important;
+}
+
+/* Định dạng cho chữ 'Loại' */
+.classes-time li span:first-child {
+    font-weight: bold !important;
+}
+
+/* Định dạng cho chữ tên loại lễ hội (Lễ hội tâm linh, Lễ hội nông nghiệp...) */
+.classes-time li span:last-child {
+    color: #c94848 !important;
+    font-size: 17px !important;
+    font-weight: bold !important;
+    margin-left: 0px !important;
+}
