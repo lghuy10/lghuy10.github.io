@@ -6505,3 +6505,102 @@ a.fav-load {
 .custom-navbar a:hover {
     color: #c94848 !important;
 }
+/* Đẩy toàn bộ khối nội dung bài viết nhích đều sang phải */
+.post.hentry .entry-content,
+.post.hentry > div,
+article.post > div:not(.post-thumb) {
+    padding-left: 10px !important;
+}
+
+/* Đẩy tất cả các thẻ tag (bất kể màu đỏ hay xanh) nhích sang phải */
+article.post span[style*="inline-block"],
+article.post span[style*="border-radius"] {
+    margin-left: 10px !important;
+}
+article.post .entry-title,
+article.post h2,
+article.post h3 {
+    margin-left: 200px !important;
+}
+/* Căn chỉnh khoảng lùi và cỡ chữ chung cho toàn bộ danh sách loại lễ hội */
+.classes-time {
+    padding-left: 0 !important;
+    margin-left: -12px !important;
+}
+
+.classes-time li {
+    font-size: 16px !important;
+}
+
+/* Định dạng cho chữ 'Loại' */
+.classes-time li span:first-child {
+    font-weight: bold !important;
+}
+
+/* Định dạng cho chữ tên loại lễ hội (Lễ hội tâm linh, Lễ hội nông nghiệp...) */
+.classes-time li span:last-child {
+    color: #000000 !important;
+    font-size: 17px !important;
+    font-weight: bold !important;
+    margin-left: 0px !important;
+}
+/* Tự động căn giữa và đổi màu trắng cho tất cả tiêu đề banner */
+article.post .entry-title,
+.post-title,
+h1.entry-title,
+h1 {
+    color: #ffffff !important;
+    text-align: center !important;
+    margin: 0 auto !important;
+    text-shadow: none !important;
+}
+/* Đổi màu nổi bật cho các tiêu đề phụ bên trong bài viết */
+article h2, article h3, article h4,
+.entry-content h2, .entry-content h3, .entry-content h4,
+.post-content h2, .post-content h3, .post-content h4 {
+    color: #8b2626 !important; /* Đổi sang màu đỏ đất đậm (hoặc dùng #b82828) */
+}
+/* Đổi màu tất cả chữ hồng trong thẻ li, span, div, p thuộc khu vực thông tin bên cạnh */
+.classes-info *, 
+.classes-details *,
+.sidebar *,
+.widget * {
+    color: #8b2626 !important; /* Đổi sang màu đỏ đất đậm */
+}
+
+/* Giữ lại màu đen/xám cho nội dung miêu tả phía dưới tiêu đề đó */
+.classes-info p, 
+.classes-details p {
+    color: #333333 !important; /* Màu chữ nội dung bình thường */
+}
+/* 1. Đẩy tấm ảnh ra khỏi tiêu đề bên dưới */
+.img-thumb, 
+figure, 
+.classes-info {
+    margin-bottom: 20px !important;
+    clear: both !important;
+}
+
+/* 2. Tạo khoảng cách phía trên cho tiêu đề h3 */
+div.classes-info h3 {
+    margin-top: 20px !important;
+    margin-bottom: 10px !important;
+    padding-top: 10px !important;
+    display: block !important;
+}
+/* Đổi màu cho tiêu đề Bình Luận */
+.comment-reply-title, #reply-title {
+    color: #8b2626 !important; /* Đổi mã màu đỏ đất tại đây */
+}
+/* Đổi màu cho thẻ h5 trong bài viết */
+.entry-content h5,
+h5 {
+    color: #8b2626 !important;
+    font-weight: bold !important;
+}
+/* Đổi màu chữ số 5 (hoặc bất kỳ số nào có nền xanh này) sang màu trắng */
+[class*="price"], 
+[class*="number"], 
+[class*="badge"] {
+    color: #ffffff !important; /* Thay màu trắng hoặc màu bạn muốn */
+}
