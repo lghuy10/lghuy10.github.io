@@ -173,7 +173,7 @@ const DEFAULT_QUIZZES = [
       },
       {
         "id": 9,
-        "question_text": "",
+        "question_text": "Khi tham gia Lễ hội Chùa Bà Thiên Hậu, việc làm nào thể hiện ý thức tôn trọng giá trị văn hóa và tín ngưỡng?",
         "option_a": "Chụp ảnh trong khu vực hành lễ để đăng mạng xã hội.",
         "option_b": "Tôn trọng không gian tín ngưỡng, thực hiện đúng quy định và giữ gìn vệ sinh chung.",
         "option_c": "Tự ý sắp xếp lễ vật để thuận tiện tham quan.",

@@ -35,7 +35,7 @@
     if(!toggleEl) return;
     toggleEl.classList.toggle('muted', !!muted);
     toggleEl.setAttribute('aria-pressed', String(!muted));
-    if(iconEl) iconEl.style.opacity = muted ? '0.65' : '1';
+    if(iconEl) iconEl.style.opacity = muted ? '0.85' : '1';
   }
 
   // restore saved mute and position
@@ -92,16 +92,29 @@
 
   // autoplay attempt on entry
   window.addEventListener('load', async () => {
-    // respect user choice: if they paused previously don't force
-    const lastState = localStorage.getItem(STATE_KEY) || 'playing';
-    if(lastState !== 'playing'){
+    // First visit: play music immediately; subsequent visits: respect saved state
+    const lastState = localStorage.getItem(STATE_KEY);
+    
+    // If this is the first visit (no saved state), force play
+    if(lastState === null){
+      // Force unmute on first visit
+      audio.muted = false;
+      try { localStorage.setItem(MUTED_KEY, '0'); } catch(e){}
+      try { localStorage.setItem(STATE_KEY, 'playing'); } catch(e){}
+    } else if(lastState !== 'playing'){
+      // Previously paused, don't autoplay
       setUI(audio.muted);
       return;
+    } else {
+      // Previously playing, restore mute state
+      try {
+        const savedMuted = localStorage.getItem(MUTED_KEY);
+        if(savedMuted !== null) audio.muted = savedMuted === '1';
+      } catch(e){}
     }
 
     async function tryPlayUnmuted(){
       try {
-        audio.muted = audio.muted; // keep stored mute if exists; we want unmuted attempt only if currently not muted
         await audio.play();
         try { localStorage.setItem(STATE_KEY, 'playing'); } catch(e){}
         setUI(audio.muted);
