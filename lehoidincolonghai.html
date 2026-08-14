@@ -119,48 +119,17 @@ Cô (Lê Thị Hồng) - được tôn kính gọi là "Long Hải Thần Nữ",
 </article>
 <div class="comments-area" id="comments">
 <ul id="comment-list"></ul>
-<script>
-                  window.POST_ID = 23;
-                  const API_URL1 = "https://baldandbadgithubio-production-4f3f.up.railway.app/comments";
-                  async function loadComments() {
-                    const res = await fetch(`${API_URL1}?post_id=${window.POST_ID}`);
-                    const comments = await res.json();
-                    const list = document.getElementById("comment-list");
-                    list.innerHTML = "";
-                    comments.forEach(c => {
-                      const html = `
-																
-																				<li class="comment">
-																					<article class="comment-body">
-																						<div class="author-photo">
-																							<a href="blog-details.html" class="avatar">
-																								<img class="avatar" src="${c.avatar || 'images/use_img/post_author.jpg'}" alt="" />
-																							</a>
-																						</div>
-																						<div class="comment-wrapper">
-																							<div class="comment-meta">
-																								<div class="comment-author vcard">
-																									<h5 class="fn">${c.name}</h5>
-																								</div>
-																							</div>
-																							<div class="comment-content">
-																								<p>${c.message}</p>
-																							</div>
-																							<div class="comment-metadata">
-																								<span>${new Date(c.created_at).toLocaleDateString()}</span>
-																							</div>
-																							<div class="reply">
-																								<a href="#" class="comment-reply-link btn btn-default">Reply</a>
-																							</div>
-																						</div>
-																					</article>
-																				</li>
-    `;
-                      list.insertAdjacentHTML("beforeend", html);
-                    });
-                  }
-                  loadComments();
-                </script>
+<style>
+  .comment-reactions { display:flex; gap:6px; margin-top:8px; flex-wrap:wrap; }
+  .reaction-btn { border:1px solid #e0d5c8; background:#fff; border-radius:16px; padding:3px 10px; font-size:14px; cursor:pointer; display:inline-flex; align-items:center; gap:4px; transition:background .15s,border-color .15s; }
+  .reaction-btn:hover { background:#fdf3ea; }
+  .reaction-btn.active { background:#fdeee0; border-color:#8b2626; }
+  .reaction-count { font-size:12px; font-weight:700; color:#555; }
+  .comment-image { max-width:280px; border-radius:8px; margin-top:8px; display:block; }
+  .comment-image-input-wrap { margin-top:6px; }
+  .comment-image-preview { max-width:140px; max-height:140px; border-radius:6px; margin-top:6px; display:none; }
+  .inline-reply-form .comment-image-preview { max-width:100px; max-height:100px; }
+</style>
 <div class="comment-respond" id="respond">
 <h3 class="comment-reply-title" id="reply-title">Bình Luận</h3>
 <form action="#" class="comment-form" id="commentform" method="post">
@@ -172,6 +141,11 @@ Cô (Lê Thị Hồng) - được tôn kính gọi là "Long Hải Thần Nữ",
 <p class="comment-form-comment">
 <label>Bình luận</label>
 <textarea cols="45" id="comment" name="comment" required="" rows="8"></textarea>
+</p>
+<p class="comment-image-input-wrap">
+<label>Ảnh đính kèm (không bắt buộc)</label><br/>
+<input accept="image/*" id="comment-image" type="file"/>
+<img alt="Xem trước ảnh" class="comment-image-preview" id="comment-image-preview"/>
 </p>
 <p class="form-submit">
 <input class="submit btn btn-default" id="submit" type="submit" value="Submit"/>

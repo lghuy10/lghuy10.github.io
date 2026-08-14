@@ -55,6 +55,7 @@ function isValidGeminiKey(key) {
 
 const ALLOWED_ORIGINS = [
   "https://baldandbad.github.io",
+  "https://backend-production-1a0d.up.railway.app",
   "https://baldandbadgithubio-production-4f3f.up.railway.app",
   "https://baldandbadgithubio-production.up.railway.app",
   "http://localhost:5173",
