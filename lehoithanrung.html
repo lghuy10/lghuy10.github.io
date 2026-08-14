@@ -202,9 +202,58 @@ Không gian tổ chức ngoài trời, dưới gốc cây cổ thụ, thường 
 </form>
 </div>
 <script>
-                  window.POST_ID = 23;
+                  window.POST_ID = 24;
                   const postID = window.POST_ID;
-                  const API_URL = "https://baldandbadgithubio-production-4f3f.up.railway.app/comments";
+                  const API_URL = "https://backend-production-1a0d.up.railway.app/comments";
+                  const REACTION_EMOJIS = ['👍', '❤️', '😂', '😮', '😢'];
+
+                  // (thêm bởi Claude) id ngẫu nhiên lưu theo trình duyệt, dùng để nhớ "mình đã thả cảm xúc gì"
+                  // cho từng comment — không phải tài khoản thật, chỉ để tránh bấm loạn nhiều lần trên cùng máy.
+                  function getDeviceId() {
+                    let id = localStorage.getItem('comment_device_id');
+                    if (!id) {
+                      id = 'dev-' + Date.now() + '-' + Math.random().toString(36).slice(2, 10);
+                      try { localStorage.setItem('comment_device_id', id); } catch (e) {}
+                    }
+                    return id;
+                  }
+
+                  // (thêm bởi Claude) Nén + resize ảnh ngay trên trình duyệt trước khi gửi lên server,
+                  // tránh phải lưu file gốc nặng — trả về chuỗi base64 (data URL) dạng JPEG.
+                  function compressImageToBase64(file, maxWidth, quality) {
+                    maxWidth = maxWidth || 800;
+                    quality = quality || 0.7;
+                    return new Promise((resolve, reject) => {
+                      if (!file.type || !file.type.startsWith('image/')) { reject(new Error('File không phải là ảnh')); return; }
+                      const reader = new FileReader();
+                      reader.onload = (e) => {
+                        const img = new Image();
+                        img.onload = () => {
+                          const scale = Math.min(1, maxWidth / img.width);
+                          const canvas = document.createElement('canvas');
+                          canvas.width = Math.max(1, Math.round(img.width * scale));
+                          canvas.height = Math.max(1, Math.round(img.height * scale));
+                          const ctx = canvas.getContext('2d');
+                          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                          resolve(canvas.toDataURL('image/jpeg', quality));
+                        };
+                        img.onerror = () => reject(new Error('Không đọc được ảnh, thử ảnh khác nhé'));
+                        img.src = e.target.result;
+                      };
+                      reader.onerror = () => reject(new Error('Không đọc được file'));
+                      reader.readAsDataURL(file);
+                    });
+                  }
+
+                  // Xem trước ảnh ngay khi chọn (form chính)
+                  document.getElementById('comment-image').addEventListener('change', function (e) {
+                    const preview = document.getElementById('comment-image-preview');
+                    const file = e.target.files && e.target.files[0];
+                    if (!file) { preview.style.display = 'none'; preview.src = ''; return; }
+                    const reader = new FileReader();
+                    reader.onload = (ev) => { preview.src = ev.target.result; preview.style.display = 'block'; };
+                    reader.readAsDataURL(file);
+                  });
 
                   function buildCommentTree(comments) {
                     const map = {};
@@ -223,50 +272,68 @@ Không gian tổ chức ngoài trời, dưới gốc cây cổ thụ, thường 
                     return roots;
                   }
 
+                  function escapeHtmlComment(s) {
+                    return String(s == null ? '' : s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+                  }
+
+                  // (thêm bởi Claude) render hàng nút cảm xúc kiểu Facebook — mỗi emoji kèm số lượt thả,
+                  // nút đang active (mình đã thả) được tô viền đậm hơn
+                  function renderReactions(c) {
+                    const reactions = c.reactions || {};
+                    const myReaction = c.myReaction || null;
+                    return REACTION_EMOJIS.map(emo => {
+                      const count = reactions[emo] || 0;
+                      const active = myReaction === emo ? ' active' : '';
+                      return `<button type="button" class="reaction-btn${active}" data-comment-id="${c.id}" data-emoji="${emo}">${emo}${count > 0 ? ` <span class="reaction-count">${count}</span>` : ''}</button>`;
+                    }).join('');
+                  }
+
                   function createCommentHTML(c, depth = 0) {
                     // Calculate indentation - limit to 5 levels max for sanity
                     const indent = Math.min(depth, 5) * 30; // 30px per level
                     return `
-																
-																						<li class="comment ${depth > 0 ? 'is-reply' : ''}" 
+																	
+																							<li class="comment ${depth > 0 ? 'is-reply' : ''}" 
         id="li-comment-${c.id}"
         style="margin-left: ${indent}px">
-																							<article class="comment-body">
-																								<div class="author-photo">
-																									<a href="blog-details.html" class="avatar">
-																										<img class="avatar" src="${c.avatar || 'images/use_img/post_author.jpg'}" alt="" />
-																									</a>
-																								</div>
-																								<div class="comment-wrapper">
-																									<div class="comment-meta">
-																										<div class="comment-author vcard">
-																											<h5 class="fn">${c.name}</h5>
+																								<article class="comment-body">
+																									<div class="author-photo">
+																										<a href="blog-details.html" class="avatar">
+																											<img class="avatar" src="${c.avatar || 'images/use_img/post_author.jpg'}" alt="" />
+																										</a>
+																									</div>
+																									<div class="comment-wrapper">
+																										<div class="comment-meta">
+																											<div class="comment-author vcard">
+																												<h5 class="fn">${escapeHtmlComment(c.name)}</h5>
               ${depth > 0 ? `
-																											<span class="reply-indicator">↳ replied </span>` : ''}
+																												<span class="reply-indicator">↳ replied </span>` : ''}
+																											</div>
+																										</div>
+																										<div class="comment-content">
+																											<p>${escapeHtmlComment(c.message)}</p>
+              ${c.image_data ? `<img class="comment-image" src="${c.image_data}" alt="Ảnh đính kèm" />` : ''}
+																										</div>
+																										<div class="comment-metadata">
+																											<span>${new Date(c.created_at).toLocaleDateString()}</span>
+																										</div>
+																										<div class="comment-reactions">${renderReactions(c)}</div>
+																										<div class="reply">
+																											<a href="#" class="comment-reply-link btn btn-default">Reply</a>
 																										</div>
 																									</div>
-																									<div class="comment-content">
-																										<p>${c.message}</p>
-																									</div>
-																									<div class="comment-metadata">
-																										<span>${new Date(c.created_at).toLocaleDateString()}</span>
-																									</div>
-																									<div class="reply">
-																										<a href="#" class="comment-reply-link btn btn-default">Reply</a>
-																									</div>
-																								</div>
-																							</article>
+																								</article>
       ${c.replies?.length ? `
-																							<ol class="comment-replies">
+																								<ol class="comment-replies">
           ${c.replies.map(reply => createCommentHTML(reply, depth + 1)).join('')}
         </ol>
       ` : ''}
-																						</li>
+																							</li>
   `;
                   }
                   // Load comments from backend
                   async function loadComments() {
-                    const res = await fetch(`${API_URL}?post_id=${window.POST_ID}`);
+                    const res = await fetch(`${API_URL}?post_id=${window.POST_ID}&device_id=${getDeviceId()}`);
                     const comments = await res.json();
                     const nestedComments = buildCommentTree(comments);
                     const list = document.getElementById("comment-list");
@@ -275,7 +342,27 @@ Không gian tổ chức ngoài trời, dưới gốc cây cổ thụ, thường 
                       list.insertAdjacentHTML("beforeend", createCommentHTML(c));
                     });
                   }
-                  document.addEventListener("click", function(e) {
+
+                  // (thêm bởi Claude) Bấm 1 nút cảm xúc: nếu đang active (đã thả) thì gỡ ra, chưa thì thêm vào
+                  // — chỉ 1 loại cảm xúc/người/comment tại 1 thời điểm, giống Facebook.
+                  document.addEventListener("click", async function (e) {
+                    const reactBtn = e.target.closest(".reaction-btn");
+                    if (reactBtn) {
+                      const commentId = reactBtn.dataset.commentId;
+                      const emoji = reactBtn.dataset.emoji;
+                      const isActive = reactBtn.classList.contains("active");
+                      reactBtn.disabled = true;
+                      try {
+                        await fetch(`${API_URL}/${commentId}/react`, {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({ emoji, device_id: getDeviceId(), action: isActive ? "remove" : "add" })
+                        });
+                      } catch (err) { console.warn("Reaction failed", err); }
+                      loadComments();
+                      return;
+                    }
+
                     if (e.target.classList.contains("comment-reply-link")) {
                       e.preventDefault();
                       // Remove any existing inline reply forms
@@ -286,21 +373,38 @@ Không gian tổ chức ngoài trời, dưới gốc cây cổ thụ, thường 
                       const replyForm = document.createElement("form");
                       replyForm.classList.add("inline-reply-form");
                       replyForm.innerHTML = `
-																						<input type="text" name="reply-name" placeholder="Your name" required />
-																						<textarea name="reply-message" placeholder="Write your reply..." required></textarea>
-																						<button type="submit">Post Reply</button>
+																							<input type="text" name="reply-name" placeholder="Your name" required />
+																							<textarea name="reply-message" placeholder="Write your reply..." required></textarea>
+																							<input type="file" accept="image/*" name="reply-image" class="reply-image-input" />
+																							<img class="comment-image-preview" alt="Xem trước ảnh" />
+																							<button type="submit">Post Reply</button>
     `;
                       // Append form to comment
                       commentElement.appendChild(replyForm);
+
+                      const replyImageInput = replyForm.querySelector(".reply-image-input");
+                      const replyPreview = replyForm.querySelector(".comment-image-preview");
+                      replyImageInput.addEventListener("change", () => {
+                        const file = replyImageInput.files && replyImageInput.files[0];
+                        if (!file) { replyPreview.style.display = "none"; return; }
+                        const reader = new FileReader();
+                        reader.onload = (ev) => { replyPreview.src = ev.target.result; replyPreview.style.display = "block"; };
+                        reader.readAsDataURL(file);
+                      });
+
                       // Handle reply form submission
-                      replyForm.addEventListener("submit", async function(e) {
+                      replyForm.addEventListener("submit", async function (e) {
                         e.preventDefault();
                         const name = this.querySelector("input[name='reply-name']").value;
                         const message = this.querySelector("textarea[name='reply-message']").value;
-                        console.log(name);
-                        console.log(message);
                         const created_at = new Date();
-                        await fetch("https://baldandbadgithubio-production-4f3f.up.railway.app/comments", {
+                        let image_data = null;
+                        const file = replyImageInput.files && replyImageInput.files[0];
+                        if (file) {
+                          try { image_data = await compressImageToBase64(file); }
+                          catch (err) { alert("Ảnh không hợp lệ: " + err.message); return; }
+                        }
+                        await fetch(API_URL, {
                           method: "POST",
                           headers: {
                             "Content-Type": "application/json"
@@ -311,7 +415,8 @@ Không gian tổ chức ngoài trời, dưới gốc cây cổ thụ, thường 
                             avatar: null,
                             created_at: created_at,
                             post_id: postID,
-                            parent_id: parentId
+                            parent_id: parentId,
+                            image_data
                           })
                         });
                         // Reload comments
@@ -320,10 +425,16 @@ Không gian tổ chức ngoài trời, dưới gốc cây cổ thụ, thường 
                     }
                   });
                   // Handle form submit
-                  document.getElementById("commentform").addEventListener("submit", async function(e) {
+                  document.getElementById("commentform").addEventListener("submit", async function (e) {
                     e.preventDefault();
                     const name = document.getElementById("author").value;
                     const message = document.getElementById("comment").value;
+                    const imageInput = document.getElementById("comment-image");
+                    let image_data = null;
+                    if (imageInput.files && imageInput.files[0]) {
+                      try { image_data = await compressImageToBase64(imageInput.files[0]); }
+                      catch (err) { alert("Ảnh không hợp lệ: " + err.message); return; }
+                    }
                     const created_at = new Date();
                     const post_id = postID;
                     await fetch(API_URL, {
@@ -337,10 +448,12 @@ Không gian tổ chức ngoài trời, dưới gốc cây cổ thụ, thường 
                         avatar: null,
                         created_at,
                         post_id,
-                        parent_id: null
+                        parent_id: null,
+                        image_data
                       })
                     });
                     this.reset();
+                    document.getElementById('comment-image-preview').style.display = 'none';
                     loadComments();
                   });
                   // Load on page start
