@@ -10,10 +10,23 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { Server } from "socket.io";
 import pool from "./db.js";
-import DEFAULT_QUIZZES from "./js/default_quizzes.js";
+import fs from "fs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+let DEFAULT_QUIZZES = [];
+try {
+  const raw = fs.readFileSync(path.join(__dirname, "js", "default_quizzes.js"), "utf-8");
+  const match = raw.match(/const\s+DEFAULT_QUIZZES\s*=\s*(\[[\s\S]*\])\s*;\s*\n\s*if\s*\(typeof module/);
+  if (match) {
+    DEFAULT_QUIZZES = JSON.parse(match[1]);
+  } else {
+    console.error("[server.js] Không tách được DEFAULT_QUIZZES từ js/default_quizzes.js.");
+  }
+} catch (err) {
+  console.error("[server.js] Lỗi đọc js/default_quizzes.js:", err);
+}
 
 dotenv.config({ path: path.resolve(__dirname, ".env") });
 
