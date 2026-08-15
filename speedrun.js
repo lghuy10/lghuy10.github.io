@@ -11,27 +11,42 @@ let schemaReady = null;
 
 async function ensureSchema() {
   if (schemaReady) return schemaReady;
-  schemaReady = pool.query(`
-    CREATE TABLE IF NOT EXISTS speedrun_results (
-      id SERIAL PRIMARY KEY,
-      name TEXT NOT NULL,
-      class_name TEXT NOT NULL,
-      name_key TEXT NOT NULL,
-      class_key TEXT NOT NULL,
-      badge_count INTEGER NOT NULL DEFAULT 0,
-      progress_count INTEGER NOT NULL DEFAULT 0,
-      time_seconds INTEGER NOT NULL DEFAULT 0,
-      created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-      updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-      UNIQUE (name_key, class_key)
-    );
-  `);
-  await schemaReady;
+  schemaReady = (async () => {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS speedrun_results (
+        id SERIAL PRIMARY KEY,
+        name TEXT NOT NULL,
+        class_name TEXT NOT NULL,
+        name_key TEXT NOT NULL,
+        class_key TEXT NOT NULL,
+        class_group_key TEXT NOT NULL DEFAULT '',
+        badge_count INTEGER NOT NULL DEFAULT 0,
+        progress_count INTEGER NOT NULL DEFAULT 0,
+        time_seconds INTEGER NOT NULL DEFAULT 0,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+        updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+        UNIQUE (name_key, class_key)
+      );
+    `);
+    // phòng trường hợp bảng đã được tạo từ trước (chưa có cột class_group_key)
+    await pool.query(`ALTER TABLE speedrun_results ADD COLUMN IF NOT EXISTS class_group_key TEXT NOT NULL DEFAULT '';`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_speedrun_class_group ON speedrun_results (class_group_key);`);
+  })();
   return schemaReady;
 }
 
 function normKey(s) {
   return String(s || "").trim().toLowerCase().replace(/\s+/g, " ");
+}
+
+// (thêm bởi Claude) Chuẩn hóa tên lớp để gộp nhóm: bỏ khoảng trắng, không phân biệt hoa/thường,
+// bỏ số 0 dẫn đầu trong các cụm số. Ví dụ: "10C01", "10c1", "10C01", "10C1" đều thành "10c1".
+function normalizeClassGroupKey(s) {
+  return String(s || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "")
+    .replace(/0+(\d)/g, "$1");
 }
 
 // GET /speedrun/top?limit=5 — top người chơi, ưu tiên huy hiệu rồi tới thời gian
@@ -71,6 +86,7 @@ router.post("/", async (req, res) => {
 
     const nameKey = normKey(cleanName);
     const classKey = normKey(cleanClass);
+    const classGroupKey = normalizeClassGroupKey(cleanClass);
 
     const existing = await pool.query(
       `SELECT id, badge_count, time_seconds FROM speedrun_results WHERE name_key = $1 AND class_key = $2`,
@@ -79,9 +95,9 @@ router.post("/", async (req, res) => {
 
     if (existing.rows.length === 0) {
       const { rows } = await pool.query(
-        `INSERT INTO speedrun_results (name, class_name, name_key, class_key, badge_count, progress_count, time_seconds)
-         VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
-        [cleanName, cleanClass, nameKey, classKey, badges, progress, seconds]
+        `INSERT INTO speedrun_results (name, class_name, name_key, class_key, class_group_key, badge_count, progress_count, time_seconds)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
+        [cleanName, cleanClass, nameKey, classKey, classGroupKey, badges, progress, seconds]
       );
       return res.status(201).json({ saved: true, replaced: false, result: rows[0] });
     }
@@ -95,13 +111,40 @@ router.post("/", async (req, res) => {
 
     const { rows } = await pool.query(
       `UPDATE speedrun_results
-       SET name = $1, class_name = $2, badge_count = $3, progress_count = $4, time_seconds = $5, updated_at = now()
-       WHERE id = $6 RETURNING *`,
-      [cleanName, cleanClass, badges, progress, seconds, old.id]
+       SET name = $1, class_name = $2, class_group_key = $3, badge_count = $4, progress_count = $5, time_seconds = $6, updated_at = now()
+       WHERE id = $7 RETURNING *`,
+      [cleanName, cleanClass, classGroupKey, badges, progress, seconds, old.id]
     );
     res.json({ saved: true, replaced: true, result: rows[0] });
   } catch (err) {
     console.error("[speedrun] POST / error:", err);
+    res.status(500).json({ error: "Database error" });
+  }
+});
+
+// GET /speedrun/classes/top?limit=3 — bảng xếp hạng LỚP, gộp tất cả người chơi cùng lớp
+// (không phân biệt hoa/thường, bỏ số 0 đầu — vd 10C01/10c1/10C1 cùng 1 nhóm)
+// Ưu tiên: tổng huy hiệu cả lớp giảm dần, rồi tổng thời gian cả lớp tăng dần.
+router.get("/classes/top", async (req, res) => {
+  try {
+    await ensureSchema();
+    const limit = Math.min(50, Math.max(1, parseInt(req.query.limit, 10) || 3));
+    const { rows } = await pool.query(
+      `SELECT
+         class_group_key,
+         (array_agg(class_name ORDER BY updated_at DESC))[1] AS class_name,
+         SUM(badge_count)::int AS total_badges,
+         SUM(time_seconds)::int AS total_time_seconds,
+         COUNT(*)::int AS participant_count
+       FROM speedrun_results
+       GROUP BY class_group_key
+       ORDER BY total_badges DESC, total_time_seconds ASC
+       LIMIT $1`,
+      [limit]
+    );
+    res.json(rows);
+  } catch (err) {
+    console.error("[speedrun] GET /classes/top error:", err);
     res.status(500).json({ error: "Database error" });
   }
 });
