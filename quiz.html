@@ -22,21 +22,21 @@
 </style>
 <style>
 :root{
-    --bg1:#0b1220; --bg2:#08132b;
-    --card: rgba(255,255,255,0.03);
-    --accentA:#ff7ab6; --accentB:#ffd86b;
-    --good:#34d399; --bad:#fb7185;
+    --bg1:#2e2018; --bg2:#4a3524;
+    --card: rgba(255,255,255,0.6);
+    --accentA:#c1694f; --accentB:#c9a66b;
+    --good:#7a9471; --bad:#a13d3d;
     --glass: rgba(255,255,255,0.03);
     --radius:14px;
-    --color-indigo: #1f2d3d;
+    --color-indigo: #2a1c14;
   }
   *{box-sizing:border-box}
   html,body{height:100%}
   body{
     margin:0;
     font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
-    background: linear-gradient(135deg,var(--bg1),var(--bg2));
-    color:#eaf5ff;
+    background: #f2e8d3;
+    color:#3a2a1c;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -49,36 +49,36 @@
   .stage{background:var(--card);border-radius:12px;padding:14px;min-height:560px;display:flex;flex-direction:column;gap:12px;position:relative}
   .topbar{display:flex;justify-content:space-between;align-items:center}
   .logo{display:flex;gap:10px;align-items:center}
-  .badge{width:44px;height:44px;border-radius:10px;background:linear-gradient(45deg,var(--accentA),var(--accentB));display:flex;align-items:center;justify-content:center;font-weight:900;color:#051426}
-  .server{font-size:13px;color:#cfe6ff;opacity:.9}
+  .badge{width:44px;height:44px;border-radius:10px;background:linear-gradient(45deg,var(--accentA),var(--accentB));display:flex;align-items:center;justify-content:center;font-weight:900;color:#2a1c14}
+  .server{font-size:13px;color:#7a6650;opacity:.9}
 
   .game-area{display:flex;gap:12px;align-items:flex-start}
   .question-card{flex:1;background:linear-gradient(180deg, rgba(255,255,255,0.015), transparent);padding:16px;border-radius:12px;position:relative;overflow:hidden}
   .qtext{font-weight:800;font-size:20px;margin-bottom:10px;min-height:56px}
   .options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   @media(max-width:520px){ .options{grid-template-columns:1fr} }
-  .opt{padding:12px;border-radius:12px;background:rgba(255,255,255,0.02);cursor:pointer;border:1px solid rgba(255,255,255,0.02);font-weight:800;transition:transform .12s, box-shadow .12s, opacity .12s}
+  .opt{padding:12px;border-radius:12px;background:rgba(255,255,255,0.55);cursor:pointer;border:1px solid rgba(58,42,28,0.15);font-weight:800;transition:transform .12s, box-shadow .12s, opacity .12s}
   .opt:hover{transform:translateY(-6px)}
   .opt.correct{box-shadow: 3px 3px 0px var(--color-indigo);border-color: rgba(52,211,153,0.2);background:rgba(52,211,153,0.06)}
   .opt.wrong{box-shadow: 3px 3px 0px var(--color-indigo);border-color: rgba(251,113,133,0.12);background:rgba(251,113,133,0.04)}
   .meta-row{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
 
-  .time-wrap{height:10px;background:rgba(255,255,255,0.03);border-radius:8px;overflow:hidden;margin-top:12px}
+  .time-wrap{height:10px;background:rgba(58,42,28,0.12);border-radius:8px;overflow:hidden;margin-top:12px}
   .time-bar{height:100%;width:100%;background:linear-gradient(90deg,var(--accentB),var(--accentA));transform-origin:left;transition:width 0.12s linear}
 
   .sidebar{display:flex;flex-direction:column;gap:12px}
-  .card{background:var(--card);padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.02)}
+  .card{background:var(--card);padding:12px;border-radius:12px;border:1px solid rgba(58,42,28,0.12)}
   .list{max-height:44vh;overflow:auto;padding-right:6px;display:flex;flex-direction:column;gap:8px}
-  .quiz-item{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent)}
+  .quiz-item{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:10px;background:rgba(255,255,255,0.55);border:1px solid rgba(58,42,28,0.08)}
   .btn{padding:10px 12px;border-radius:10px;border:none;cursor:pointer;font-weight:900}
-  .btn.primary{background:linear-gradient(90deg,#ffd86b,#ff7ab6);color:#081226}
-  .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:#cfe6ff}
+  .btn.primary{background:linear-gradient(90deg,#c9a66b,#c1694f);color:#2a1c14}
+  .btn.ghost{background:rgba(255,255,255,0.4);border:1px solid rgba(58,42,28,0.2);color:#5c4a36}
 
   .scoreboard{display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px;border-radius:12px;background:linear-gradient(90deg, rgba(255,255,255,0.01), transparent)}
   .score-number{font-size:28px;font-weight:900}
-  .combo{font-weight:800;color:#ffd86b}
+  .combo{font-weight:800;color:#c9a66b}
 
-  .small{font-size:13px;color:#a8c0ff}
+  .small{font-size:13px;color:#8a7358}
   .hidden{display:none}
   .shake{animation:shake .45s}
   @keyframes shake{0%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(4px)}100%{transform:translateX(0)}}
@@ -93,7 +93,7 @@
     padding:16px;border-radius:12px;
     box-shadow: 3px 3px 0px var(--color-indigo);
     min-width:260px;
-    border: 1.5px solid #ffd86b;
+    border: 1.5px solid #c9a66b;
   }
   .modal input{width:100%;padding:10px;border-radius:8px;border:none;margin:8px 0}
   .modal .row{display:flex;gap:8px}
@@ -101,17 +101,47 @@
 
   #message {position:fixed;left:12px;bottom:12px;background:rgba(0,0,0,0.5);padding:8px 12px;border-radius:10px;font-size:13px}
 
-  .end-overlay{position:fixed;left:0;top:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg, rgba(8,19,43,0.6), rgba(4,8,20,0.75));z-index:120;backdrop-filter: blur(6px);padding:16px}
-  .end-card{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));padding:18px;border-radius:14px;width:100%;max-width:520px;color:#051226}
+  .end-overlay{position:fixed;left:0;top:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg, rgba(26,17,10,0.78), rgba(15,9,5,0.88));z-index:120;backdrop-filter: blur(6px);padding:16px}
+  .end-card{background:linear-gradient(180deg, #faf1de, #f3e6cc);padding:18px;border-radius:14px;width:100%;max-width:520px;color:#2a1c14;box-shadow: 0 8px 28px rgba(0,0,0,0.35); border: 1px solid rgba(58,42,28,0.15)}
   .end-header{display:flex;justify-content:space-between;align-items:center}
   .end-list{margin-top:12px;display:flex;flex-direction:column;gap:8px;max-height:60vh;overflow:auto;padding-right:8px}
-  .end-row{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:10px;background:rgba(255,255,255,0.04)}
-  .end-winner{border:2px solid rgba(255,255,255,0.12);background:linear-gradient(90deg,#ffd86b,#ff7ab6);color:#051226;font-weight:900}
+  .end-row{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:10px;background:rgba(255,255,255,0.85);border:1px solid rgba(58,42,28,0.1)}
+  .end-winner{border:2px solid rgba(255,255,255,0.12);background:linear-gradient(90deg,#c9a66b,#c1694f);color:#2a1c14;font-weight:900}
   .end-actions{display:flex;gap:8px;margin-top:12px;justify-content:flex-end}
   .btn.end-ghost{background:transparent;border:1px solid rgba(0,0,0,0.06);color:inherit;padding:8px 12px;border-radius:10px}
-  .btn.end-primary{background:linear-gradient(90deg,#ffd86b,#ff7ab6);color:#051226;padding:8px 12px;border-radius:10px;font-weight:900}
+  .btn.end-primary{background:linear-gradient(90deg,#c9a66b,#c1694f);color:#2a1c14;padding:8px 12px;border-radius:10px;font-weight:900}
 
   #serverName { display: none !important; }
+
+  /* ===== Chế độ "đang chơi" — thu gọn phần phụ, tập trung vào câu hỏi (thêm bởi Claude) =====
+     Chỉ đổi CSS theo class, không đụng vị trí thật của phần tử trong HTML — nên toàn bộ
+     JS (getElementById các #scoreDisplay, #comboDisplay, #qtext...) không bị ảnh hưởng gì. */
+  #quizWrap.quiz-playing.mode-solo { grid-template-columns: 1fr; }
+  #quizWrap.quiz-playing.mode-multi { grid-template-columns: 1fr 260px; }
+
+  .quiz-playing #joinCard,
+  .quiz-playing #quizListCard { display: none; }
+
+  .quiz-playing #questionCard {
+    max-width: 720px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 30px 26px;
+  }
+  .quiz-playing .qtext { font-size: 26px; min-height: 76px; line-height: 1.35; }
+  .quiz-playing .options { grid-template-columns: 1fr; gap: 12px; }
+  .quiz-playing .opt { padding: 16px 18px; font-size: 16px; word-break: break-word; }
+
+  /* Thanh điểm số thu gọn thành dải mỏng ngang, thay vì khối vuông to */
+  .quiz-playing .topbar .scoreboard.card {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 14px;
+    background: rgba(255,255,255,0.5);
+  }
+  .quiz-playing .topbar .scoreboard.card > .small:first-child { display: none; }
+  .quiz-playing .topbar .scoreboard.card .score-number { font-size: 18px; }
 
   /* ===== MOBILE UI FOR QUIZ PAGE ===== */
   @media (max-width: 900px) {
@@ -166,6 +196,16 @@
     .opt {
       padding: 10px !important;
       font-size: 15px !important;
+    }
+    /* Chế độ đang chơi trên di động: to hơn 1 chút so với lúc duyệt (16px), nhưng vẫn
+       an toàn không tràn chữ trên màn hình hẹp — chữ tự xuống dòng bình thường. */
+    .quiz-playing .qtext {
+      font-size: 19px !important;
+      min-height: 44px !important;
+    }
+    .quiz-playing #questionCard {
+      padding: 14px !important;
+      max-width: 100% !important;
     }
     .meta-row {
       flex-direction: column !important;
@@ -276,6 +316,10 @@
       font-size: 14px !important;
       min-height: 24px !important;
     }
+    .quiz-playing .qtext {
+      font-size: 17px !important;
+      min-height: 36px !important;
+    }
     .opt {
       font-size: 13px !important;
       padding: 8px !important;
@@ -326,7 +370,7 @@
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="wrap" id="quizWrap">
 <div class="stage" id="stage">
 <div class="topbar">
 <div class="logo">
@@ -366,7 +410,7 @@
 </div>
 </div>
 <div class="sidebar">
-<div class="card">
+<div class="card" id="joinCard">
 <div style="display:flex;justify-content:space-between;align-items:center">
 <div>
 <div id="titleSide" style="font-weight:900">Chơi</div>
@@ -378,7 +422,7 @@
 <button class="btn ghost" onclick="openJoinModal()">Join</button>
 </div>
 </div>
-<div class="card">
+<div class="card" id="quizListCard">
 <div style="display:flex;justify-content:space-between;align-items:center">
 <div class="small">Quizzes</div>
 <div><button class="btn ghost" onclick="refreshQuizzes()">Refresh</button></div>
@@ -415,17 +459,16 @@
 <div aria-labelledby="endTitle" aria-modal="true" class="end-card" role="dialog">
 <div class="end-header">
 <div>
-<div id="endTitle" style="font-weight:900;color:#eaf5ff">Số điểm</div>
+<div id="endTitle" style="font-weight:900;color:#3a2a1c">Số điểm</div>
 <div class="small" id="endSubtitle">Bạn đã hoàn thành trò chơi!</div>
-<div class="small" id="endBadgeNote" style="margin-top:4px;color:#ffd86b">🏅 Trả lời đúng tất cả câu hỏi mới được nhận huy hiệu Minigame.</div>
+<div class="small" id="endBadgeNote" style="margin-top:4px;color:#c9a66b">🏅 Trả lời đúng tất cả câu hỏi mới được nhận huy hiệu Minigame.</div>
 </div>
-<div id="endScoreSummary" style="text-align:right;color:#eaf5ff"></div>
+<div id="endScoreSummary" style="text-align:right;color:#3a2a1c"></div>
 </div>
 <div class="end-list" id="endList"></div>
 <div class="end-actions">
-<button class="btn end-ghost" onclick="closeEndScreen()">Home</button>
 <button class="btn end-primary" onclick="playAgain()">Play again</button>
-<button class="btn end-primary" id="backToMapBtn" style="display:none;background:linear-gradient(90deg,#60a5fa,#34d399)" onclick="window.location.href='/map.html'">🗺️ Quay lại bản đồ</button>
+<button class="btn end-primary" id="backToMapBtn" style="display:none;background:linear-gradient(90deg,#b5854a,#7a9471)" onclick="window.location.href='/map.html'">🗺️ Quay lại bản đồ</button>
 </div>
 </div>
 </div>
@@ -520,7 +563,7 @@ function startSound(){ playTone(440,0.12,'sine',0.12); setTimeout(()=>playTone(6
 function finishSound(){ playTone(520,0.12,'triangle',0.12); setTimeout(()=>playTone(780,0.08,'triangle',0.08),150); }
 
 function burstConfetti(x = window.innerWidth/2, y = window.innerHeight/4, count = 40) {
-  const colors = ["#ffd86b","#ff7ab6","#34d399","#60a5fa","#f97316","#a78bfa"];
+  const colors = ["#c9a66b","#c1694f","#7a9471","#a13d3d","#b5854a","#dcc9a3"];
   const canvas = document.createElement('canvas');
   canvas.style.position = 'fixed';
   canvas.style.left = 0; canvas.style.top = 0; canvas.style.pointerEvents = 'none';
@@ -840,6 +883,14 @@ function showQuestion(){
   updateTimeBar(1);
   timeBonus.textContent = '';
 
+  // (thêm bởi Claude) Bật layout "đang chơi" — thu gọn sidebar, phóng to thẻ câu hỏi.
+  // Chỉ toggle class, không đụng vị trí/nội dung phần tử nên không ảnh hưởng logic bên dưới.
+  const wrapEl = document.getElementById('quizWrap');
+  if (wrapEl && (mode === 'solo' || mode === 'multi')) {
+    wrapEl.classList.remove('mode-solo', 'mode-multi');
+    wrapEl.classList.add('quiz-playing', 'mode-' + mode);
+  }
+
   if(mode === 'solo'){
     if(!questions.length){ qtext.textContent = 'No question loaded'; optionsEl.innerHTML=''; return; }
     const q = questions[currentIndex];
@@ -974,11 +1025,11 @@ function updateTimeBar(fraction){
   timeBar.style.width = pct + '%';
 
   if (fraction < 0.25) {
-    timeBar.style.background = 'linear-gradient(90deg,#fb7185,#ff7ab6)';
+    timeBar.style.background = 'linear-gradient(90deg,#a13d3d,#c1694f)';
   } else if (fraction < 0.6) {
-    timeBar.style.background = 'linear-gradient(90deg,#ffd86b,#ff7ab6)';
+    timeBar.style.background = 'linear-gradient(90deg,#c9a66b,#c1694f)';
   } else {
-    timeBar.style.background = 'linear-gradient(90deg,#60a5fa,#34d399)';
+    timeBar.style.background = 'linear-gradient(90deg,#b5854a,#7a9471)';
   }
 }
 function onTimeUp(){
@@ -1143,6 +1194,10 @@ function closeEndScreen(){
   updateTimeBar(0);
   qtext.textContent = 'Chọn "Play" để chơi hoặc "Host" để tạo phòng.';
   optionsEl.innerHTML = '';
+
+  // (thêm bởi Claude) Tắt layout "đang chơi" — trở lại màn hình duyệt danh sách quiz đầy đủ.
+  const wrapEl = document.getElementById('quizWrap');
+  if (wrapEl) wrapEl.classList.remove('quiz-playing', 'mode-solo', 'mode-multi');
 }
 
 function playAgain(){
