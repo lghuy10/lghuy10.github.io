@@ -1731,7 +1731,7 @@
 
 <div>
 
-<p style="margin-bottom:0; color:#333;">- Các lễ hội gần vị trí nhau sẽ được gộp thành một nút tròn hiển thị số lượng lễ hội gần đó, nhấn vào nút đó để xem các lễ hội trong khu vực đó.<br/>- Nút bộ lọc có chức năng dùng để lọc ra các lễ hội theo loại.<br/>- Mỗi lễ hội sẽ có một bài viết và hướng dẫn chỉ đường gắn vào. <br/>- Các lễ hội đều có chức năng VR360.<br/>- 📖 là huy hiệu Tài liệu (đã xem bài viết về lễ hội), 📝 là huy hiệu Minigame (đã hoàn thành quiz) — đạt đủ cả 2 huy hiệu, mảnh bản đồ của lễ hội đó sẽ được khai phá hoàn toàn.<br/>- Mảnh ghép lễ hội hiện màu vàng khi đạt 1 huy hiệu và màu đỏ cam khi đạt đủ huy hiệu</p>
+<p style="margin-bottom:0; color:#333;">- Các lễ hội gần vị trí nhau sẽ được gộp thành một nút tròn hiển thị số lượng lễ hội gần đó, nhấn vào nút đó để xem các lễ hội trong khu vực đó.<br/>- Nút bên góc phải trên sẽ bật chế độ toàn màn hình.<br/>- Nút bộ lọc có chức năng dùng để lọc ra các lễ hội theo loại.<br/>- Mỗi lễ hội sẽ có một bài viết và hướng dẫn chỉ đường gắn vào. <br/>- Các lễ hội đều có chức năng VR360.<br/>- 📖 là huy hiệu Tài liệu (đã xem bài viết về lễ hội), 📝 là huy hiệu Minigame (đã hoàn thành quiz) — đạt đủ cả 2 huy hiệu, mảnh bản đồ của lễ hội đó sẽ được khai phá hoàn toàn.<br/>- Mảnh ghép lễ hội hiện màu vàng khi đạt 1 huy hiệu và màu đỏ cam khi đạt đủ huy hiệu</p>
 
 </div>
 
@@ -3625,14 +3625,86 @@ marker.bindPopup(buildPopupHtml(item), {
   }
 
   let celebrated = false;
+  // (sửa bởi Claude) Banner chúc mừng to hơn, đặt giữa màn hình, tông đỏ-vàng lễ hội + hiệu ứng confetti.
+  // pointer-events:none trên toàn bộ overlay để tuyệt đối không chặn được thao tác chạm bên dưới
+  // (đặc biệt là nút "Hoàn thành" của chế độ Speedrun) — dù có vô tình che khuất về hình ảnh,
+  // ngón tay chạm vào vẫn "xuyên" thẳng xuống nút phía dưới như banner không hề tồn tại.
   function celebrateFullCompletion() {
     if (celebrated) return;
     celebrated = true;
-    const el = document.createElement('div');
-    el.textContent = '🎉 Chúc mừng! Bạn đã khai phá toàn bộ bản đồ lễ hội! 🎉';
-    el.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#16a34a;color:white;padding:14px 22px;border-radius:10px;font-weight:bold;z-index:2000;box-shadow:3px 3px 0px var(--color-indigo);';
-    document.body.appendChild(el);
-    setTimeout(() => el.remove(), 5000);
+
+    if (!document.getElementById('celebrate-style')) {
+      const style = document.createElement('style');
+      style.id = 'celebrate-style';
+      style.textContent = `
+        #celebrate-overlay {
+          position: fixed; inset: 0; z-index: 2400; pointer-events: none;
+          display: flex; align-items: center; justify-content: center; padding: 24px;
+        }
+        #celebrate-card {
+          position: relative; max-width: 380px; width: 100%;
+          background: linear-gradient(160deg, #8b1f1f 0%, #6e1616 100%);
+          border: 3px solid #f0c04a; border-radius: 20px;
+          padding: 30px 24px; text-align: center;
+          box-shadow: 0 10px 0px #4a0e0e, 0 18px 40px rgba(0,0,0,0.45);
+          animation: celebrate-pop 550ms cubic-bezier(.2,1.4,.4,1) forwards, celebrate-fade-out 600ms ease-in 5400ms forwards;
+        }
+        #celebrate-card .celebrate-emoji { font-size: 44px; display: block; margin-bottom: 8px; animation: celebrate-swing 1.6s ease-in-out infinite; }
+        #celebrate-card .celebrate-title { color: #f7dfa0; font-size: 22px; font-weight: 900; margin: 0 0 8px; text-shadow: 0 2px 0 rgba(0,0,0,0.25); }
+        #celebrate-card .celebrate-sub { color: #f0d9b8; font-size: 14px; margin: 0; opacity: 0.95; }
+        #celebrate-card .celebrate-corner { position: absolute; font-size: 26px; opacity: 0.85; animation: celebrate-swing 1.6s ease-in-out infinite; }
+        #celebrate-card .celebrate-corner--tl { top: -14px; left: -10px; animation-delay: .1s; }
+        #celebrate-card .celebrate-corner--tr { top: -14px; right: -10px; animation-delay: .3s; }
+        @keyframes celebrate-pop {
+          0% { transform: scale(0.4); opacity: 0; }
+          65% { transform: scale(1.06); opacity: 1; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes celebrate-fade-out { to { opacity: 0; transform: scale(0.92); } }
+        @keyframes celebrate-swing { 0%,100% { transform: rotate(-8deg); } 50% { transform: rotate(8deg); } }
+        .celebrate-confetti { position: fixed; top: -20px; z-index: 2401; pointer-events: none; border-radius: 2px; will-change: transform, opacity; }
+        @keyframes celebrate-confetti-fall {
+          to { transform: translateY(110vh) rotate(var(--rot-end)); opacity: 0; }
+        }
+      `;
+      document.head.appendChild(style);
+    }
+
+    const overlay = document.createElement('div');
+    overlay.id = 'celebrate-overlay';
+    overlay.innerHTML = `
+      <div id="celebrate-card">
+        <span class="celebrate-corner celebrate-corner--tl">🏮</span>
+        <span class="celebrate-corner celebrate-corner--tr">🏮</span>
+        <span class="celebrate-emoji">🎉</span>
+        <p class="celebrate-title">Chúc mừng!</p>
+        <p class="celebrate-sub">Bạn đã khai phá toàn bộ bản đồ lễ hội truyền thống!</p>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+    setTimeout(() => overlay.remove(), 6000);
+
+    // Confetti rơi từ trên xuống, màu theo tông đỏ-vàng-kem
+    const colors = ['#f0c04a', '#e8542f', '#f7dfa0', '#8b1f1f', '#ffffff'];
+    const confettiCount = 60;
+    for (let i = 0; i < confettiCount; i++) {
+      const piece = document.createElement('div');
+      piece.className = 'celebrate-confetti';
+      const size = 6 + Math.random() * 6;
+      const startX = Math.random() * 100;
+      const duration = 2200 + Math.random() * 1400;
+      const delay = Math.random() * 500;
+      const rotEnd = (Math.random() > 0.5 ? 1 : -1) * (360 + Math.random() * 360);
+      piece.style.cssText = `
+        left: ${startX}vw; width: ${size}px; height: ${size * (Math.random() > 0.5 ? 1 : 2.2)}px;
+        background: ${colors[Math.floor(Math.random() * colors.length)]};
+        transform: rotate(${Math.random() * 360}deg);
+        --rot-end: ${rotEnd}deg;
+        animation: celebrate-confetti-fall ${duration}ms ease-in ${delay}ms forwards;
+      `;
+      document.body.appendChild(piece);
+      setTimeout(() => piece.remove(), duration + delay + 200);
+    }
   }
 
   function refreshAll() {
@@ -4615,7 +4687,7 @@ jQuery('.fancybox').fancybox();
     <label for="speedrun-name-input">Tên</label>
     <input id="speedrun-name-input" maxlength="80" placeholder="Nhập tên của bạn" type="text"/>
     <label for="speedrun-class-input">Lớp</label>
-    <input id="speedrun-class-input" maxlength="60" placeholder="Ví dụ: 10C1" type="text"/>
+    <input id="speedrun-class-input" maxlength="60" placeholder="Ví dụ: 10A1" type="text"/>
     <div class="speedrun-error" id="speedrun-modal-error"></div>
     <div class="speedrun-modal-actions">
       <button class="speedrun-btn-cancel" id="speedrun-cancel-btn" type="button">Hủy</button>
