@@ -6604,3 +6604,8 @@ h5 {
 [class*="badge"] {
     color: #ffffff !important; /* Thay màu trắng hoặc màu bạn muốn */
 }
+/* Chỉ căn trái riêng tiêu đề h1 của slide hero-neo */
+.hero-neo__slide h1 {
+    text-align: left !important;
+    margin-left: 0 !important;
+}
