@@ -48,6 +48,8 @@
 
 <link href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" rel="stylesheet"/>
 
+<script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+
 <link href="/css/global.css" rel="stylesheet"/>
 
 <link href="/css/style.css" rel="stylesheet"/>
@@ -343,6 +345,45 @@
 
 .popup-actions button.share { background:#10b981; color:white; }
 
+/* ===== Fog-of-war progress panel (thêm bởi Claude) ===== */
+#explore-progress {
+  position: absolute; top: 10px; right: 10px; z-index: 501;
+  background: #ffffff !important; border: 2px solid #ff9800; border-radius: 8px;
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  padding: 8px 12px; font-size: 13px; font-weight: bold;
+  cursor: pointer; user-select: none;
+  display: flex; align-items: center; gap: 8px;
+}
+#explore-progress, #explore-progress * { color: #1a1a1a !important; }
+#explore-progress .bar-outer { width: 90px; height: 8px; background: #eee !important; border-radius: 4px; overflow: hidden; }
+#explore-progress .bar-inner { height: 100%; background: linear-gradient(90deg,#ffd86b,#ff7043) !important; width: 0%; transition: width .4s; }
+
+#badge-panel {
+  position: absolute; top: 55px; right: 10px; z-index: 501;
+  width: 300px; max-height: 60%; overflow-y: auto;
+  background: #ffffff !important; border: 2px solid #ff9800; border-radius: 8px;
+  box-shadow: 3px 3px 0px var(--color-indigo);
+  padding: 10px; display: none;
+}
+#badge-panel.active { display: block; }
+#badge-panel, #badge-panel h4, #badge-panel .badge-row, #badge-panel .badge-row span { color: #1a1a1a !important; }
+#badge-panel h4 { margin: 0 0 8px 0; font-size: 14px; }
+#badge-panel .badge-row { display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid #f0f0f0; font-size: 12.5px; }
+#badge-panel .badge-row:last-child { border-bottom: none; }
+/* (thêm bởi Claude) icon huy hiệu (📖/📝) to gấp đôi chữ tên lễ hội để dễ nhận biết */
+#badge-panel .badge-icons { font-size: 25px; line-height: 1; display: inline-flex; gap: 4px; flex-shrink: 0; margin-left: 8px; }
+#badge-panel .badge-row > span:first-child { flex: 1; min-width: 0; }
+#reset-progress-btn { color: #ffffff !important; }
+
+.popup-btn.quiz { background:#7c3aed !important; }
+
+/* ===== Quầng nhiệt (heatmap glow) cho mảnh Voronoi (thêm bởi Claude) ===== */
+.heat-cell {
+  transition: filter .3s;
+}
+/* Hiệu ứng "làn sóng" khi vừa đạt badge giờ dùng L.circle thật (xem playRingWave trong JS)
+   thay vì CSS transform — để đảm bảo luôn thấy rõ chuyển động trên mọi trình duyệt. */
+
 
 
 
@@ -609,15 +650,15 @@
 
 
 
-/* inline actions container — force single row */
+/* inline actions container — wrap khi không đủ chỗ (sửa bởi Claude) */
 
 .popup-actions-inline {
 
   display: flex;
 
-  flex-wrap: nowrap;       /* don't wrap into multiple lines on wide screens */
+  flex-wrap: wrap;
 
-  gap: 12px;
+  gap: 8px;
 
   align-items: center;
 
@@ -633,9 +674,9 @@
 
   white-space: nowrap;     /* prevent button text from breaking */
 
-  padding: 10px 18px;      /* slightly bigger hit area */
+  padding: 8px 14px;
 
-  font-size: 14px;
+  font-size: 13px;
 
 }
 
@@ -1637,6 +1678,17 @@
 
 <button id="fullscreen-btn" title="Toàn màn hình">⛶</button>
 
+<!-- Bảng tiến trình khám phá (thêm bởi Claude) -->
+<div id="explore-progress" title="Xem bộ sưu tập huy hiệu">
+  <span id="explore-progress-text">Khám phá: 0/10</span>
+  <div class="bar-outer"><div class="bar-inner" id="explore-progress-bar"></div></div>
+  <button id="reset-progress-btn" title="Reset tiến trình khám phá" style="border:none;border-radius:6px;background:#ef4444;color:#ffffff;font-weight:bold;font-size:13px;cursor:pointer;padding:4px 8px;line-height:1;">🗑️</button>
+</div>
+<div id="badge-panel">
+  <h4>Bộ sưu tập huy hiệu</h4>
+  <div id="badge-panel-list"></div>
+</div>
+
 <!-- Search bar -->
 
 <div class="search-bar">
@@ -1679,7 +1731,7 @@
 
 <div>
 
-<p style="margin-bottom:0; color:#333;">- Các lễ hội gần vị trí nhau sẽ được gộp thành một nút, nhấn vào nút đó để xem các lễ hội trong khu vực đó.<br/>- Nút bên góc phải trên sẽ bật chế độ toàn màn hình.<br/>- Nút bộ lọc có chức năng dùng để lọc ra các lễ hội theo loại.<br/>- Mỗi địa điểm sẽ có một bài viết và hướng dẫn chỉ đường gắn vào. <br/>- Một số địa điểm có chức năng VR360.</p>
+<p style="margin-bottom:0; color:#333;">- Các lễ hội gần vị trí nhau sẽ được gộp thành một nút tròn hiển thị số lượng lễ hội gần đó, nhấn vào nút đó để xem các lễ hội trong khu vực đó.<br/>- Nút bên góc phải trên sẽ bật chế độ toàn màn hình.<br/>- Nút bộ lọc có chức năng dùng để lọc ra các lễ hội theo loại.<br/>- Mỗi lễ hội sẽ có một bài viết và hướng dẫn chỉ đường gắn vào. <br/>- Các lễ hội đều có chức năng VR360.<br/>- 📖 là huy hiệu Tài liệu (đã xem bài viết về lễ hội), 📝 là huy hiệu Minigame (đã hoàn thành quiz) — đạt đủ cả 2 huy hiệu, mảnh bản đồ của lễ hội đó sẽ được khai phá hoàn toàn.<br/>- Mảnh ghép lễ hội hiện màu vàng khi đạt 1 huy hiệu và màu đỏ cam khi đạt đủ huy hiệu</p>
 
 </div>
 
@@ -2059,11 +2111,9 @@ function injectPopupCategoryCSS_Robust() {
 
     .popup-content .popup-thumb { width:100%; height:160px; object-fit:cover; border-radius:8px; display:block; margin-bottom:12px; }
 
-    .popup-actions-inline { display:flex; gap:12px; flex-wrap:nowrap; align-items:center; margin-top:12px; }
+    .popup-actions-inline { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:12px; }
 
-    @media (max-width:420px) { .popup-actions-inline { flex-wrap:wrap; gap:8px; } }
-
-    .popup-btn { color:#fff; border:none; cursor:pointer; border-radius:22px; padding:10px 16px; font-weight:700; white-space:nowrap; box-shadow: 3px 3px 0px var(--color-indigo); transition: transform .12s, box-shadow .12s; }
+    .popup-btn { color:#fff; border:none; cursor:pointer; border-radius:22px; padding:8px 13px; font-weight:700; font-size:13px; white-space:nowrap; box-shadow: 3px 3px 0px var(--color-indigo); transition: transform .12s, box-shadow .12s; }
 
     .popup-btn:active{ transform: translateY(1px) scale(.995); }
 
@@ -2764,57 +2814,96 @@ fetch('js/hcmc-binhduong-baria.geojson')
 
 const data = [
 
-  { name: "Lễ hội Khai Hạ - Cầu An", coords:[10.80188, 106.69691], category:"tuongniem", page:"lehoikhahacauan.html", vr:true,
+  { name: "Lễ hội Khai Hạ - Cầu An", festId: 8, coords:[10.80188, 106.69691], category:"tuongniem", page:"lehoikhahacauan.html", vr:true,
     vrCoords:[10.80188, 106.69691],
     image:"/images/khca1.jpg",
     snippet: "Tại Lăng Tả quân Lê Văn Duyệt (số 1 Vũ Tùng, Phường Gia Định - cũ Phường 1 Bình Thạnh). Lễ hội tưởng niệm danh nhân cầu bình an, quốc thái dân an." },
 
-  { name: "Lễ hội Nghinh Ông Cần Giờ", coords:[10.588077394763685, 106.85587799205318], category:"ngunghiep", page:"lehoinghinong.html", vr:true,
+  { name: "Lễ hội Nghinh Ông Cần Giờ", festId: 5, coords:[10.588077394763685, 106.85587799205318], category:"ngunghiep", page:"lehoinghinong.html", vr:true,
     vrCoords:[10.588077394763685, 106.85587799205318],
     image:"/images/ngongcg.jpg",
     snippet: "Đặc sản văn hóa ngư dân Nam Bộ tại Thị trấn Cần Giờ, xã Bình Khánh, An Thới Đông. Tôn vinh Cá Ông (cá voi) và cầu nguyện biển yên sóng lặng." },
 
-  { name: "Lễ hội Nguyên Tiêu", coords:[10.75490, 106.67230], category:"tamlinh", page:"lehoinguyentieu.html", vr:true,
+  { name: "Lễ hội Nguyên Tiêu", festId: 1, coords:[10.75490, 106.67230], category:"tamlinh", page:"lehoinguyentieu.html", vr:true,
     vrCoords:[10.75490, 106.67230],
     image:"/images/ngtieu1.jpg",
     snippet: "Tết rằm tháng Giêng của người Việt gốc Hoa, thu hút đông đảo người dân tham gia rước đèn ở khu vực Phường An Đông - Chợ Lớn (Quận 5 - Quận 6)." },
 
-  { name: "Lễ hội Thần Rừng", coords:[10.904953259336603, 106.61472667039584], category:"tamlinh", page:"lehoithanrung.html", vr:true,
+  { name: "Lễ hội Thần Rừng", festId: 10, coords:[10.904953259336603, 106.61472667039584], category:"tamlinh", page:"lehoithanrung.html", vr:true,
     vrCoords:[10.904953259336603, 106.61472667039584],
     image:"/images/tr1.jpg",
     snippet: "Lễ hội lớn của người Chơ-Ro, tạ ơn Thần Rừng. Gặp gỡ cộng đồng Chơ-Ro tại Khu vực 32/5 Đường Trung Đông 7, Ấp Trung Đông, Đông Thạnh, Hóc Môn." },
 
-  { name: "Lễ hội Chùa Bà Thiên Hậu", coords:[11.065402730352945, 106.6872265726053], category:"tamlinh", page:"lehoichuabathienhau.html", vr:true,
+  { name: "Lễ hội Chùa Bà Thiên Hậu", festId: 2, coords:[11.065402730352945, 106.6872265726053], category:"tamlinh", page:"lehoichuabathienhau.html", vr:true,
     vrCoords:[11.065402730352945, 106.6872265726053],
     image:"/images/cbth1.png",
     snippet: "Lễ hội lớn nhất Bình Dương. Miếu Bà Thiên Hậu Thánh Mẫu - Cơ sở Lê Hoàn (3M8P+4VX Lê Hoàn, Thủ Dầu Một) + Cơ sở 4 Nguyễn Du, Phú Cường." },
 
-  { name: "Lễ hội Cúng Thần Lúa", coords:[10.679158835001111, 107.26008218748035], category:"nongnghiep", page:"lehoicungthanlua.html", vr:true,
+  { name: "Lễ hội Cúng Thần Lúa", festId: 9, coords:[10.679158835001111, 107.26008218748035], category:"nongnghiep", page:"lehoicungthanlua.html", vr:true,
     vrCoords:[10.679158835001111, 107.26008218748035],
     image:"/images/tl1.jpg",
     snippet: "Người Chơ-ro tạ ơn Thần Lúa, cầu mùa màng bội thu. Tổ chức trọng thể tại Nhà văn hóa dân tộc Châu Ro Bàu Chinh (M7H6+J5C, xã Kim Long)." },
 
-  { name: "Lễ hội Mùa Trái Chín Lái Thiêu", coords:[10.935862632634228, 106.68647638488417], category:"nongnghiep", page:"lehoimuatraichin.html", vr:true,
+  { name: "Lễ hội Mùa Trái Chín Lái Thiêu", festId: 7, coords:[10.935862632634228, 106.68647638488417], category:"nongnghiep", page:"lehoimuatraichin.html", vr:true,
     vrCoords:[10.935862632634228, 106.68647638488417],
     image:"/images/mtc1.jpg",
     snippet: "Lễ hội trái cây đặc sản Lái Thiêu, Thuận An (cũ Bình Dương). Tọa lạc tại WMPP+7JM, Đường tỉnh 745, Phường Thuận An - Phường Lái Thiêu." },
 
-  { name: "Lễ Hội Dinh Cô Long Hải", coords:[10.386574440470264, 107.23415626276024], category:"tamlinh", page:"lehoidincolonghai.html", vr:true,
+  { name: "Lễ Hội Dinh Cô Long Hải", festId: 4, coords:[10.386574440470264, 107.23415626276024], category:"tamlinh", page:"lehoidincolonghai.html", vr:true,
     vrCoords:[10.386574440470264, 107.23415626276024],
     image:"/images/dc1.jpg",
     snippet: "Lễ hội ngư dân Long Hải, Bà Rịa-Vũng Tàu. Dinh Cô tọa lạc tại 39 Đường Hai Bà Trưng, Thị trấn Long Hải (huyện Long Điền cũ)." },
 
-  { name: "Lễ Hội Nghinh Ông Tam Thắng Vũng Tàu", coords:[10.34028, 107.08306], category:"ngunghiep", page:"lehoinghinongtamthang.html", vr:true,
+  { name: "Lễ Hội Nghinh Ông Tam Thắng Vũng Tàu", festId: 6, coords:[10.34028, 107.08306], category:"ngunghiep", page:"lehoinghinongtamthang.html", vr:true,
     vrCoords:[10.34028, 107.08306],
     image:"/images/ngongtt1.jpg",
     snippet: "Lễ hội Cá Ông lớn bậc nhất Vũng Tàu. Di tích Đình Thần Thắng Tam tại 77A Hoàng Hoa Thám, Phường Vũng Tàu (78210). Lưu giữ 12-13 sắc phong triều Nguyễn." },
 
-  { name: "Lễ Hội Giỗ Tổ Trần Hưng Đạo", coords:[10.791069989916952, 106.69447774546703], category:"tuongniem", page:"lehoitranhungdao.html", vr:true,
+  { name: "Lễ Hội Giỗ Tổ Trần Hưng Đạo", festId: 3, coords:[10.791069989916952, 106.69447774546703], category:"tuongniem", page:"lehoitranhungdao.html", vr:true,
     vrCoords:[10.791069989916952, 106.69447774546703],
     image:"/images/thd1.jpg",
     snippet: "Lễ hội tưởng nhớ Đức Thánh Trần Hưng Đạo - anh hùng dân tộc. Tại Đền thờ số 36 Võ Thị Sáu, Phường Tân Định, Quận 1, Thành phố Hồ Chí Minh." }
 
 ];
+
+/* ============================================================
+   HỆ THỐNG BADGE / KHÁM PHÁ MẢNH GHÉP (thêm bởi Claude)
+   ============================================================ */
+const FESTIVAL_BADGE_KEY = 'festival_badges_v1';
+
+function loadBadges() {
+  try {
+    return JSON.parse(localStorage.getItem(FESTIVAL_BADGE_KEY)) || {};
+  } catch (e) { return {}; }
+}
+function saveBadges(obj) {
+  try { localStorage.setItem(FESTIVAL_BADGE_KEY, JSON.stringify(obj)); } catch (e) {}
+}
+function getBadge(festId) {
+  const all = loadBadges();
+  return all[festId] || { doc: false, quiz: false };
+}
+function isFullyUnlocked(festId) {
+  const b = getBadge(festId);
+  return !!(b.doc && b.quiz);
+}
+function countUnlocked() {
+  return data.filter(item => item.festId && isFullyUnlocked(item.festId)).length;
+}
+// (thêm bởi Claude) Tổng số huy hiệu riêng lẻ (doc + quiz tính riêng, tối đa 20) — dùng cho xếp hạng Speedrun.
+// Khác với countUnlocked() (đếm số lễ hội ĐÃ KHAI PHÁ HOÀN TOÀN, tối đa 10) chỉ dùng để hiển thị tiến trình.
+function totalBadgeCount() {
+  const all = loadBadges();
+  let n = 0;
+  data.forEach(item => {
+    if (!item.festId) return;
+    const b = all[item.festId] || { doc: false, quiz: false };
+    if (b.doc) n++;
+    if (b.quiz) n++;
+  });
+  return n;
+}
+window.FestivalBadges = { loadBadges, saveBadges, getBadge, isFullyUnlocked, countUnlocked, totalBadgeCount };
 
 // helper: map category -> CSS class
 
@@ -2899,6 +2988,13 @@ function buildPopupHtml(item) {
     `<a class="popup-btn primary" href="${escapeHtml(item.page)}" target="_blank" rel="noopener noreferrer">Xem thêm</a>`
 
   );
+
+  // 1b. "Làm quiz" — dẫn thẳng tới quiz đúng của lễ hội này (thêm bởi Claude)
+  if (item.festId) {
+    buttons.push(
+      `<a class="popup-btn quiz" href="/quiz.html?festival=${encodeURIComponent(item.festId)}" target="_blank" rel="noopener noreferrer">📝 Làm quiz</a>`
+    );
+  }
 
   // 2. VR button — Ngay kế bên "Xem thêm"
 
@@ -3000,6 +3096,16 @@ function buildPopupHtml(item) {
 
   }
 
+  // Badge status line (thêm bởi Claude)
+  let badgeStatusHtml = '';
+  if (item.festId) {
+    const b = getBadge(item.festId);
+    const docIcon = b.doc ? '✅' : '⬜';
+    const quizIcon = b.quiz ? '✅' : '⬜';
+    const fullMsg = (b.doc && b.quiz) ? ' — <strong>Đã khai phá!</strong> 🏅' : '';
+    badgeStatusHtml = `<div class="badge-status" style="margin-top:8px;font-size:0.92em;">${docIcon} Đọc tư liệu &nbsp; ${quizIcon} Làm quiz${fullMsg}</div>`;
+  }
+
   return `
 
     <div class="custom-popup" style="--cat: ${borderColor}; --deco: url('${decoPath}')">
@@ -3021,6 +3127,8 @@ function buildPopupHtml(item) {
       <p class="meta">Loại: ${escapeHtml(humanCategory)}</p>
 
       ${actions}
+
+      ${badgeStatusHtml}
 
       ${vrSourceHtml}
 
@@ -3198,6 +3306,384 @@ marker.bindPopup(buildPopupHtml(item), {
 
   window.categoryIcons = categoryIcons;
 
+})();
+
+/* ============================================================
+   MẢNH GHÉP VORONOI + CẬP NHẬT TRẠNG THÁI KHÁM PHÁ (thêm bởi Claude)
+   ============================================================ */
+(function () {
+
+  let voronoiLayer = null; // L.geoJSON layer chứa 10 mảnh ghép
+
+  // (thêm bởi Claude) Đếm số animation "dầu loang" đang chạy + cờ báo cần rebuild lại sau khi xong,
+  // để tránh việc buildVoronoi() xóa/thay layer giữa lúc playOilSpill() đang tham chiếu tới nó
+  // (nguyên nhân khiến vệt màu bị gãy/biến mất nếu có sự kiện storage/visibilitychange xen ngang).
+  let activeSpillCount = 0;
+  let pendingRebuildAfterSpill = false;
+
+  function cellState(item) {
+    const b = getBadge(item.festId);
+    if (b.doc && b.quiz) return 'full';
+    if (b.doc || b.quiz) return 'partial';
+    return 'unexplored';
+  }
+
+  const PULSED_KEY = 'festival_badges_pulsed_v1'; // lưu mốc học sinh ĐÃ TỪNG XEM hiệu ứng lan màu: { festId: 'partial' | 'full' }
+
+  function loadPulsedMap() {
+    try {
+      const obj = JSON.parse(localStorage.getItem(PULSED_KEY));
+      return (obj && typeof obj === 'object' && !Array.isArray(obj)) ? obj : {};
+    } catch (e) { return {}; }
+  }
+  function savePulsedMap(obj) {
+    try { localStorage.setItem(PULSED_KEY, JSON.stringify(obj)); } catch (e) {}
+  }
+  window.__clearPulsedSet = function () { try { localStorage.removeItem(PULSED_KEY); } catch (e) {} };
+
+  // Trạng thái ĐANG HIỂN THỊ trên bản đồ = mốc cao nhất học sinh đã từng "chứng kiến" hiệu ứng lan màu.
+  // Khác với cellState() (trạng thái THẬT dựa theo badge) — nhờ tách 2 khái niệm này, màu chỉ thực sự
+  // đổi khi có animation "lan" chạy qua, không bao giờ nhảy thẳng sang màu cuối rồi mới vẽ hiệu ứng đè lên.
+  function displayState(item) {
+    const pulsedMap = loadPulsedMap();
+    return pulsedMap[item.festId] || 'unexplored';
+  }
+
+  // Chèn định nghĩa gradient nhiệt + filter làm mờ + clipPath riêng cho từng mảnh vào <svg> của dimmerPane
+  function ensureHeatDefs() {
+    const pane = map.getPane('dimmerPane');
+    if (!pane) return null;
+    const svg = pane.querySelector('svg');
+    if (!svg) return null;
+
+    let defs = svg.querySelector('#festival-heat-defs');
+    if (defs) return defs;
+
+    const NS = 'http://www.w3.org/2000/svg';
+    defs = document.createElementNS(NS, 'defs');
+    defs.setAttribute('id', 'festival-heat-defs');
+
+    // Quầng nhiệt "sáng tạm" (1/2 badge) — vàng cam nhạt
+    const gradPartial = document.createElementNS(NS, 'radialGradient');
+    gradPartial.setAttribute('id', 'heat-glow-partial');
+    gradPartial.setAttribute('gradientUnits', 'objectBoundingBox');
+    gradPartial.setAttribute('cx', '50%'); gradPartial.setAttribute('cy', '50%'); gradPartial.setAttribute('r', '65%');
+    gradPartial.innerHTML =
+      '<stop offset="0%" stop-color="#ffcf6b" stop-opacity="0.85"/>' +
+      '<stop offset="55%" stop-color="#ffb648" stop-opacity="0.45"/>' +
+      '<stop offset="100%" stop-color="#ffb648" stop-opacity="0.05"/>';
+
+    // Quầng nhiệt "khai phá vĩnh viễn" (đủ 2 badge) — đỏ cam rực
+    const gradFull = document.createElementNS(NS, 'radialGradient');
+    gradFull.setAttribute('id', 'heat-glow-full');
+    gradFull.setAttribute('gradientUnits', 'objectBoundingBox');
+    gradFull.setAttribute('cx', '50%'); gradFull.setAttribute('cy', '50%'); gradFull.setAttribute('r', '65%');
+    gradFull.innerHTML =
+      '<stop offset="0%" stop-color="#ff5a1f" stop-opacity="0.95"/>' +
+      '<stop offset="45%" stop-color="#ff7a2e" stop-opacity="0.65"/>' +
+      '<stop offset="100%" stop-color="#ff9d4d" stop-opacity="0.10"/>';
+
+    // Filter làm mờ nhẹ để quầng sáng mềm mại, đúng chất "heatmap"
+    const blur = document.createElementNS(NS, 'filter');
+    blur.setAttribute('id', 'heat-glow-blur');
+    blur.setAttribute('x', '-50%'); blur.setAttribute('y', '-50%');
+    blur.setAttribute('width', '200%'); blur.setAttribute('height', '200%');
+    blur.innerHTML = '<feGaussianBlur stdDeviation="5"/>';
+
+    defs.appendChild(gradPartial);
+    defs.appendChild(gradFull);
+    defs.appendChild(blur);
+    svg.insertBefore(defs, svg.firstChild);
+    return defs;
+  }
+
+  // Tạo (nếu chưa có) 1 clipPath riêng cho đúng hình dạng mảnh Voronoi của 1 lễ hội — dùng để giới hạn
+  // vệt "dầu loang" không tràn ra ngoài polygon của mảnh đó (thêm bởi Claude)
+  function ensureCellClipPath(festId, cellPathEl) {
+    const defs = ensureHeatDefs();
+    if (!defs) return null;
+    const clipId = 'clip-cell-' + festId;
+    let clipPath = defs.querySelector('#' + clipId);
+    if (clipPath) { clipPath.remove(); } // mảnh được vẽ lại mỗi lần buildVoronoi, nên làm mới clipPath theo path mới
+
+    const NS = 'http://www.w3.org/2000/svg';
+    clipPath = document.createElementNS(NS, 'clipPath');
+    clipPath.setAttribute('id', clipId);
+    const use = document.createElementNS(NS, 'use');
+    use.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#' + cellPathEl.id);
+    use.setAttribute('href', '#' + cellPathEl.id);
+    clipPath.appendChild(use);
+    defs.appendChild(clipPath);
+    return clipId;
+  }
+
+  // Viền LUÔN nổi bật ở mọi trạng thái (kể cả chưa khám phá) để học sinh luôn thấy rõ ranh giới
+  // từng mảnh lễ hội trên bản đồ — theo yêu cầu "luôn nổi bật mọi lúc" (thêm bởi Claude)
+  function styleForCell(feature) {
+    const state = feature.properties.state;
+    if (state === 'full') {
+      return { color: '#ff7a2e', weight: 3, opacity: 0.95, fillColor: 'url(#heat-glow-full)', fillOpacity: 1, className: 'heat-cell', pane: 'dimmerPane' };
+    }
+    if (state === 'partial') {
+      return { color: '#ffb648', weight: 2.5, opacity: 0.9, fillColor: 'url(#heat-glow-partial)', fillOpacity: 1, className: 'heat-cell', pane: 'dimmerPane' };
+    }
+    return { color: '#e5e5e5', weight: 2, opacity: 0.85, fillColor: '#111', fillOpacity: 0.55, pane: 'dimmerPane' };
+  }
+
+  function buildVoronoi(boundaryGeoJsonFeature) {
+    if (typeof turf === 'undefined') { console.warn('turf.js chưa load, bỏ qua Voronoi.'); return; }
+
+    // (thêm bởi Claude) Nếu đang có animation dầu loang chạy dở, KHÔNG rebuild layer ngay — rebuild sẽ
+    // xóa các <path>/<clipPath> mà animation đang tham chiếu, làm vệt màu bị gãy giữa chừng. Thay vào đó,
+    // đánh dấu "cần rebuild" — playOilSpill() sẽ tự gọi lại buildVoronoi() khi animation cuối cùng xong.
+    if (activeSpillCount > 0) {
+      pendingRebuildAfterSpill = true;
+      return;
+    }
+
+    const points = turf.featureCollection(
+      data.filter(it => it.festId).map(it =>
+        turf.point([it.coords[1], it.coords[0]], { festId: it.festId, name: it.name })
+      )
+    );
+
+    const bbox = turf.bbox(boundaryGeoJsonFeature);
+
+    let voronoiPolys;
+    try {
+      voronoiPolys = turf.voronoi(points, { bbox: bbox });
+    } catch (e) {
+      console.warn('Voronoi tính toán thất bại', e);
+      return;
+    }
+    if (!voronoiPolys) return;
+
+    // Clip từng cell theo polygon ranh giới thật, gắn TRẠNG THÁI ĐANG HIỂN THỊ (không phải trạng thái
+    // thật) — trạng thái thật chỉ được "mở khóa" thông qua animation lan màu ở detectNewlyUnlocked()
+    const clipped = [];
+    voronoiPolys.features.forEach((cell, idx) => {
+      if (!cell) return;
+      const pt = points.features[idx];
+      let inter;
+      try {
+        inter = turf.intersect(cell, boundaryGeoJsonFeature);
+      } catch (e) { inter = null; }
+      if (!inter) return;
+      const item = data.find(d => d.festId === pt.properties.festId);
+      inter.properties = {
+        festId: pt.properties.festId,
+        name: pt.properties.name,
+        state: item ? displayState(item) : 'unexplored'
+      };
+      clipped.push(inter);
+    });
+
+    if (voronoiLayer) { try { map.removeLayer(voronoiLayer); } catch (e) {} }
+
+    voronoiLayer = L.geoJSON(turf.featureCollection(clipped), {
+      style: styleForCell,
+      interactive: false
+    }).addTo(map);
+
+    ensureHeatDefs();
+
+    // Gắn id cố định cho từng path + áp filter blur (Leaflet không có style option cho 'filter')
+    voronoiLayer.eachLayer(layer => {
+      const fid = layer.feature && layer.feature.properties.festId;
+      if (!layer._path || fid == null) return;
+      layer._path.id = 'voronoi-cell-' + fid;
+      if (layer.feature.properties.state !== 'unexplored') {
+        layer._path.style.filter = 'url(#heat-glow-blur)';
+      }
+    });
+
+    detectNewlyUnlocked();
+  }
+
+  // Tính bán kính (pixel) đủ lớn để vệt màu lan phủ kín hết mảnh polygon, dựa theo đúng hình dạng
+  // thật của mảnh đó tại mức zoom hiện tại — không đoán chừng, nên luôn phủ vừa khít dù zoom xa/gần.
+  function computeMaxPixelRadius(centerLatLng, feature) {
+    const centerPt = map.latLngToLayerPoint(centerLatLng);
+    let maxDist = 0;
+    function walk(coords) {
+      if (typeof coords[0] === 'number') {
+        const pt = map.latLngToLayerPoint(L.latLng(coords[1], coords[0]));
+        const d = centerPt.distanceTo(pt);
+        if (d > maxDist) maxDist = d;
+      } else {
+        coords.forEach(walk);
+      }
+    }
+    walk(feature.geometry.coordinates);
+    return maxDist;
+  }
+
+  // Hiệu ứng "dầu loang": 1 khối màu đặc lan rộng dần từ marker, bị giới hạn (clip) đúng theo hình
+  // dạng mảnh Voronoi của lễ hội đó — nên chỉ lan tới đúng ranh giới mảnh rồi dừng, không tràn ra
+  // ngoài. Sau khi lan xong, khóa mảnh về đúng kiểu hiển thị tĩnh (gradient nhiệt) như bình thường.
+  function playOilSpill(festId, targetState) {
+    if (!voronoiLayer) return;
+    const item = data.find(d => d.festId === festId);
+    if (!item) return;
+
+    let targetLayer = null;
+    voronoiLayer.eachLayer(layer => {
+      if (layer.feature && layer.feature.properties.festId === festId) targetLayer = layer;
+    });
+    if (!targetLayer || !targetLayer._path) return;
+
+    activeSpillCount++; // (thêm bởi Claude) đánh dấu đang có animation chạy — chặn buildVoronoi() rebuild giữa chừng
+
+    const clipId = ensureCellClipPath(festId, targetLayer._path);
+    const latlng = L.latLng(item.coords[0], item.coords[1]);
+    const maxR = computeMaxPixelRadius(latlng, targetLayer.feature) * 1.08 + 6; // dư chút để phủ kín góc nhọn
+    const isFull = targetState === 'full';
+    // (sửa bởi Claude) dùng đúng gradient tâm đậm - rìa nhạt giống trạng thái tĩnh, thay vì màu phẳng 1 tông
+    const gradientId = isFull ? 'heat-glow-full' : 'heat-glow-partial';
+    const duration = isFull ? 1300 : 950;
+
+    const spill = L.circleMarker(latlng, {
+      radius: 1,
+      stroke: false,
+      fillColor: `url(#${gradientId})`,
+      fillOpacity: 1, // gradient đã tự có alpha giảm dần ở từng stop, để 1 để khỏi bị nhân đôi độ mờ
+      pane: 'dimmerPane',
+      interactive: false
+    }).addTo(map);
+
+    if (clipId && spill._path) spill._path.style.clipPath = 'url(#' + clipId + ')';
+
+    const start = performance.now();
+    function frame(now) {
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 2.2); // ease-out: lan nhanh lúc đầu, chậm dần khi gần phủ kín — giống dầu loang thật
+      spill.setRadius(1 + eased * maxR);
+      if (t < 1) {
+        requestAnimationFrame(frame);
+      } else {
+        map.removeLayer(spill);
+        // Lan xong: khóa mảnh về đúng kiểu hiển thị tĩnh (gradient nhiệt) của trạng thái đích
+        targetLayer.feature.properties.state = targetState;
+        targetLayer.setStyle(styleForCell(targetLayer.feature));
+        if (targetLayer._path) targetLayer._path.style.filter = 'url(#heat-glow-blur)';
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  // Phát hiện mảnh có trạng thái THẬT (dựa theo badge) đi trước trạng thái ĐANG HIỂN THỊ — tức là
+  // học sinh vừa đạt mốc mới mà chưa từng "chứng kiến" hiệu ứng lan màu cho mốc đó (thêm bởi Claude).
+  // Dùng localStorage để dù học sinh thoát web ngay sau khi đạt badge (không quay lại tab bản đồ kịp),
+  // lần mở bản đồ tiếp theo vẫn chắc chắn thấy hiệu ứng lan màu.
+  function detectNewlyUnlocked() {
+    if (!voronoiLayer) return;
+
+    // Chỉ chạy khi tab bản đồ ĐANG hiển thị thật sự — tránh trường hợp animation chạy ngầm
+    // và kết thúc trong lúc học sinh còn ở tab khác. Khi tab ẩn: bỏ qua, mảnh vẫn hiển thị ở
+    // trạng thái CŨ (chưa lan màu) — visibilitychange sẽ tự gọi lại đúng lúc quay về tab này.
+    if (document.hidden) return;
+
+    const pulsedMap = loadPulsedMap();
+    let changed = false;
+
+    data.filter(it => it.festId).forEach(it => {
+      const trueState = cellState(it); // 'unexplored' | 'partial' | 'full'
+      const seen = pulsedMap[it.festId]; // undefined | 'partial' | 'full'
+
+      if (trueState === 'full' && seen !== 'full') {
+        pulsedMap[it.festId] = 'full';
+        changed = true;
+        playOilSpill(it.festId, 'full');
+      } else if (trueState === 'partial' && !seen) {
+        pulsedMap[it.festId] = 'partial';
+        changed = true;
+        playOilSpill(it.festId, 'partial');
+      }
+    });
+
+    // Đánh dấu đã xem NGAY (không đợi animation chạy xong) để tránh lan lặp lại nếu reload giữa chừng
+    if (changed) savePulsedMap(pulsedMap);
+  }
+
+  function refreshProgressUI() {
+    const total = data.filter(it => it.festId).length;
+    const done = countUnlocked();
+    const textEl = document.getElementById('explore-progress-text');
+    const barEl = document.getElementById('explore-progress-bar');
+    if (textEl) textEl.textContent = `Khám phá: ${done}/${total}`;
+    if (barEl) barEl.style.width = (total ? (done / total * 100) : 0) + '%';
+
+    const listEl = document.getElementById('badge-panel-list');
+    if (listEl) {
+      listEl.innerHTML = data.filter(it => it.festId).map(it => {
+        const b = getBadge(it.festId);
+        return `<div class="badge-row"><span>${escapeHtml ? escapeHtml(it.name) : it.name}</span><span class="badge-icons">${b.doc ? '📖' : '⬜'} ${b.quiz ? '📝' : '⬜'}</span></div>`;
+      }).join('');
+    }
+
+    if (total && done === total) celebrateFullCompletion();
+  }
+
+  let celebrated = false;
+  function celebrateFullCompletion() {
+    if (celebrated) return;
+    celebrated = true;
+    const el = document.createElement('div');
+    el.textContent = '🎉 Chúc mừng! Bạn đã khai phá toàn bộ bản đồ lễ hội! 🎉';
+    el.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#16a34a;color:white;padding:14px 22px;border-radius:10px;font-weight:bold;z-index:2000;box-shadow:3px 3px 0px var(--color-indigo);';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 5000);
+  }
+
+  function refreshAll() {
+    if (window.__lastBoundaryFeature) buildVoronoi(window.__lastBoundaryFeature);
+    refreshProgressUI();
+  }
+
+  // Gọi lại sau khi ranh giới TPHCM load xong (boundaryLayer đã fetch ở đoạn code có sẵn phía trên)
+  const boundaryCheckInterval = setInterval(() => {
+    if (typeof boundaryLayer !== 'undefined' && boundaryLayer) {
+      clearInterval(boundaryCheckInterval);
+      try {
+        // gộp toàn bộ geometry biên thành 1 feature để turf xử lý
+        const feats = [];
+        boundaryLayer.eachLayer(l => { if (l.feature) feats.push(l.feature); });
+        let merged = feats[0];
+        for (let i = 1; i < feats.length; i++) {
+          try { merged = turf.union(merged, feats[i]); } catch (e) {}
+        }
+        window.__lastBoundaryFeature = merged || feats[0];
+        refreshAll();
+      } catch (e) { console.warn('Không dựng được ranh giới cho Voronoi', e); }
+    }
+  }, 300);
+
+  // Cập nhật khi quiz.html hoặc trang tài liệu (tab khác) ghi localStorage
+  window.addEventListener('storage', (e) => {
+    if (e.key === FESTIVAL_BADGE_KEY) refreshAll();
+  });
+  // Cập nhật khi quay lại tab (trường hợp cùng tab, storage event không bắn)
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshAll(); });
+
+  // Toggle badge panel
+  document.getElementById('explore-progress').addEventListener('click', () => {
+    document.getElementById('badge-panel').classList.toggle('active');
+    refreshProgressUI();
+  });
+
+  // Reset tiến trình khám phá (thêm bởi Claude)
+  document.getElementById('reset-progress-btn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    const ok = window.confirm('Xóa toàn bộ huy hiệu và tiến trình khám phá đã lưu trên trình duyệt này? Không thể hoàn tác.');
+    if (!ok) return;
+    try { localStorage.removeItem(FESTIVAL_BADGE_KEY); } catch (err) {}
+    if (window.__clearPulsedSet) window.__clearPulsedSet();
+    celebrated = false;
+    refreshAll();
+    document.getElementById('badge-panel').classList.remove('active');
+  });
+
+  refreshProgressUI();
 })();
 
 // confirm icons created
@@ -4088,10 +4574,304 @@ jQuery('.fancybox').fancybox();
 
 </div>
 
-</footer></body>
+</footer>
+
+<!-- ============================================================
+     CHẾ ĐỘ ĐẤU HẠNG - SPEEDRUN (thêm bởi Claude)
+     ============================================================ -->
+<style>
+  #speedrun-overlay { position: fixed; inset: 0; background: rgba(20,15,10,0.55); z-index: 3000; display: none; align-items: center; justify-content: center; padding: 16px; }
+  #speedrun-overlay.active { display: flex; }
+  .speedrun-modal { background: #fff; border-radius: 14px; box-shadow: 5px 5px 0px var(--color-indigo); max-width: 380px; width: 100%; padding: 22px; text-align: center; }
+  .speedrun-modal h3 { margin: 0 0 6px 0; color: #8b2626; font-size: 19px; }
+  .speedrun-modal p { margin: 0 0 16px 0; color: #555; font-size: 14px; }
+  .speedrun-modal label { display: block; text-align: left; font-size: 13px; font-weight: 600; color: #333; margin: 10px 0 4px; }
+  .speedrun-modal input { width: 100%; box-sizing: border-box; padding: 9px 12px; border-radius: 8px; border: 1.5px solid #e0d5c8; font-size: 14px; }
+  .speedrun-modal input:focus { outline: none; border-color: #8b2626; }
+  .speedrun-modal-actions { display: flex; gap: 10px; margin-top: 18px; }
+  .speedrun-modal-actions button { flex: 1; padding: 10px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; font-size: 14px; }
+  .speedrun-btn-cancel { background: #f0ece4; color: #555; }
+  .speedrun-btn-start { background: #8b2626; color: #fff; }
+  .speedrun-btn-start:disabled { opacity: 0.5; cursor: not-allowed; }
+  .speedrun-error { color: #c0392b; font-size: 12.5px; text-align: left; min-height: 16px; margin-top: 4px; }
+
+  #speedrun-widget { position: fixed; top: 70px; right: 12px; z-index: 2500; background: #fff; border: 2px solid #8b2626; border-radius: 12px; box-shadow: 3px 3px 0px var(--color-indigo); padding: 10px 14px; display: none; align-items: center; gap: 10px; }
+  #speedrun-widget.active { display: flex; }
+  #speedrun-widget.minimized { padding: 8px; border-radius: 50%; width: 44px; height: 44px; justify-content: center; }
+  #speedrun-widget.minimized .speedrun-widget-full { display: none; }
+  #speedrun-widget:not(.minimized) .speedrun-widget-mini-icon { display: none; }
+  .speedrun-widget-time { font-weight: 900; font-size: 17px; color: #8b2626; font-variant-numeric: tabular-nums; }
+  .speedrun-widget-label { font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 0.5px; }
+  #speedrun-finish-btn { background: #16a34a; color: #fff; border: none; border-radius: 6px; padding: 6px 10px; font-weight: 700; font-size: 12px; cursor: pointer; }
+  #speedrun-minimize-btn { background: none; border: none; cursor: pointer; font-size: 15px; color: #999; padding: 2px 4px; }
+  .speedrun-widget-mini-icon { font-size: 18px; cursor: pointer; }
+  #speedrun-done-toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #16a34a; color: #fff; padding: 12px 20px; border-radius: 10px; font-weight: 700; z-index: 3001; box-shadow: 3px 3px 0px var(--color-indigo); display: none; text-align: center; }
+</style>
+
+<div id="speedrun-overlay">
+  <div class="speedrun-modal">
+    <h3>⚡ Chào mừng đến với chế độ Đấu hạng - Speedrun!</h3>
+    <p>Bạn có 30 phút để khám phá càng nhiều lễ hội càng tốt. Nhập tên và lớp để bắt đầu:</p>
+    <label for="speedrun-name-input">Tên</label>
+    <input id="speedrun-name-input" maxlength="80" placeholder="Nhập tên của bạn" type="text"/>
+    <label for="speedrun-class-input">Lớp</label>
+    <input id="speedrun-class-input" maxlength="60" placeholder="Ví dụ: 10C1" type="text"/>
+    <div class="speedrun-error" id="speedrun-modal-error"></div>
+    <div class="speedrun-modal-actions">
+      <button class="speedrun-btn-cancel" id="speedrun-cancel-btn" type="button">Hủy</button>
+      <button class="speedrun-btn-start" id="speedrun-start-btn" type="button">Bắt đầu</button>
+    </div>
+  </div>
+</div>
+
+<div id="speedrun-widget">
+  <span class="speedrun-widget-mini-icon" id="speedrun-mini-icon" title="Mở rộng đồng hồ Speedrun">⚡</span>
+  <div class="speedrun-widget-full" style="display:flex; align-items:center; gap:10px;">
+    <div>
+      <div class="speedrun-widget-label">Speedrun</div>
+      <div class="speedrun-widget-time" id="speedrun-time-display">30:00</div>
+    </div>
+    <button id="speedrun-finish-btn" type="button">Hoàn thành</button>
+    <button id="speedrun-minimize-btn" title="Thu nhỏ" type="button">➖</button>
+  </div>
+</div>
+
+<div id="speedrun-done-toast"></div>
+
+<script>
+(function () {
+  const SPEEDRUN_API = 'https://backend-production-1a0d.up.railway.app/speedrun';
+  const SESSION_KEY = 'speedrun_session_v1';
+  const TABS_KEY = 'speedrun_open_tabs_v1';
+  const DURATION_MS = 30 * 60 * 1000; // 30 phút
+  const HEARTBEAT_MS = 5000;
+  const STALE_MS = 45000; // 1 tab khác coi như "còn sống" nếu heartbeat trong 45s gần nhất (chịu được throttle nền)
+
+  const tabId = 'tab-' + Date.now() + '-' + Math.random().toString(36).slice(2, 9);
+  let session = null;       // { name, class_name, started_at, completed }
+  let tickInterval = null;
+  let heartbeatInterval = null;
+  let finalized = false;
+
+  function loadSession() {
+    try { return JSON.parse(localStorage.getItem(SESSION_KEY)); } catch (e) { return null; }
+  }
+  function saveSession(s) {
+    try { localStorage.setItem(SESSION_KEY, JSON.stringify(s)); } catch (e) {}
+  }
+  function clearSession() {
+    try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
+  }
+
+  function readTabRegistry() {
+    try { return JSON.parse(localStorage.getItem(TABS_KEY)) || {}; } catch (e) { return {}; }
+  }
+  function writeTabRegistry(reg) {
+    try { localStorage.setItem(TABS_KEY, JSON.stringify(reg)); } catch (e) {}
+  }
+  function heartbeat() {
+    const reg = readTabRegistry();
+    const now = Date.now();
+    reg[tabId] = now;
+    // dọn các tab cũ (không còn heartbeat trong STALE_MS) để registry không phình to mãi
+    Object.keys(reg).forEach(id => { if (now - reg[id] > STALE_MS) delete reg[id]; });
+    writeTabRegistry(reg);
+  }
+  function removeSelfFromRegistry() {
+    const reg = readTabRegistry();
+    delete reg[tabId];
+    writeTabRegistry(reg);
+    return reg;
+  }
+  function anyOtherTabAlive(reg) {
+    const now = Date.now();
+    return Object.keys(reg).some(id => id !== tabId && (now - reg[id]) <= STALE_MS);
+  }
+
+  function formatTime(ms) {
+    const totalSec = Math.max(0, Math.ceil(ms / 1000));
+    const m = String(Math.floor(totalSec / 60)).padStart(2, '0');
+    const s = String(totalSec % 60).padStart(2, '0');
+    return m + ':' + s;
+  }
+
+  function showToast(msg) {
+    const el = document.getElementById('speedrun-done-toast');
+    el.textContent = msg;
+    el.style.display = 'block';
+    setTimeout(() => { el.style.display = 'none'; }, 5000);
+  }
+
+  function computeResultPayload(reason) {
+    const now = Date.now();
+    const elapsedMs = Math.min(DURATION_MS, now - session.started_at);
+    return {
+      name: session.name,
+      class_name: session.class_name,
+      badge_count: (window.FestivalBadges && window.FestivalBadges.totalBadgeCount) ? window.FestivalBadges.totalBadgeCount() : 0,
+      progress_count: (window.FestivalBadges && window.FestivalBadges.countUnlocked) ? window.FestivalBadges.countUnlocked() : 0,
+      time_seconds: Math.round(elapsedMs / 1000),
+      reason: reason
+    };
+  }
+
+  // Nộp kết quả bằng fetch bình thường (dùng khi tab vẫn đang mở, có thể chờ phản hồi)
+  async function submitResultNormal(reason) {
+    if (finalized || !session) return;
+    finalized = true;
+    const payload = computeResultPayload(reason);
+    stopTimers();
+    session.completed = true;
+    session.last_result = payload;
+    saveSession(session);
+    try {
+      const res = await fetch(SPEEDRUN_API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json().catch(() => null);
+      if (data && data.saved && data.replaced) {
+        showToast('🏆 Đã nộp bài! Kết quả mới của bạn tốt hơn — đã cập nhật bảng xếp hạng!');
+      } else if (data && data.saved) {
+        showToast('🏆 Đã nộp bài và lưu vào bảng xếp hạng!');
+      } else {
+        showToast('✅ Đã nộp bài! (kết quả trước của bạn vẫn tốt hơn nên giữ nguyên bảng xếp hạng)');
+      }
+    } catch (err) {
+      console.warn('[speedrun] submit failed', err);
+      showToast('⚠️ Đã lưu kết quả trên máy, nhưng gửi lên bảng xếp hạng bị lỗi mạng.');
+    }
+    hideWidget();
+    removeSelfFromRegistry();
+  }
+
+  // Nộp kết quả bằng sendBeacon (dùng lúc tab đang đóng — không thể await fetch bình thường)
+  function submitResultBeacon(reason) {
+    if (finalized || !session) return;
+    finalized = true;
+    const payload = computeResultPayload(reason);
+    session.completed = true;
+    session.last_result = payload;
+    saveSession(session);
+    try {
+      const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+      navigator.sendBeacon(SPEEDRUN_API, blob);
+    } catch (err) { /* best-effort, không còn cách nào khác lúc trang đang đóng */ }
+  }
+
+  function stopTimers() {
+    if (tickInterval) { clearInterval(tickInterval); tickInterval = null; }
+    if (heartbeatInterval) { clearInterval(heartbeatInterval); heartbeatInterval = null; }
+  }
+
+  function hideWidget() {
+    document.getElementById('speedrun-widget').classList.remove('active');
+  }
+
+  function tick() {
+    if (!session || session.completed) return;
+    const remaining = DURATION_MS - (Date.now() - session.started_at);
+    document.getElementById('speedrun-time-display').textContent = formatTime(remaining);
+    if (remaining <= 0) {
+      submitResultNormal('timeout');
+    }
+  }
+
+  function startWidget() {
+    const widget = document.getElementById('speedrun-widget');
+    widget.classList.add('active');
+    tick();
+    tickInterval = setInterval(tick, 1000);
+    heartbeat();
+    heartbeatInterval = setInterval(heartbeat, HEARTBEAT_MS);
+  }
+
+  function beginSession(name, className) {
+    session = { name: name, class_name: className, started_at: Date.now(), completed: false };
+    saveSession(session);
+    finalized = false;
+    document.getElementById('speedrun-overlay').classList.remove('active');
+    startWidget();
+  }
+
+  function showWelcomeModal() {
+    const overlay = document.getElementById('speedrun-overlay');
+    const errorEl = document.getElementById('speedrun-modal-error');
+    errorEl.textContent = '';
+    overlay.classList.add('active');
+
+    document.getElementById('speedrun-cancel-btn').onclick = () => {
+      overlay.classList.remove('active');
+      // Bỏ tham số ?mode=speedrun khỏi URL để không hiện lại modal nếu load lại trang
+      const url = new URL(window.location.href);
+      url.searchParams.delete('mode');
+      window.history.replaceState({}, '', url.toString());
+    };
+
+    document.getElementById('speedrun-start-btn').onclick = () => {
+      const name = document.getElementById('speedrun-name-input').value.trim();
+      const className = document.getElementById('speedrun-class-input').value.trim();
+      if (!name || !className) {
+        errorEl.textContent = 'Vui lòng nhập đủ tên và lớp.';
+        return;
+      }
+      beginSession(name, className);
+    };
+  }
+
+  function initSpeedrunMode() {
+    const params = new URLSearchParams(window.location.search);
+    const existing = loadSession();
+
+    if (existing && !existing.completed) {
+      // Đang có lượt chơi dở (ví dụ vừa reload trang) -> tiếp tục luôn, không hỏi lại
+      session = existing;
+      finalized = false;
+      startWidget();
+      return;
+    }
+
+    if (params.get('mode') === 'speedrun') {
+      showWelcomeModal();
+    }
+  }
+
+  // Nút thu nhỏ / mở rộng đồng hồ
+  document.getElementById('speedrun-minimize-btn').addEventListener('click', () => {
+    document.getElementById('speedrun-widget').classList.add('minimized');
+  });
+  document.getElementById('speedrun-mini-icon').addEventListener('click', () => {
+    document.getElementById('speedrun-widget').classList.remove('minimized');
+  });
+  document.getElementById('speedrun-finish-btn').addEventListener('click', () => {
+    if (window.confirm('Nộp bài ngay bây giờ? Không thể hoàn tác.')) {
+      submitResultNormal('manual');
+    }
+  });
+
+  // (thêm bởi Claude) Phát hiện "không còn tab nào liên quan đang mở, kể cả ở nền" để tự nộp bài.
+  // Cơ chế: mỗi tab tự báo còn sống (heartbeat) vào localStorage mỗi 5s. Khi 1 tab đóng lại
+  // (beforeunload/pagehide), nó tự xóa mình khỏi danh sách rồi kiểm tra còn tab nào khác gần đây
+  // vẫn còn heartbeat không — nếu không còn tab nào -> đây là tab cuối cùng -> tự nộp bài qua sendBeacon.
+  // Lưu ý: cơ chế này không đảm bảo 100% (ví dụ hệ điều hành tắt đột ngột trình duyệt có thể không
+  // kịp bắn sự kiện) — nhưng bao trùm hầu hết trường hợp thực tế (đóng tab, đóng trình duyệt, tắt app).
+  function handlePageLeaving() {
+    if (!session || session.completed || finalized) return;
+    const reg = removeSelfFromRegistry();
+    if (!anyOtherTabAlive(reg)) {
+      submitResultBeacon('all_tabs_closed');
+    }
+  }
+  window.addEventListener('pagehide', handlePageLeaving);
+  window.addEventListener('beforeunload', handlePageLeaving);
+
+  initSpeedrunMode();
+})();
+</script>
+
+</body>
 
 <!--login23:54  -->
 
 </html>
-
-

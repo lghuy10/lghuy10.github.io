@@ -351,6 +351,149 @@
   });
 })();
 </script>
+<!-- ============================================================
+     BẢNG XẾP HẠNG: ĐẤU HẠNG - SPEEDRUN (thêm bởi Claude)
+     ============================================================ -->
+<style>
+  .speedrun-lb-section { background: #fdf6ec; padding: 46px 0; }
+  .speedrun-lb-inner { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+  .speedrun-lb-maintitle { text-align: center; font-size: 26px; font-weight: 900; color: #8b2626; margin: 0 0 6px; }
+  .speedrun-lb-mainsubtitle { text-align: center; color: #777; font-size: 14px; margin: 0 0 28px; }
+  .speedrun-lb-grid { display: flex; gap: 22px; align-items: flex-start; flex-wrap: wrap; }
+  .speedrun-lb-col { flex: 1 1 420px; min-width: 0; }
+  .speedrun-lb-title { text-align: center; font-size: 17px; font-weight: 800; color: #8b2626; margin: 0 0 4px; }
+  .speedrun-lb-subtitle { text-align: center; color: #999; font-size: 12.5px; margin: 0 0 12px; }
+  .speedrun-lb-card { background: #fff; border-radius: 14px; box-shadow: 4px 4px 0px var(--color-indigo); overflow: hidden; }
+  .speedrun-lb-row { display: grid; grid-template-columns: 40px 1fr 84px 100px 84px; align-items: center; gap: 6px; padding: 12px 16px; border-bottom: 1px solid #f1ece2; }
+  .speedrun-lb-row.speedrun-lb-row-class { grid-template-columns: 40px 1fr 90px 100px; }
+  .speedrun-lb-row:last-child { border-bottom: none; }
+  .speedrun-lb-row.speedrun-lb-header { background: #fbeee0; font-size: 11px; text-transform: uppercase; letter-spacing: .4px; color: #a06b3f; font-weight: 800; }
+  .speedrun-lb-rank { font-weight: 900; font-size: 17px; text-align: center; color: #8b2626; }
+  .speedrun-lb-row:nth-child(2) .speedrun-lb-rank { color: #d4af37; }
+  .speedrun-lb-row:nth-child(3) .speedrun-lb-rank { color: #9c9c9c; }
+  .speedrun-lb-row:nth-child(4) .speedrun-lb-rank { color: #b06a3a; }
+  .speedrun-lb-name { font-weight: 700; color: #2f2f2f; font-size: 13.5px; }
+  .speedrun-lb-class { font-size: 12px; color: #999; font-weight: 500; }
+  .speedrun-lb-badges, .speedrun-lb-time, .speedrun-lb-progress, .speedrun-lb-participants { text-align: center; font-size: 12.5px; font-weight: 700; color: #444; }
+  .speedrun-lb-empty { text-align: center; padding: 26px 18px; color: #999; font-size: 13.5px; }
+  .speedrun-lb-cta { text-align: center; margin-top: 24px; }
+  .speedrun-lb-cta a { display: inline-block; background: #8b2626; color: #fff !important; font-weight: 800; padding: 13px 32px; border-radius: 30px; text-decoration: none; box-shadow: 3px 3px 0px var(--color-indigo); transition: transform .15s; }
+  .speedrun-lb-cta a:hover { transform: translateY(-2px); }
+  @media (max-width: 640px) {
+    .speedrun-lb-row { grid-template-columns: 32px 1fr 56px; grid-template-areas: "rank name badges" "rank class time"; row-gap: 2px; }
+    .speedrun-lb-row.speedrun-lb-row-class { grid-template-columns: 32px 1fr 56px; grid-template-areas: "rank name badges" "rank name2 time"; }
+    .speedrun-lb-row.speedrun-lb-header { display: none; }
+    .speedrun-lb-progress { display: none; }
+    .speedrun-lb-rank { grid-area: rank; }
+    .speedrun-lb-name { grid-area: name; }
+    .speedrun-lb-class { grid-area: class; text-align: left; }
+    .speedrun-lb-participants { grid-area: name2; text-align: left; color: #999; font-weight: 500; }
+    .speedrun-lb-badges { grid-area: badges; }
+    .speedrun-lb-time { grid-area: time; text-align: right; font-size: 11.5px; color: #888; font-weight: 500; }
+  }
+</style>
+<section class="speedrun-lb-section">
+<div class="speedrun-lb-inner">
+<h2 class="speedrun-lb-maintitle">🏆 Bảng xếp hạng: Đấu hạng - Speedrun</h2>
+<p class="speedrun-lb-mainsubtitle">Ai khai phá bản đồ lễ hội nhanh và đầy đủ nhất — tính theo cá nhân và theo lớp</p>
+<div class="speedrun-lb-grid">
+<div class="speedrun-lb-col">
+<h3 class="speedrun-lb-title">👤 Cá nhân xuất sắc</h3>
+<p class="speedrun-lb-subtitle">Top 5 — ưu tiên số huy hiệu, sau đó thời gian</p>
+<div class="speedrun-lb-card">
+<div class="speedrun-lb-row speedrun-lb-header">
+<div>#</div><div>Người chơi</div><div>Huy hiệu</div><div>Tiến trình</div><div>Thời gian</div>
+</div>
+<div id="speedrun-lb-list">
+<div class="speedrun-lb-empty">Đang tải bảng xếp hạng...</div>
+</div>
+</div>
+</div>
+<div class="speedrun-lb-col">
+<h3 class="speedrun-lb-title">🏫 Lớp xuất sắc</h3>
+<p class="speedrun-lb-subtitle">Top 3 — gộp từ toàn bộ học sinh cùng lớp</p>
+<div class="speedrun-lb-card">
+<div class="speedrun-lb-row speedrun-lb-row-class speedrun-lb-header">
+<div>#</div><div>Lớp</div><div>Tổng huy hiệu</div><div>Tổng thời gian</div>
+</div>
+<div id="speedrun-lb-class-list">
+<div class="speedrun-lb-empty">Đang tải bảng xếp hạng...</div>
+</div>
+</div>
+</div>
+</div>
+<div class="speedrun-lb-cta">
+<a href="/map.html?mode=speedrun">⚡ Thử ngay</a>
+</div>
+</div>
+</section>
+<script>
+(function () {
+  const SPEEDRUN_API = 'https://backend-production-1a0d.up.railway.app/speedrun';
+  function fmtTime(sec) {
+    sec = Math.max(0, Math.round(sec || 0));
+    const h = Math.floor(sec / 3600);
+    const m = String(Math.floor((sec % 3600) / 60)).padStart(2, '0');
+    const s = String(sec % 60).padStart(2, '0');
+    return h > 0 ? `${h}:${m}:${s}` : `${m}:${s}`;
+  }
+  function escapeHtml(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  }
+
+  fetch(SPEEDRUN_API + '/top?limit=5')
+    .then(res => res.json())
+    .then(rows => {
+      const list = document.getElementById('speedrun-lb-list');
+      if (!Array.isArray(rows) || rows.length === 0) {
+        list.innerHTML = '<div class="speedrun-lb-empty">Chưa có ai hoàn thành lượt Speedrun nào — hãy là người đầu tiên!</div>';
+        return;
+      }
+      list.innerHTML = rows.map((r, i) => `
+        <div class="speedrun-lb-row">
+          <div class="speedrun-lb-rank">${i + 1}</div>
+          <div>
+            <div class="speedrun-lb-name">${escapeHtml(r.name)}</div>
+            <div class="speedrun-lb-class">Lớp ${escapeHtml(r.class_name)}</div>
+          </div>
+          <div class="speedrun-lb-badges">🎖️ ${r.badge_count}/20</div>
+          <div class="speedrun-lb-progress">🧩 ${r.progress_count}/10</div>
+          <div class="speedrun-lb-time">⏱️ ${fmtTime(r.time_seconds)}</div>
+        </div>
+      `).join('');
+    })
+    .catch(err => {
+      console.warn('[speedrun leaderboard] load failed', err);
+      document.getElementById('speedrun-lb-list').innerHTML = '<div class="speedrun-lb-empty">Không tải được bảng xếp hạng lúc này.</div>';
+    });
+
+  fetch(SPEEDRUN_API + '/classes/top?limit=3')
+    .then(res => res.json())
+    .then(rows => {
+      const list = document.getElementById('speedrun-lb-class-list');
+      if (!Array.isArray(rows) || rows.length === 0) {
+        list.innerHTML = '<div class="speedrun-lb-empty">Chưa có lớp nào tham gia — hãy là lớp đầu tiên!</div>';
+        return;
+      }
+      list.innerHTML = rows.map((r, i) => `
+        <div class="speedrun-lb-row speedrun-lb-row-class">
+          <div class="speedrun-lb-rank">${i + 1}</div>
+          <div>
+            <div class="speedrun-lb-name">Lớp ${escapeHtml(r.class_name)}</div>
+            <div class="speedrun-lb-participants">${r.participant_count} bạn tham gia</div>
+          </div>
+          <div class="speedrun-lb-badges">🎖️ ${r.total_badges}</div>
+          <div class="speedrun-lb-time">⏱️ ${fmtTime(r.total_time_seconds)}</div>
+        </div>
+      `).join('');
+    })
+    .catch(err => {
+      console.warn('[speedrun class leaderboard] load failed', err);
+      document.getElementById('speedrun-lb-class-list').innerHTML = '<div class="speedrun-lb-empty">Không tải được bảng xếp hạng lúc này.</div>';
+    });
+})();
+</script>
+
 <section class="about-with-slide">
 <div class="container">
 <div class="row">

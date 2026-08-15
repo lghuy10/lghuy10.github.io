@@ -28,6 +28,7 @@
     --good:#34d399; --bad:#fb7185;
     --glass: rgba(255,255,255,0.03);
     --radius:14px;
+    --color-indigo: #1f2d3d;
   }
   *{box-sizing:border-box}
   html,body{height:100%}
@@ -416,6 +417,7 @@
 <div>
 <div id="endTitle" style="font-weight:900;color:#eaf5ff">Số điểm</div>
 <div class="small" id="endSubtitle">Bạn đã hoàn thành trò chơi!</div>
+<div class="small" id="endBadgeNote" style="margin-top:4px;color:#ffd86b">🏅 Trả lời đúng tất cả câu hỏi mới được nhận huy hiệu Minigame.</div>
 </div>
 <div id="endScoreSummary" style="text-align:right;color:#eaf5ff"></div>
 </div>
@@ -423,6 +425,7 @@
 <div class="end-actions">
 <button class="btn end-ghost" onclick="closeEndScreen()">Home</button>
 <button class="btn end-primary" onclick="playAgain()">Play again</button>
+<button class="btn end-primary" id="backToMapBtn" style="display:none;background:linear-gradient(90deg,#60a5fa,#34d399)" onclick="window.location.href='/map.html'">🗺️ Quay lại bản đồ</button>
 </div>
 </div>
 </div>
@@ -474,6 +477,23 @@ const joinModal = document.getElementById('joinModal');
 const endScreen = document.getElementById('endScreen');
 const endList = document.getElementById('endList');
 const endScoreSummary = document.getElementById('endScoreSummary');
+
+/* ===== Badge system (thêm bởi Claude) ===== */
+const FESTIVAL_BADGE_KEY = 'festival_badges_v1';
+let currentFestivalId = null; // festId = quiz id đang chơi (solo)
+let correctCount = 0;         // số câu trả lời đúng trong lượt chơi hiện tại
+
+function loadBadges() {
+  try { return JSON.parse(localStorage.getItem(FESTIVAL_BADGE_KEY)) || {}; } catch (e) { return {}; }
+}
+function saveQuizBadge(festId, passed) {
+  if (!festId || !passed) return;
+  const all = loadBadges();
+  const cur = all[festId] || { doc: false, quiz: false };
+  cur.quiz = true;
+  all[festId] = cur;
+  try { localStorage.setItem(FESTIVAL_BADGE_KEY, JSON.stringify(all)); } catch (e) {}
+}
 
 function showMsg(t, timeout=2500){
   messageEl.textContent = t; messageEl.classList.remove('hidden');
@@ -693,7 +713,9 @@ function findLocalQuiz(qid, title){
   return DEFAULT_QUIZZES.find(q => {
     const quizId = String(q?.id ?? '');
     const quizTitle = normalizeQuizTitle(q?.title || q?.name || '');
-    return String(qid) === quizId || quizTitle === normalizedTitle || quizTitle.includes(normalizedTitle) || normalizedTitle.includes(quizTitle);
+    if (String(qid) === quizId) return true; // khớp theo ID luôn được ưu tiên, không phụ thuộc title
+    if (!normalizedTitle) return false; // title rỗng thì không dò theo tên (tránh khớp bừa)
+    return quizTitle === normalizedTitle || quizTitle.includes(normalizedTitle) || normalizedTitle.includes(quizTitle);
   }) || null;
 }
 
@@ -775,6 +797,10 @@ async function openSolo(qid){
     questions = adaptRows(data);
     if(questions.length === 0) { showMsg('Quiz has no questions'); return; }
     currentIndex = 0; score = 0; combo = 0;
+    correctCount = 0;
+    currentFestivalId = qid;
+    const backBtn0 = document.getElementById('backToMapBtn');
+    if (backBtn0) backBtn0.style.display = 'none';
     showQuestion();
     startSound();
   }catch(e){ showMsg('Failed to load quiz: ' + e.message, 3000); }
@@ -858,6 +884,7 @@ function handlePick(answerId, el, playMode='solo', correctIdIfSolo=null){
       const gained = 10 + clamp(bonus, 0, timerDuration);
       score += gained;
       combo++;
+      correctCount++;
       el.classList.add('correct');
       showMsg('Correct! +' + gained, 1100);
     }
@@ -901,11 +928,23 @@ function handlePick(answerId, el, playMode='solo', correctIdIfSolo=null){
 function finishRun(){
   clearInterval(timer);
 
-  const scores = [{ id: 'you', name: 'Bạn', total: score }];
-  showMsg(`Run finished! Score ${score}`, 3000);
+  const totalQuestions = questions.length;
+  const passed = totalQuestions > 0 && correctCount === totalQuestions; // yêu cầu đúng 100%
+  const backBtn = document.getElementById('backToMapBtn');
 
-  showEndScreen(scores);
-  questions = []; currentIndex=0; score=0; combo=0;
+  if (passed && currentFestivalId != null) {
+    saveQuizBadge(currentFestivalId, true);
+    showMsg('🏅 Bạn đã đạt huy hiệu Quiz cho lễ hội này!', 3200);
+    if (backBtn) backBtn.style.display = 'inline-flex';
+  } else {
+    if (backBtn) backBtn.style.display = 'none';
+    if (totalQuestions > 0) showMsg(`Bạn đúng ${correctCount}/${totalQuestions} — cần đúng hết để nhận huy hiệu, thử lại nhé!`, 3200);
+  }
+
+  const scores = [{ id: 'you', name: 'Bạn', total: score }];
+
+  showEndScreen(scores, { passed, correctCount, total: totalQuestions });
+  questions = []; currentIndex=0; score=0; combo=0; correctCount = 0;
   qtext.textContent = 'Hit Solo or Host to play again';
   optionsEl.innerHTML = '';
   scoreDisplay.textContent = '0';
@@ -1051,7 +1090,7 @@ function updatePlayers(list){
   });
 }
 
-function showEndScreen(scores){
+function showEndScreen(scores, soloInfo){
 
   endList.innerHTML = '';
   if(!Array.isArray(scores)) scores = [scores];
@@ -1060,7 +1099,24 @@ function showEndScreen(scores){
   normalized.sort((a,b) => (b.total || 0) - (a.total || 0));
   const top = normalized[0];
 
-  endScoreSummary.innerHTML = `<div style="font-weight:800">${top.name} đã thắng! — ${top.total} pts</div>`;
+  // (sửa bởi Claude) chế độ solo: không dùng chữ "đã thắng!" chung chung của bảng xếp hạng multiplayer,
+  // mà hiện đúng kết quả đạt/chưa đạt huy hiệu (yêu cầu đúng 100% câu hỏi)
+  const badgeNoteEl = document.getElementById('endBadgeNote');
+  if (soloInfo) {
+    if (soloInfo.passed) {
+      endScoreSummary.innerHTML = `<div style="font-weight:800">🎉 Đạt huy hiệu! — ${top.total} pts</div>`;
+    } else {
+      endScoreSummary.innerHTML = `<div style="font-weight:800">Đúng ${soloInfo.correctCount}/${soloInfo.total} — ${top.total} pts</div>`;
+    }
+    if (badgeNoteEl) {
+      badgeNoteEl.textContent = soloInfo.passed
+        ? '🏅 Bạn đã trả lời đúng tất cả câu hỏi và nhận được huy hiệu Minigame!'
+        : '🏅 Cần trả lời đúng TẤT CẢ câu hỏi mới được nhận huy hiệu Minigame — thử lại nhé!';
+    }
+  } else {
+    endScoreSummary.innerHTML = `<div style="font-weight:800">${top.name} đã thắng! — ${top.total} pts</div>`;
+    if (badgeNoteEl) badgeNoteEl.textContent = '';
+  }
 
   normalized.forEach((p, i) => {
     const row = document.createElement('div');
@@ -1070,7 +1126,10 @@ function showEndScreen(scores){
   });
 
   endScreen.style.display = 'flex';
-  burstConfetti(window.innerWidth/2, window.innerHeight/3, 120);
+  // (sửa bởi Claude) chỉ bắn pháo giấy khi thật sự đạt huy hiệu (solo) hoặc đang ở kết quả multiplayer thật
+  if (!soloInfo || soloInfo.passed) {
+    burstConfetti(window.innerWidth/2, window.innerHeight/3, 120);
+  }
 }
 
 function closeEndScreen(){
@@ -1104,6 +1163,18 @@ function returnHome(){
 
 refreshQuizzes();
 connectSocket();
+
+/* ===== Tự mở quiz nếu đến từ bản đồ (thêm bởi Claude) ===== */
+(function autoOpenFromMap(){
+  const params = new URLSearchParams(window.location.search);
+  const festParam = params.get('festival');
+  if (!festParam) return;
+  // Đợi refreshQuizzes() render xong danh sách rồi mới mở, tránh trường hợp DEFAULT_QUIZZES chưa sẵn sàng
+  setTimeout(() => {
+    openSolo(festParam);
+    showMsg('Đang mở quiz cho lễ hội bạn vừa xem…', 1800);
+  }, 400);
+})();
 
 </script>
 <div aria-label="Toggle music mute" aria-pressed="false" class="auto-music-toggle" role="button" tabindex="0">
