@@ -1,22 +1,9 @@
 import express from "express";
-import pkg from "pg";
-const { Pool } = pkg;
+import pool from "./db.js"; // (sửa bởi Claude) dùng chung pool với server.js/speedrun.js thay vì tự tạo pool riêng
 const router = express.Router();
-
-// Tạo DB connection pool
-const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: process.env.DATABASE_URL && process.env.DATABASE_URL.includes("localhost") 
-        ? false 
-        : { rejectUnauthorized: false }
-});
 
 // Khởi tạo Schema Postgres
 async function initDB() {
-    if (!process.env.DATABASE_URL) {
-        console.warn("[comments.js] DATABASE_URL chưa được cấu hình, bỏ qua DB init.");
-        return;
-    }
     try {
         await pool.query(`
             CREATE TABLE IF NOT EXISTS comments (
