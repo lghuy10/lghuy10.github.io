@@ -5,6 +5,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import fetch from "node-fetch";
 import commentsRouter from "./comments.js";
+import speedrunRouter from "./speedrun.js";
 import http from "http";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -54,6 +55,7 @@ function isValidGeminiKey(key) {
 }
 
 const ALLOWED_ORIGINS = [
+  "https://lghuy10.github.io",
   "https://baldandbad.github.io",
   "https://backend-production-1a0d.up.railway.app",
   "https://baldandbadgithubio-production-4f3f.up.railway.app",
@@ -257,6 +259,7 @@ app.post("/ask", async (req, res) => {
 });
 
 app.use("/comments", commentsRouter);
+app.use("/speedrun", speedrunRouter);
 
 app.get("/", (_req, res) => {
   res.send("Backend is running ✅");

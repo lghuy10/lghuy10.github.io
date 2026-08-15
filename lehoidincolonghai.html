@@ -121,6 +121,7 @@ Cô (Lê Thị Hồng) - được tôn kính gọi là "Long Hải Thần Nữ",
 <ul id="comment-list"></ul>
 <style>
   .comment-reactions { display:flex; gap:6px; margin-top:8px; flex-wrap:wrap; }
+  .name-badge { display:inline-block; margin-left:6px; font-size:13px; cursor:default; }
   .reaction-btn { border:1px solid #e0d5c8; background:#fff; border-radius:16px; padding:3px 10px; font-size:14px; cursor:pointer; display:inline-flex; align-items:center; gap:4px; transition:background .15s,border-color .15s; }
   .reaction-btn:hover { background:#fdf3ea; }
   .reaction-btn.active { background:#fdeee0; border-color:#8b2626; }
@@ -238,7 +239,28 @@ Cô (Lê Thị Hồng) - được tôn kính gọi là "Long Hải Thần Nữ",
                       return `<button type="button" class="reaction-btn${active}" data-comment-id="${c.id}" data-emoji="${emo}">${emo}${count > 0 ? ` <span class="reaction-count">${count}</span>` : ''}</button>`;
                     }).join('');
                   }
+                                    // (thêm bởi Claude) FESTIVAL_ID của đúng trang này — dùng để đọc huy hiệu snapshot lúc đăng comment.
+                  // Phải khớp với FESTIVAL_ID ở script cuối trang (phần đo giờ đọc tư liệu).
+                  const COMMENT_FESTIVAL_ID = 4;
+                  const COMMENT_BADGE_KEY = 'festival_badges_v1';
 
+                  // Đọc trạng thái huy hiệu HIỆN TẠI của máy đang gửi comment — chỉ chụp lại đúng lúc này,
+                  // không tự cập nhật về sau (giống "cấp bậc lúc đăng bài" trên diễn đàn).
+                  function getMyBadgeSnapshot() {
+                    let all = {};
+                    try { all = JSON.parse(localStorage.getItem(COMMENT_BADGE_KEY)) || {}; } catch (e) {}
+                    const cur = all[COMMENT_FESTIVAL_ID] || { doc: false, quiz: false };
+                    return { badge_doc: !!cur.doc, badge_quiz: !!cur.quiz };
+                  }
+
+                  // Hiện icon huy hiệu cạnh tên — dựa theo dữ liệu ĐÃ LƯU SẴN trong chính comment đó
+                  // (server trả về badge_doc/badge_quiz kèm mỗi comment), không phải trạng thái hiện tại.
+                  function renderNameBadges(c) {
+                    const icons = [];
+                    if (c.badge_doc) icons.push('<span class="name-badge" title="Đã đọc tư liệu lúc đăng">📖</span>');
+                    if (c.badge_quiz) icons.push('<span class="name-badge" title="Đã làm quiz đúng 100% lúc đăng">📝</span>');
+                    return icons.join('');
+                  }
                   function createCommentHTML(c, depth = 0) {
                     // Calculate indentation - limit to 5 levels max for sanity
                     const indent = Math.min(depth, 5) * 30; // 30px per level
@@ -256,7 +278,7 @@ Cô (Lê Thị Hồng) - được tôn kính gọi là "Long Hải Thần Nữ",
 																									<div class="comment-wrapper">
 																										<div class="comment-meta">
 																											<div class="comment-author vcard">
-																												<h5 class="fn">${escapeHtmlComment(c.name)}</h5>
+																												<h5 class="fn">${escapeHtmlComment(c.name)}${renderNameBadges(c)}</h5>
               ${depth > 0 ? `
 																												<span class="reply-indicator">↳ replied </span>` : ''}
 																											</div>
@@ -367,7 +389,8 @@ Cô (Lê Thị Hồng) - được tôn kính gọi là "Long Hải Thần Nữ",
                             created_at: created_at,
                             post_id: postID,
                             parent_id: parentId,
-                            image_data
+                            image_data,
+                            ...getMyBadgeSnapshot()
                           })
                         });
                         // Reload comments
@@ -400,7 +423,8 @@ Cô (Lê Thị Hồng) - được tôn kính gọi là "Long Hải Thần Nữ",
                         created_at,
                         post_id,
                         parent_id: null,
-                        image_data
+                        image_data,
+                        ...getMyBadgeSnapshot()
                       })
                     });
                     this.reset();

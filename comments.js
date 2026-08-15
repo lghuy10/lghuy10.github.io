@@ -27,7 +27,9 @@ async function initDB() {
                 image_data TEXT,
                 created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
                 post_id VARCHAR(100),
-                parent_id INTEGER REFERENCES comments(id) ON DELETE CASCADE
+                parent_id INTEGER REFERENCES comments(id) ON DELETE CASCADE,
+                badge_doc BOOLEAN DEFAULT false,
+                badge_quiz BOOLEAN DEFAULT false
             );
         `);
 
@@ -39,6 +41,24 @@ async function initDB() {
                     WHERE table_name='comments' AND column_name='image_data'
                 ) THEN
                     ALTER TABLE comments ADD COLUMN image_data TEXT;
+                END IF;
+            END $$;
+        `);
+
+        await pool.query(`
+            DO $$ 
+            BEGIN 
+                IF NOT EXISTS (
+                    SELECT 1 FROM information_schema.columns 
+                    WHERE table_name='comments' AND column_name='badge_doc'
+                ) THEN
+                    ALTER TABLE comments ADD COLUMN badge_doc BOOLEAN DEFAULT false;
+                END IF;
+                IF NOT EXISTS (
+                    SELECT 1 FROM information_schema.columns 
+                    WHERE table_name='comments' AND column_name='badge_quiz'
+                ) THEN
+                    ALTER TABLE comments ADD COLUMN badge_quiz BOOLEAN DEFAULT false;
                 END IF;
             END $$;
         `);
@@ -119,7 +139,7 @@ router.get("/", async (req, res) => {
 // POST /comments - Thêm comment mới (có ảnh)
 router.post("/", async (req, res) => {
     try {
-        const { name, message, avatar, image_data, created_at, post_id, parent_id } = req.body;
+        const { name, message, avatar, image_data, created_at, post_id, parent_id, badge_doc, badge_quiz } = req.body;
         if (!name || !message) {
             return res.status(400).json({ error: "Name and message are required" });
         }
@@ -127,10 +147,10 @@ router.post("/", async (req, res) => {
         const createdAtVal = created_at ? new Date(created_at) : new Date();
 
         const { rows } = await pool.query(
-            `INSERT INTO comments (name, message, avatar, image_data, created_at, post_id, parent_id) 
-             VALUES ($1, $2, $3, $4, $5, $6, $7) 
+            `INSERT INTO comments (name, message, avatar, image_data, created_at, post_id, parent_id, badge_doc, badge_quiz) 
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
              RETURNING *, '{}'::json AS reactions, NULL AS "myReaction"`,
-            [name, message, avatar || null, image_data || null, createdAtVal, post_id || null, parent_id || null]
+            [name, message, avatar || null, image_data || null, createdAtVal, post_id || null, parent_id || null, !!badge_doc, !!badge_quiz]
         );
 
         res.status(201).json(rows[0]);

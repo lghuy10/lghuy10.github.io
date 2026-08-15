@@ -2890,7 +2890,20 @@ function isFullyUnlocked(festId) {
 function countUnlocked() {
   return data.filter(item => item.festId && isFullyUnlocked(item.festId)).length;
 }
-window.FestivalBadges = { loadBadges, saveBadges, getBadge, isFullyUnlocked, countUnlocked };
+// (thêm bởi Claude) Tổng số huy hiệu riêng lẻ (doc + quiz tính riêng, tối đa 20) — dùng cho xếp hạng Speedrun.
+// Khác với countUnlocked() (đếm số lễ hội ĐÃ KHAI PHÁ HOÀN TOÀN, tối đa 10) chỉ dùng để hiển thị tiến trình.
+function totalBadgeCount() {
+  const all = loadBadges();
+  let n = 0;
+  data.forEach(item => {
+    if (!item.festId) return;
+    const b = all[item.festId] || { doc: false, quiz: false };
+    if (b.doc) n++;
+    if (b.quiz) n++;
+  });
+  return n;
+}
+window.FestivalBadges = { loadBadges, saveBadges, getBadge, isFullyUnlocked, countUnlocked, totalBadgeCount };
 
 // helper: map category -> CSS class
 
@@ -4561,7 +4574,303 @@ jQuery('.fancybox').fancybox();
 
 </div>
 
-</footer></body>
+</footer>
+
+<!-- ============================================================
+     CHẾ ĐỘ ĐẤU HẠNG - SPEEDRUN (thêm bởi Claude)
+     ============================================================ -->
+<style>
+  #speedrun-overlay { position: fixed; inset: 0; background: rgba(20,15,10,0.55); z-index: 3000; display: none; align-items: center; justify-content: center; padding: 16px; }
+  #speedrun-overlay.active { display: flex; }
+  .speedrun-modal { background: #fff; border-radius: 14px; box-shadow: 5px 5px 0px var(--color-indigo); max-width: 380px; width: 100%; padding: 22px; text-align: center; }
+  .speedrun-modal h3 { margin: 0 0 6px 0; color: #8b2626; font-size: 19px; }
+  .speedrun-modal p { margin: 0 0 16px 0; color: #555; font-size: 14px; }
+  .speedrun-modal label { display: block; text-align: left; font-size: 13px; font-weight: 600; color: #333; margin: 10px 0 4px; }
+  .speedrun-modal input { width: 100%; box-sizing: border-box; padding: 9px 12px; border-radius: 8px; border: 1.5px solid #e0d5c8; font-size: 14px; }
+  .speedrun-modal input:focus { outline: none; border-color: #8b2626; }
+  .speedrun-modal-actions { display: flex; gap: 10px; margin-top: 18px; }
+  .speedrun-modal-actions button { flex: 1; padding: 10px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; font-size: 14px; }
+  .speedrun-btn-cancel { background: #f0ece4; color: #555; }
+  .speedrun-btn-start { background: #8b2626; color: #fff; }
+  .speedrun-btn-start:disabled { opacity: 0.5; cursor: not-allowed; }
+  .speedrun-error { color: #c0392b; font-size: 12.5px; text-align: left; min-height: 16px; margin-top: 4px; }
+
+  #speedrun-widget { position: fixed; top: 70px; right: 12px; z-index: 2500; background: #fff; border: 2px solid #8b2626; border-radius: 12px; box-shadow: 3px 3px 0px var(--color-indigo); padding: 10px 14px; display: none; align-items: center; gap: 10px; }
+  #speedrun-widget.active { display: flex; }
+  #speedrun-widget.minimized { padding: 8px; border-radius: 50%; width: 44px; height: 44px; justify-content: center; }
+  #speedrun-widget.minimized .speedrun-widget-full { display: none; }
+  #speedrun-widget:not(.minimized) .speedrun-widget-mini-icon { display: none; }
+  .speedrun-widget-time { font-weight: 900; font-size: 17px; color: #8b2626; font-variant-numeric: tabular-nums; }
+  .speedrun-widget-label { font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 0.5px; }
+  #speedrun-finish-btn { background: #16a34a; color: #fff; border: none; border-radius: 6px; padding: 6px 10px; font-weight: 700; font-size: 12px; cursor: pointer; }
+  #speedrun-minimize-btn { background: none; border: none; cursor: pointer; font-size: 15px; color: #999; padding: 2px 4px; }
+  .speedrun-widget-mini-icon { font-size: 18px; cursor: pointer; }
+  #speedrun-done-toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #16a34a; color: #fff; padding: 12px 20px; border-radius: 10px; font-weight: 700; z-index: 3001; box-shadow: 3px 3px 0px var(--color-indigo); display: none; text-align: center; }
+</style>
+
+<div id="speedrun-overlay">
+  <div class="speedrun-modal">
+    <h3>⚡ Chào mừng đến với chế độ Đấu hạng - Speedrun!</h3>
+    <p>Bạn có 30 phút để khám phá càng nhiều lễ hội càng tốt. Nhập tên và lớp để bắt đầu:</p>
+    <label for="speedrun-name-input">Tên</label>
+    <input id="speedrun-name-input" maxlength="80" placeholder="Nhập tên của bạn" type="text"/>
+    <label for="speedrun-class-input">Lớp</label>
+    <input id="speedrun-class-input" maxlength="60" placeholder="Ví dụ: 10A1" type="text"/>
+    <div class="speedrun-error" id="speedrun-modal-error"></div>
+    <div class="speedrun-modal-actions">
+      <button class="speedrun-btn-cancel" id="speedrun-cancel-btn" type="button">Hủy</button>
+      <button class="speedrun-btn-start" id="speedrun-start-btn" type="button">Bắt đầu</button>
+    </div>
+  </div>
+</div>
+
+<div id="speedrun-widget">
+  <span class="speedrun-widget-mini-icon" id="speedrun-mini-icon" title="Mở rộng đồng hồ Speedrun">⚡</span>
+  <div class="speedrun-widget-full" style="display:flex; align-items:center; gap:10px;">
+    <div>
+      <div class="speedrun-widget-label">Speedrun</div>
+      <div class="speedrun-widget-time" id="speedrun-time-display">30:00</div>
+    </div>
+    <button id="speedrun-finish-btn" type="button">Hoàn thành</button>
+    <button id="speedrun-minimize-btn" title="Thu nhỏ" type="button">➖</button>
+  </div>
+</div>
+
+<div id="speedrun-done-toast"></div>
+
+<script>
+(function () {
+  const SPEEDRUN_API = 'https://backend-production-1a0d.up.railway.app/speedrun';
+  const SESSION_KEY = 'speedrun_session_v1';
+  const TABS_KEY = 'speedrun_open_tabs_v1';
+  const DURATION_MS = 30 * 60 * 1000; // 30 phút
+  const HEARTBEAT_MS = 5000;
+  const STALE_MS = 45000; // 1 tab khác coi như "còn sống" nếu heartbeat trong 45s gần nhất (chịu được throttle nền)
+
+  const tabId = 'tab-' + Date.now() + '-' + Math.random().toString(36).slice(2, 9);
+  let session = null;       // { name, class_name, started_at, completed }
+  let tickInterval = null;
+  let heartbeatInterval = null;
+  let finalized = false;
+
+  function loadSession() {
+    try { return JSON.parse(localStorage.getItem(SESSION_KEY)); } catch (e) { return null; }
+  }
+  function saveSession(s) {
+    try { localStorage.setItem(SESSION_KEY, JSON.stringify(s)); } catch (e) {}
+  }
+  function clearSession() {
+    try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
+  }
+
+  function readTabRegistry() {
+    try { return JSON.parse(localStorage.getItem(TABS_KEY)) || {}; } catch (e) { return {}; }
+  }
+  function writeTabRegistry(reg) {
+    try { localStorage.setItem(TABS_KEY, JSON.stringify(reg)); } catch (e) {}
+  }
+  function heartbeat() {
+    const reg = readTabRegistry();
+    const now = Date.now();
+    reg[tabId] = now;
+    // dọn các tab cũ (không còn heartbeat trong STALE_MS) để registry không phình to mãi
+    Object.keys(reg).forEach(id => { if (now - reg[id] > STALE_MS) delete reg[id]; });
+    writeTabRegistry(reg);
+  }
+  function removeSelfFromRegistry() {
+    const reg = readTabRegistry();
+    delete reg[tabId];
+    writeTabRegistry(reg);
+    return reg;
+  }
+  function anyOtherTabAlive(reg) {
+    const now = Date.now();
+    return Object.keys(reg).some(id => id !== tabId && (now - reg[id]) <= STALE_MS);
+  }
+
+  function formatTime(ms) {
+    const totalSec = Math.max(0, Math.ceil(ms / 1000));
+    const m = String(Math.floor(totalSec / 60)).padStart(2, '0');
+    const s = String(totalSec % 60).padStart(2, '0');
+    return m + ':' + s;
+  }
+
+  function showToast(msg) {
+    const el = document.getElementById('speedrun-done-toast');
+    el.textContent = msg;
+    el.style.display = 'block';
+    setTimeout(() => { el.style.display = 'none'; }, 5000);
+  }
+
+  function computeResultPayload(reason) {
+    const now = Date.now();
+    const elapsedMs = Math.min(DURATION_MS, now - session.started_at);
+    return {
+      name: session.name,
+      class_name: session.class_name,
+      badge_count: (window.FestivalBadges && window.FestivalBadges.totalBadgeCount) ? window.FestivalBadges.totalBadgeCount() : 0,
+      progress_count: (window.FestivalBadges && window.FestivalBadges.countUnlocked) ? window.FestivalBadges.countUnlocked() : 0,
+      time_seconds: Math.round(elapsedMs / 1000),
+      reason: reason
+    };
+  }
+
+  // Nộp kết quả bằng fetch bình thường (dùng khi tab vẫn đang mở, có thể chờ phản hồi)
+  async function submitResultNormal(reason) {
+    if (finalized || !session) return;
+    finalized = true;
+    const payload = computeResultPayload(reason);
+    stopTimers();
+    session.completed = true;
+    session.last_result = payload;
+    saveSession(session);
+    try {
+      const res = await fetch(SPEEDRUN_API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json().catch(() => null);
+      if (data && data.saved && data.replaced) {
+        showToast('🏆 Đã nộp bài! Kết quả mới của bạn tốt hơn — đã cập nhật bảng xếp hạng!');
+      } else if (data && data.saved) {
+        showToast('🏆 Đã nộp bài và lưu vào bảng xếp hạng!');
+      } else {
+        showToast('✅ Đã nộp bài! (kết quả trước của bạn vẫn tốt hơn nên giữ nguyên bảng xếp hạng)');
+      }
+    } catch (err) {
+      console.warn('[speedrun] submit failed', err);
+      showToast('⚠️ Đã lưu kết quả trên máy, nhưng gửi lên bảng xếp hạng bị lỗi mạng.');
+    }
+    hideWidget();
+    removeSelfFromRegistry();
+  }
+
+  // Nộp kết quả bằng sendBeacon (dùng lúc tab đang đóng — không thể await fetch bình thường)
+  function submitResultBeacon(reason) {
+    if (finalized || !session) return;
+    finalized = true;
+    const payload = computeResultPayload(reason);
+    session.completed = true;
+    session.last_result = payload;
+    saveSession(session);
+    try {
+      const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+      navigator.sendBeacon(SPEEDRUN_API, blob);
+    } catch (err) { /* best-effort, không còn cách nào khác lúc trang đang đóng */ }
+  }
+
+  function stopTimers() {
+    if (tickInterval) { clearInterval(tickInterval); tickInterval = null; }
+    if (heartbeatInterval) { clearInterval(heartbeatInterval); heartbeatInterval = null; }
+  }
+
+  function hideWidget() {
+    document.getElementById('speedrun-widget').classList.remove('active');
+  }
+
+  function tick() {
+    if (!session || session.completed) return;
+    const remaining = DURATION_MS - (Date.now() - session.started_at);
+    document.getElementById('speedrun-time-display').textContent = formatTime(remaining);
+    if (remaining <= 0) {
+      submitResultNormal('timeout');
+    }
+  }
+
+  function startWidget() {
+    const widget = document.getElementById('speedrun-widget');
+    widget.classList.add('active');
+    tick();
+    tickInterval = setInterval(tick, 1000);
+    heartbeat();
+    heartbeatInterval = setInterval(heartbeat, HEARTBEAT_MS);
+  }
+
+  function beginSession(name, className) {
+    session = { name: name, class_name: className, started_at: Date.now(), completed: false };
+    saveSession(session);
+    finalized = false;
+    document.getElementById('speedrun-overlay').classList.remove('active');
+    startWidget();
+  }
+
+  function showWelcomeModal() {
+    const overlay = document.getElementById('speedrun-overlay');
+    const errorEl = document.getElementById('speedrun-modal-error');
+    errorEl.textContent = '';
+    overlay.classList.add('active');
+
+    document.getElementById('speedrun-cancel-btn').onclick = () => {
+      overlay.classList.remove('active');
+      // Bỏ tham số ?mode=speedrun khỏi URL để không hiện lại modal nếu load lại trang
+      const url = new URL(window.location.href);
+      url.searchParams.delete('mode');
+      window.history.replaceState({}, '', url.toString());
+    };
+
+    document.getElementById('speedrun-start-btn').onclick = () => {
+      const name = document.getElementById('speedrun-name-input').value.trim();
+      const className = document.getElementById('speedrun-class-input').value.trim();
+      if (!name || !className) {
+        errorEl.textContent = 'Vui lòng nhập đủ tên và lớp.';
+        return;
+      }
+      beginSession(name, className);
+    };
+  }
+
+  function initSpeedrunMode() {
+    const params = new URLSearchParams(window.location.search);
+    const existing = loadSession();
+
+    if (existing && !existing.completed) {
+      // Đang có lượt chơi dở (ví dụ vừa reload trang) -> tiếp tục luôn, không hỏi lại
+      session = existing;
+      finalized = false;
+      startWidget();
+      return;
+    }
+
+    if (params.get('mode') === 'speedrun') {
+      showWelcomeModal();
+    }
+  }
+
+  // Nút thu nhỏ / mở rộng đồng hồ
+  document.getElementById('speedrun-minimize-btn').addEventListener('click', () => {
+    document.getElementById('speedrun-widget').classList.add('minimized');
+  });
+  document.getElementById('speedrun-mini-icon').addEventListener('click', () => {
+    document.getElementById('speedrun-widget').classList.remove('minimized');
+  });
+  document.getElementById('speedrun-finish-btn').addEventListener('click', () => {
+    if (window.confirm('Nộp bài ngay bây giờ? Không thể hoàn tác.')) {
+      submitResultNormal('manual');
+    }
+  });
+
+  // (thêm bởi Claude) Phát hiện "không còn tab nào liên quan đang mở, kể cả ở nền" để tự nộp bài.
+  // Cơ chế: mỗi tab tự báo còn sống (heartbeat) vào localStorage mỗi 5s. Khi 1 tab đóng lại
+  // (beforeunload/pagehide), nó tự xóa mình khỏi danh sách rồi kiểm tra còn tab nào khác gần đây
+  // vẫn còn heartbeat không — nếu không còn tab nào -> đây là tab cuối cùng -> tự nộp bài qua sendBeacon.
+  // Lưu ý: cơ chế này không đảm bảo 100% (ví dụ hệ điều hành tắt đột ngột trình duyệt có thể không
+  // kịp bắn sự kiện) — nhưng bao trùm hầu hết trường hợp thực tế (đóng tab, đóng trình duyệt, tắt app).
+  function handlePageLeaving() {
+    if (!session || session.completed || finalized) return;
+    const reg = removeSelfFromRegistry();
+    if (!anyOtherTabAlive(reg)) {
+      submitResultBeacon('all_tabs_closed');
+    }
+  }
+  window.addEventListener('pagehide', handlePageLeaving);
+  window.addEventListener('beforeunload', handlePageLeaving);
+
+  initSpeedrunMode();
+})();
+</script>
+
+</body>
 
 <!--login23:54  -->
 
