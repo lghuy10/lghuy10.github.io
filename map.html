@@ -1731,7 +1731,7 @@
 
 <div>
 
-<p style="margin-bottom:0; color:#333;">- Các lễ hội gần vị trí nhau sẽ được gộp thành một nút tròn hiển thị số lượng lễ hội gần đó, nhấn vào nút đó để xem các lễ hội trong khu vực đó.<br/>- Nút bên góc phải trên sẽ bật chế độ toàn màn hình.<br/>- Nút bộ lọc có chức năng dùng để lọc ra các lễ hội theo loại.<br/>- Mỗi lễ hội sẽ có một bài viết và hướng dẫn chỉ đường gắn vào. <br/>- Các lễ hội đều có chức năng VR360.<br/>- 📖 là huy hiệu Tài liệu (đã xem bài viết về lễ hội), 📝 là huy hiệu Minigame (đã hoàn thành quiz) — đạt đủ cả 2 huy hiệu, mảnh bản đồ của lễ hội đó sẽ được khai phá hoàn toàn.<br/>- Mảnh ghép lễ hội hiện màu vàng khi đạt 1 huy hiệu và màu đỏ cam khi đạt đủ huy hiệu</p>
+<p style="margin-bottom:0; color:#333;">- Các lễ hội gần vị trí nhau sẽ được gộp thành một nút tròn hiển thị số lượng lễ hội gần đó, nhấn vào nút đó để xem các lễ hội trong khu vực đó.<br/>- Nút bộ lọc có chức năng dùng để lọc ra các lễ hội theo loại.<br/>- Mỗi lễ hội sẽ có một bài viết và hướng dẫn chỉ đường gắn vào. <br/>- Các lễ hội đều có chức năng VR360.<br/>- 📖 là huy hiệu Tài liệu (đã xem bài viết về lễ hội), 📝 là huy hiệu Minigame (đã hoàn thành quiz) — đạt đủ cả 2 huy hiệu, mảnh bản đồ của lễ hội đó sẽ được khai phá hoàn toàn.<br/>- Mảnh ghép lễ hội hiện màu vàng khi đạt 1 huy hiệu và màu đỏ cam khi đạt đủ huy hiệu.<br/>- Bấm vào biểu tượng thùng rác để xóa toàn bộ tiến trình!</p>
 
 </div>
 
@@ -3743,15 +3743,24 @@ marker.bindPopup(buildPopupHtml(item), {
     refreshProgressUI();
   });
 
+  // (thêm bởi Claude) Tách logic reset thành hàm dùng chung — để cả nút reset lẫn tính năng
+  // Speedrun (sao lưu/khôi phục tiến trình) đều gọi chung 1 chỗ, không lặp code.
+  window.__syncExploreUI = function () {
+    celebrated = false;
+    refreshAll();
+  };
+  window.__resetExploreProgress = function () {
+    try { localStorage.removeItem(FESTIVAL_BADGE_KEY); } catch (e) {}
+    if (window.__clearPulsedSet) window.__clearPulsedSet();
+    window.__syncExploreUI();
+  };
+
   // Reset tiến trình khám phá (thêm bởi Claude)
   document.getElementById('reset-progress-btn').addEventListener('click', (e) => {
     e.stopPropagation();
     const ok = window.confirm('Xóa toàn bộ huy hiệu và tiến trình khám phá đã lưu trên trình duyệt này? Không thể hoàn tác.');
     if (!ok) return;
-    try { localStorage.removeItem(FESTIVAL_BADGE_KEY); } catch (err) {}
-    if (window.__clearPulsedSet) window.__clearPulsedSet();
-    celebrated = false;
-    refreshAll();
+    window.__resetExploreProgress();
     document.getElementById('badge-panel').classList.remove('active');
   });
 
@@ -4684,6 +4693,7 @@ jQuery('.fancybox').fancybox();
   <div class="speedrun-modal">
     <h3>⚡ Chào mừng đến với chế độ Đấu hạng - Speedrun!</h3>
     <p>Bạn có 30 phút để khám phá càng nhiều lễ hội càng tốt. Nhập tên và nhóm để bắt đầu:</p>
+    <p style="font-size:12.5px;color:#8b2626;background:#fdf1ea;border-radius:8px;padding:8px 10px;margin-top:-8px;">⚠️ Tiến trình khám phá hiện tại sẽ được <strong>tạm ẩn đi</strong> để bắt đầu Speedrun từ đầu, và sẽ <strong>tự khôi phục lại</strong> ngay sau khi bạn nộp bài — không bị mất.</p>
     <p style="background:#fdf3ea; border-radius:8px; padding:8px 10px; font-size:12.5px; color:#8b5a2b; text-align:left; margin-top:-4px;">⚠️ Trong lúc chơi, đừng thoát hẳn trình duyệt hoặc đóng hết các tab của web (miễn còn 1 tab bất kỳ của web đang mở là vẫn an toàn) — nếu không, hệ thống sẽ tự động nộp bài ngay lúc đó.</p>
     <p style="background:#eef6ec; border-radius:8px; padding:8px 10px; font-size:12.5px; color:#3f6b32; text-align:left; margin-top:6px;">💡 Nếu bạn từng chơi bằng đúng tên + nhóm này rồi, hệ thống sẽ tự thay thế bằng kết quả cao hơn — không lo bị mất kết quả cũ tốt hơn.</p>
     <label for="speedrun-name-input">Tên</label>
@@ -4816,6 +4826,7 @@ jQuery('.fancybox').fancybox();
       console.warn('[speedrun] submit failed', err);
       showToast('⚠️ Đã lưu kết quả trên máy, nhưng gửi lên bảng xếp hạng bị lỗi mạng.');
     }
+    restoreBackedUpProgress();
     hideWidget();
     removeSelfFromRegistry();
   }
@@ -4832,6 +4843,7 @@ jQuery('.fancybox').fancybox();
       const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
       navigator.sendBeacon(SPEEDRUN_API, blob);
     } catch (err) { /* best-effort, không còn cách nào khác lúc trang đang đóng */ }
+    restoreBackedUpProgress();
   }
 
   function stopTimers() {
@@ -4861,7 +4873,43 @@ jQuery('.fancybox').fancybox();
     heartbeatInterval = setInterval(heartbeat, HEARTBEAT_MS);
   }
 
+  const BACKUP_KEY = 'speedrun_progress_backup_v1';
+  const BADGE_KEY_NAME = 'festival_badges_v1';
+  const PULSED_KEY_NAME = 'festival_badges_pulsed_v1';
+
+  // (thêm bởi Claude) Sao lưu tiến trình hiện tại của học sinh (huy hiệu + mốc đã xem hiệu ứng)
+  // rồi reset về 0 — y hệt hành vi nút thùng rác — để lượt Speedrun bắt đầu từ vạch xuất phát sạch.
+  function backupAndResetProgress() {
+    try {
+      const backup = {
+        badges: localStorage.getItem(BADGE_KEY_NAME),
+        pulsed: localStorage.getItem(PULSED_KEY_NAME)
+      };
+      localStorage.setItem(BACKUP_KEY, JSON.stringify(backup));
+    } catch (e) { console.warn('[speedrun] Không sao lưu được tiến trình cũ', e); }
+
+    if (window.__resetExploreProgress) window.__resetExploreProgress();
+  }
+
+  // (thêm bởi Claude) Khôi phục lại đúng tiến trình đã sao lưu trước khi vào Speedrun —
+  // gọi ngay sau khi đã tính xong kết quả để nộp (payload đã "chụp" đúng thành tích trong lượt chơi).
+  function restoreBackedUpProgress() {
+    try {
+      const raw = localStorage.getItem(BACKUP_KEY);
+      if (raw == null) return;
+      const backup = JSON.parse(raw);
+      if (backup.badges != null) localStorage.setItem(BADGE_KEY_NAME, backup.badges);
+      else localStorage.removeItem(BADGE_KEY_NAME);
+      if (backup.pulsed != null) localStorage.setItem(PULSED_KEY_NAME, backup.pulsed);
+      else localStorage.removeItem(PULSED_KEY_NAME);
+      localStorage.removeItem(BACKUP_KEY);
+    } catch (e) { console.warn('[speedrun] Không khôi phục được tiến trình cũ', e); }
+
+    if (window.__syncExploreUI) window.__syncExploreUI();
+  }
+
   function beginSession(name, className) {
+    backupAndResetProgress();
     session = { name: name, class_name: className, started_at: Date.now(), completed: false };
     saveSession(session);
     finalized = false;
