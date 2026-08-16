@@ -397,7 +397,7 @@
 <section class="speedrun-lb-section">
 <div class="speedrun-lb-inner">
 <h2 class="speedrun-lb-maintitle">🏆 Bảng xếp hạng: Đấu hạng - Speedrun</h2>
-<p class="speedrun-lb-mainsubtitle">Ai khai phá bản đồ lễ hội nhanh và đầy đủ nhất — tính theo cá nhân và theo lớp</p>
+<p class="speedrun-lb-mainsubtitle">Ai khai phá bản đồ lễ hội nhanh và đầy đủ nhất — tính theo cá nhân và theo nhóm</p>
 <div class="speedrun-lb-grid">
 <div class="speedrun-lb-col">
 <h3 class="speedrun-lb-title">👤 Cá nhân xuất sắc</h3>
@@ -412,11 +412,11 @@
 </div>
 </div>
 <div class="speedrun-lb-col">
-<h3 class="speedrun-lb-title">🏫 Lớp xuất sắc</h3>
-<p class="speedrun-lb-subtitle">Top 3 — gộp từ toàn bộ học sinh cùng lớp</p>
+<h3 class="speedrun-lb-title">🏫 Nhóm xuất sắc</h3>
+<p class="speedrun-lb-subtitle">Top 3 — gộp từ toàn bộ học sinh cùng nhóm</p>
 <div class="speedrun-lb-card">
 <div class="speedrun-lb-row speedrun-lb-row-class speedrun-lb-header">
-<div>#</div><div>Lớp</div><div>Tổng huy hiệu</div><div>Tổng thời gian</div>
+<div>#</div><div>Nhóm</div><div>Tổng huy hiệu</div><div>Tổng thời gian</div>
 </div>
 <div id="speedrun-lb-class-list">
 <div class="speedrun-lb-empty">Đang tải bảng xếp hạng...</div>
@@ -456,7 +456,7 @@
           <div class="speedrun-lb-rank">${i + 1}</div>
           <div>
             <div class="speedrun-lb-name">${escapeHtml(r.name)}</div>
-            <div class="speedrun-lb-class">Lớp ${escapeHtml(r.class_name)}</div>
+            <div class="speedrun-lb-class">Nhóm ${escapeHtml(r.class_name)}</div>
           </div>
           <div class="speedrun-lb-badges">🎖️ ${r.badge_count}/20</div>
           <div class="speedrun-lb-progress">🧩 ${r.progress_count}/10</div>
@@ -474,14 +474,14 @@
     .then(rows => {
       const list = document.getElementById('speedrun-lb-class-list');
       if (!Array.isArray(rows) || rows.length === 0) {
-        list.innerHTML = '<div class="speedrun-lb-empty">Chưa có lớp nào tham gia — hãy là lớp đầu tiên!</div>';
+        list.innerHTML = '<div class="speedrun-lb-empty">Chưa có nhóm nào tham gia — hãy là nhóm đầu tiên!</div>';
         return;
       }
       list.innerHTML = rows.map((r, i) => `
         <div class="speedrun-lb-row speedrun-lb-row-class">
           <div class="speedrun-lb-rank">${i + 1}</div>
           <div>
-            <div class="speedrun-lb-name">Lớp ${escapeHtml(r.class_name)}</div>
+            <div class="speedrun-lb-name">Nhóm ${escapeHtml(r.class_name)}</div>
             <div class="speedrun-lb-participants">${r.participant_count} bạn tham gia</div>
           </div>
           <div class="speedrun-lb-badges">🎖️ ${r.total_badges}</div>
@@ -990,6 +990,8 @@
 <path d="M5 9v6h4l5 4V5L9 9H5z" fill="currentColor"></path>
 </svg>
 </div>
+<link rel="stylesheet" href="/css/speedrun-widget.css">
+<script src="/js/speedrun-widget.js"></script>
 <!-- (optional) <audio> element; script will create it if missing -->
 <!-- <audio id="auto-music-audio" src="/assets/music.mp3" preload="auto" loop></audio> -->
 <!--home-123:18  -->

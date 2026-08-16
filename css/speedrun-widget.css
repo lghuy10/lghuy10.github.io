@@ -1,0 +1,12 @@
+/* speedrun-widget.css — đồng hồ Speedrun dùng chung cho mọi trang */
+#speedrun-widget { position: fixed; top: 70px; right: 12px; z-index: 2500; background: #fff; border: 2px solid #8b2626; border-radius: 12px; box-shadow: 3px 3px 0px var(--color-indigo, #8b2626); padding: 10px 14px; display: none; align-items: center; gap: 10px; }
+#speedrun-widget.active { display: flex; }
+#speedrun-widget.minimized { padding: 8px; border-radius: 50%; width: 44px; height: 44px; justify-content: center; }
+#speedrun-widget.minimized .speedrun-widget-full { display: none; }
+#speedrun-widget:not(.minimized) .speedrun-widget-mini-icon { display: none; }
+.speedrun-widget-time { font-weight: 900; font-size: 17px; color: #8b2626; font-variant-numeric: tabular-nums; }
+.speedrun-widget-label { font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 0.5px; }
+#speedrun-finish-btn { background: #16a34a; color: #fff; border: none; border-radius: 6px; padding: 6px 10px; font-weight: 700; font-size: 12px; cursor: pointer; }
+#speedrun-minimize-btn { background: none; border: none; cursor: pointer; font-size: 15px; color: #999; padding: 2px 4px; }
+.speedrun-widget-mini-icon { font-size: 18px; cursor: pointer; }
+#speedrun-done-toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #16a34a; color: #fff; padding: 12px 20px; border-radius: 10px; font-weight: 700; z-index: 3001; box-shadow: 3px 3px 0px var(--color-indigo, #8b2626); display: none; text-align: center; }

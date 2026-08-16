@@ -435,7 +435,7 @@ Cá Ông (cá Voi) - vị thần biển được ngư dân tôn thờ để cầ
   <button id="arButton" style="background: #e53935; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
     <i class="fa fa-camera"></i> Mở AR xem linh vật
   </button>
-  <model-viewer id="arViewer" src="/assets/ar_objs/ngongcgFes.glb" ar ar-modes="webxr scene-viewer" camera-controls style="width: 100%; height: 400px; margin-top: 10px; display: none;"></model-viewer>
+  <model-viewer id="arViewer" src="/assets/ar_objs/ngongcgFes.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls style="width: 100%; height: 400px; margin-top: 10px; display: none;" ios-src="/assets/ar_objs/usdz_objs/ngongcg.usdz"></model-viewer>
   <p style="font-size: 0.9em; margin-top: 5px;">Nhấn nút để mở AR xem linh vật của lễ hội!</p>
 </div>
 <h3 style="font-weight:bold; color:#8b2626 !important;">LOẠI LỄ HỘI</h3>
@@ -550,7 +550,7 @@ Cầu mong sự an bình, hạnh phúc và cuộc sống ấm no cho các ngư d
 <script>
 (function () {
   const FESTIVAL_ID = 5;
-  const MIN_READ_SECONDS = 25;
+  const MIN_READ_SECONDS = 5;
   const FESTIVAL_BADGE_KEY = 'festival_badges_v1';
 
   function markDocBadge() {
@@ -587,6 +587,9 @@ Cầu mong sự an bình, hạnh phúc và cuộc sống ấm no cho các ngư d
   document.addEventListener('visibilitychange', () => { lastTick = Date.now(); });
 })();
 </script>
-</footer></body>
+</footer>
+<link rel="stylesheet" href="/css/speedrun-widget.css">
+<script src="/js/speedrun-widget.js"></script>
+</body>
 <!--blog-details23:55  -->
 </html>
