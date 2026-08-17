@@ -4729,7 +4729,13 @@ jQuery('.fancybox').fancybox();
   const TABS_KEY = 'speedrun_open_tabs_v1';
   const DURATION_MS = 30 * 60 * 1000; // 30 phút
   const HEARTBEAT_MS = 5000;
-  const STALE_MS = 45000; // 1 tab khác coi như "còn sống" nếu heartbeat trong 45s gần nhất (chịu được throttle nền)
+  // (sửa bởi Claude — vá lỗi tự nộp bài oan) Trước là 45000 (45s). Khi tab này bị đẩy xuống
+  // nền lâu (vd mở tab lễ hội -> tab quiz, chơi vài ván), trình duyệt sẽ "bóp nghẹt" setInterval
+  // của tab nền — sau khoảng 5 phút bị ẩn, Chrome có thể giới hạn timer chạy tối đa 1 lần/phút,
+  // khiến heartbeat 5s trễ hơn 45s dù tab vẫn mở thật, làm tab khác tưởng nhầm "đã đóng hết" và
+  // tự nộp bài sớm. Nới lên 2 phút để chịu được throttle; vẫn an toàn cho trường hợp đóng tab
+  // thật vì tab tự đóng sẽ chủ động xóa mình khỏi registry qua pagehide/beforeunload ngay lập tức.
+  const STALE_MS = 120000; // 1 tab khác coi như "còn sống" nếu heartbeat trong 2 phút gần nhất (chịu được throttle nền)
 
   const tabId = 'tab-' + Date.now() + '-' + Math.random().toString(36).slice(2, 9);
   let session = null;       // { name, class_name, started_at, completed }
@@ -4987,6 +4993,13 @@ jQuery('.fancybox').fancybox();
   }
   window.addEventListener('pagehide', handlePageLeaving);
   window.addEventListener('beforeunload', handlePageLeaving);
+
+  // (thêm bởi Claude — vá lỗi tự nộp bài oan) Bắn thêm 1 nhịp tim ngay lúc tab này chuyển sang
+  // ẩn (vd người dùng mở tab lễ hội/quiz khác), trước khi trình duyệt kịp bóp nghẹt setInterval —
+  // giúp registry có timestamp mới nhất ngay tại thời điểm chuyển tab, giảm rủi ro bị coi là "cũ".
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden && session && !session.completed) heartbeat();
+  });
 
   // (thêm bởi Claude) Đồng bộ đa tab: khi 1 tab khác nộp bài xong (ghi completed:true vào
   // localStorage), sự kiện 'storage' sẽ bắn ở TẤT CẢ các tab còn lại (trừ tab vừa ghi) —

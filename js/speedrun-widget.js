@@ -17,7 +17,15 @@
   const PULSED_KEY_NAME = 'festival_badges_pulsed_v1';
   const DURATION_MS = 30 * 60 * 1000;
   const HEARTBEAT_MS = 5000;
-  const STALE_MS = 45000;
+  // (sửa bởi Claude — vá lỗi tự nộp bài oan) Trước là 45000 (45s). Khi tab map.html bị đẩy
+  // xuống nền lâu (vd mở tab lễ hội -> tab quiz, chơi vài ván), trình duyệt sẽ "bóp nghẹt"
+  // (throttle) setInterval của tab nền để tiết kiệm tài nguyên — sau khoảng 5 phút bị ẩn,
+  // Chrome có thể giới hạn timer chạy tối đa 1 lần/phút. Heartbeat 5s khi đó có thể trễ hơn
+  // 45s dù tab vẫn đang mở thật, khiến các tab khác tưởng nhầm "đã đóng hết" và tự nộp bài
+  // sớm. Nới ngưỡng lên 2 phút để đủ dư dả chịu được throttle. Việc này an toàn cho trường
+  // hợp đóng tab thật, vì tab tự đóng sẽ chủ động xóa mình khỏi registry qua pagehide/
+  // beforeunload (removeSelfFromRegistry) ngay lập tức, không phụ thuộc vào ngưỡng này.
+  const STALE_MS = 120000;
 
   const tabId = 'tab-' + Date.now() + '-' + Math.random().toString(36).slice(2, 9);
   let session = null;
@@ -230,6 +238,13 @@
   }
   window.addEventListener('pagehide', handlePageLeaving);
   window.addEventListener('beforeunload', handlePageLeaving);
+
+  // (thêm bởi Claude — vá lỗi tự nộp bài oan) Bắn thêm 1 nhịp tim ngay lúc tab chuyển sang
+  // ẩn (vd người dùng mở tab khác), trước khi trình duyệt kịp bóp nghẹt setInterval — giúp
+  // registry có timestamp mới nhất ngay tại thời điểm chuyển tab, giảm rủi ro bị coi là "cũ".
+  document.addEventListener('visibilitychange', () => {
+    if (session && !session.completed) heartbeat();
+  });
 
   // (thêm bởi Claude) Đồng bộ đa tab: khi 1 tab khác nộp bài xong (ghi completed:true vào
   // localStorage), sự kiện 'storage' sẽ bắn ở TẤT CẢ các tab còn lại (trừ tab vừa ghi) —
