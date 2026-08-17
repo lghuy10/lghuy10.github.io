@@ -4988,6 +4988,21 @@ jQuery('.fancybox').fancybox();
   window.addEventListener('pagehide', handlePageLeaving);
   window.addEventListener('beforeunload', handlePageLeaving);
 
+  // (thêm bởi Claude) Đồng bộ đa tab: khi 1 tab khác nộp bài xong (ghi completed:true vào
+  // localStorage), sự kiện 'storage' sẽ bắn ở TẤT CẢ các tab còn lại (trừ tab vừa ghi) —
+  // dùng đúng cơ chế này để dừng đếm giờ + ẩn widget ngay lập tức, không cần đợi tick() kế tiếp.
+  window.addEventListener('storage', (e) => {
+    if (e.key !== SESSION_KEY) return;
+    const updated = loadSession();
+    if (updated && updated.completed && session && !session.completed) {
+      session = updated;
+      finalized = true;
+      stopTimers();
+      hideWidget();
+      showToast('✅ Đã nộp bài (từ tab khác) — không cần làm gì thêm ở tab này.');
+    }
+  });
+
   initSpeedrunMode();
 })();
 </script>
