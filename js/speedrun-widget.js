@@ -13,6 +13,8 @@
   const SESSION_KEY = 'speedrun_session_v1';
   const TABS_KEY = 'speedrun_open_tabs_v1';
   const FESTIVAL_BADGE_KEY = 'festival_badges_v1';
+  const BACKUP_KEY = 'speedrun_progress_backup_v1';
+  const PULSED_KEY_NAME = 'festival_badges_pulsed_v1';
   const DURATION_MS = 30 * 60 * 1000;
   const HEARTBEAT_MS = 5000;
   const STALE_MS = 45000;
@@ -96,6 +98,23 @@
     };
   }
 
+  // (thêm bởi Claude — vá bug mất tiến trình) Khôi phục lại đúng tiến trình đã được map.html
+  // sao lưu trước khi vào Speedrun. Trang này (không phải map.html) không có hệ thống Voronoi
+  // để tự vẽ lại giao diện — nhưng map.html (nếu đang mở ở tab khác) sẽ TỰ nhận ra qua chính
+  // listener 'storage' theo dõi FESTIVAL_BADGE_KEY mà nó đã có sẵn, nên không cần gọi thêm gì.
+  function restoreBackedUpProgress() {
+    try {
+      const raw = localStorage.getItem(BACKUP_KEY);
+      if (raw == null) return; // không có gì để khôi phục (vd lượt chơi không bắt đầu từ map.html)
+      const backup = JSON.parse(raw);
+      if (backup.badges != null) localStorage.setItem(FESTIVAL_BADGE_KEY, backup.badges);
+      else localStorage.removeItem(FESTIVAL_BADGE_KEY);
+      if (backup.pulsed != null) localStorage.setItem(PULSED_KEY_NAME, backup.pulsed);
+      else localStorage.removeItem(PULSED_KEY_NAME);
+      localStorage.removeItem(BACKUP_KEY);
+    } catch (e) { console.warn('[speedrun] Không khôi phục được tiến trình cũ', e); }
+  }
+
   async function submitResultNormal(reason) {
     if (finalized || !session) return;
     finalized = true;
@@ -122,6 +141,7 @@
       console.warn('[speedrun] submit failed', err);
       showToast('⚠️ Đã lưu kết quả trên máy, nhưng gửi lên bảng xếp hạng bị lỗi mạng.');
     }
+    restoreBackedUpProgress();
     hideWidget();
     removeSelfFromRegistry();
   }
@@ -137,6 +157,7 @@
       const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
       navigator.sendBeacon(SPEEDRUN_API, blob);
     } catch (err) {}
+    restoreBackedUpProgress();
   }
 
   function stopTimers() {
