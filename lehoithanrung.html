@@ -24,6 +24,80 @@
 <link href="/css/style.css" rel="stylesheet"/>
 <link href="/css/kindergarten.css" rel="stylesheet"/>
 <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+<style>
+  /* Cuộn mượt khi click mục lục */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Bù trừ khoảng cách khi cuộn để không bị thanh Navbar che lấp */
+  h4[id] {
+    scroll-margin-top: 140px;
+  }
+
+  /* Khung Mục lục trong Sidebar */
+  .table-of-contents-widget {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    border: 1px solid #e0d5c8;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .toc-title {
+    font-weight: bold;
+    color: #8b2626 !important;
+    font-size: 1.1rem;
+    margin-top: 0;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #8b2626;
+    text-transform: uppercase;
+  }
+
+  .toc-nav ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+
+  .toc-nav li {
+    margin-bottom: 8px;
+  }
+
+  .toc-nav li:last-child {
+    margin-bottom: 0;
+  }
+
+  .toc-nav a {
+    color: #333;
+    text-decoration: none;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    display: block;
+    padding: 5px 8px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .toc-nav a:hover,
+  .toc-nav a:focus {
+    background-color: #fbeee8;
+    color: #e53935;
+    padding-left: 12px;
+  }
+
+  @media (max-width: 767px) {
+    h4[id] {
+      scroll-margin-top: 90px;
+    }
+  }
+</style>
 </head>
 <body><style> .custom-navbar { width: 100%; background: #fff; box-shadow: 3px 3px 0px var(--color-indigo); border-bottom: 1.5px solid #f3f3f3; position: sticky; top: 0; z-index: 1000; font-family: 'Montserrat', 'Open Sans', sans-serif; transition: box-shadow .18s; } .custom-navbar-inner { justify-content: space-between; max-width: 1200px; margin: 0 auto; display: flex; align-items: center; padding: 0 40px; height: 120px; } .custom-navbar-logo { display: flex; align-items: center; gap: 0; text-decoration: none; background: #fff; border-radius: 12px; padding: 0; transition: box-shadow .18s, border .18s; } .custom-navbar-logo img { height: 96px; width: auto; border-radius: 8px; background: #fff; } .custom-navbar-nav { display: flex; align-items: center; gap: 8px; list-style: none; margin: 0; padding: 0; } .custom-navbar-nav > li { position: relative; } .custom-navbar-link { display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px 8px 18px; color: #2f2f2f; font-weight: 600; border-radius: 8px 8px 0 0; background: none; border: none; font-size: 1rem; position: relative; transition: color .18s, background .18s; } .custom-navbar-link::after { content: ''; display: block; position: absolute; left: 18px; right: 18px; bottom: 2px; height: 2.5px; background: linear-gradient(90deg, #e53935 0%, #ff7043 100%); border-radius: 2px; transform: scaleX(0); transition: transform .22s; } .custom-navbar-link:hover, .custom-navbar-link:focus { color: #e53935; background: #f9f9f9; } .custom-navbar-link:hover::after, .custom-navbar-link:focus::after { transform: scaleX(1); } .custom-navbar-dropdown { display: none; position: absolute; left: 0; top: 110%; min-width: 200px; background: #fff; border-radius: 12px; box-shadow: 3px 3px 0px var(--color-indigo); padding: 8px 0; z-index: 1001; border: 1.5px solid #f3f3f3; animation: fadeIn .18s; } .custom-navbar-nav > li:hover > .custom-navbar-dropdown, .custom-navbar-nav > li:focus-within > .custom-navbar-dropdown { display: block; } .custom-navbar-dropdown a { display: flex; align-items: center; gap: 8px; padding: 11px 28px 11px 22px; color: #e53935; font-weight: 500; text-decoration: none; border-radius: 8px; transition: background .16s, color .16s; font-size: 0.98rem; position: relative; } .custom-navbar-dropdown a:hover { background: #fff3f1; color: transparent; } .custom-navbar-dropdown a::before { content: '2'; color: #ff7043; font-size: 1.2em; margin-right: 8px; opacity: 0.7; } .custom-navbar-toggle { display: none; background: none; border: none; color: #e53935; font-size: 2rem; cursor: pointer; margin-left: 12px; border-radius: 8px; padding: 4px 10px; transition: background .18s; } .custom-navbar-toggle:hover { background: #ffe3de; } /* new: menu toggle specific styles to avoid global button overrides */ .menu-icon-btn { /* reset heavy button rules from global styles */ background: transparent !important; border: none !important; box-shadow: 3px 3px 0px var(--color-indigo); color: #ff5722 !important; /* site orange */ font-size: 1.9rem; line-height: 1; padding: 6px 10px; display: none; /* hide by default (desktop) */ align-items: center; justify-content: center; border-radius: 8px; cursor: pointer; transition: background .18s, transform .12s; -webkit-appearance: none; } .menu-icon-btn:hover, .menu-icon-btn:focus { background: #fff3f1; color: #d32f2f !important; outline: none; } .menu-icon-btn:active { transform: translateY(1px) scale(.995); } /* keep the old custom-navbar-toggle selector for any other behavior but avoid generic button styling */ .custom-navbar-toggle { /* minimal shim so scripts querying this class still work */ background: none; border: none; padding: 0; } @media (max-width: 900px) { .custom-navbar-inner { flex-wrap: wrap; height: auto; padding: 0 10px; } /* show the menu button on mobile */ .menu-icon-btn { display: inline-flex; } .custom-navbar-nav { flex-direction: column; align-items: flex-start; width: 100%; background: #fff; border-radius: 0 0 16px 16px; box-shadow: 3px 3px 0px var(--color-indigo); margin-top: 8px; display: none; position: absolute; left: 0; top: 72px; z-index: 1002; border-top: 1.5px solid #f3f3f3; } .custom-navbar-nav.show { display: flex; } .custom-navbar-nav > li { width: 100%; } .custom-navbar-link { color: #e53935; background: none; width: 100%; text-align: left; border-radius: 0; padding: 16px 22px 14px 22px; } .custom-navbar-link::after { left: 22px; right: 22px; bottom: 4px; } .custom-navbar-link:hover { background: #fff3f1; color: #d32f2f; } .custom-navbar-dropdown { position: static; box-shadow: 3px 3px 0px var(--color-indigo); background: #fff; border-radius: 0; min-width: 100%; padding: 0; border: none; } .custom-navbar-dropdown a { padding: 13px 32px; } .custom-navbar-toggle { display: block; } } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } body { background-color: #ebe8e2; }
 </style>
@@ -51,28 +125,28 @@
 <div class="entry-content">
 <div class="post-frame"><img alt="Nghi thức cúng Thần Rừng Cà Mum (ảnh minh họa)" src="/images/tr1.jpg"/><div class="img-ref">Nghi thức cúng Thần Rừng tại cánh đồng Cà Mum. Nguồn : bienphong.com.vn</div></div>
 <h3 style="text-align: left !important; align-self: flex-start !important; width: 100% !important; margin-left: 0 !important;">Bài viết giới thiệu</h3>
-<h4>• Xếp hạng di tích</h4>
+<h4 id="xep-hang-di-tich">• Xếp hạng di tích</h4>
 <p>
 Là một trong hai lễ hội lớn nhất của người Chơ-ro, được đưa vào danh mục bảo tồn nghiêm ngặt và phát triển gắn liền với du lịch cộng đồng.<br/>là một trong hai lễ hội lớn nhất của người Chơ -ro, được đưa vào danh mục bảo tồn nghiêm ngặt và phát triển gắn liền với du lịch cộng đồng.
 </p>
-<h4>• Địa chỉ</h4>
+<h4 id="dia-chi">• Địa chỉ</h4>
 <p>
 Các xã có người Chơ-ro sinh sống ở Thành phố Hồ Chí Minh như xã: Xuân Sơn, Bầu Lâm, Ngãi Giao, Kim Long, Nghĩa Thành. Điển hình nhất là tại cánh đồng Cà Mum, xã Xuân Sơn.<br/>diễn ra tại các xã có người Chơ – ro sinh sống ở thành phố Hồ Chí Minh như xã: Xuân Sơn, Bầu Lâm, Ngãi Giao, Kim Long, Nghĩa Thành. Điển hình nhất là tại cánh đồng Cà Mum, xã Xuân Sơn.
 </p>
-<h4>• Thời gian</h4>
+<h4 id="thoi-gian">• Thời gian</h4>
 <p>
 Tín ngưỡng Thần Rừng gồm hai giai đoạn chính: tục "Mở cửa rừng" xin phép thần linh vào tháng Giêng âm lịch, và Đại lễ cúng Nhang rừng tạ ơn vào tháng 3 âm lịch (thường lồng chung với lễ cúng Thần Lúa).<br/>Tín ngưỡng Thần Rừng của người Chơ Ro bao gồm hai giai đoạn chính: tục “Mở cửa rừng” xin phép thần linh vào tháng Giêng âm lịch và Đại lễ cúng Nhang rừng tạ ơn vào tháng 3 âm lịch ( thường lồng chung với lễ cúng thần Lúa).
 </p>
-<h4>• Mục đích</h4>
+<h4 id="muc-dinh">• Mục đích</h4>
 <p>
 Nhằm tạ ơn Thần Rừng đã che chở, mang lại mưa thuận gió hòa, mùa màng bội thu và cầu bình an cho buôn làng.
 </p>
-<h4>• Lịch sử hình thành</h4>
+<h4 id="lich-su-hinh-thanh">• Lịch sử hình thành</h4>
 <p>
 Lễ hội bắt nguồn từ tín ngưỡng lúa rẫy nguyên thủy của người Chơ-ro gắn liền với núi rừng Đông Nam Bộ. Lễ cúng Thần rừng trước kia thường kéo dài trong nhiều ngày đêm. Hiện nay, người dân đã thay đổi nhận thức nên chỉ tổ chức một đến hai ngày, nhưng vẫn đảm bảo thực hiện đầy đủ các nghi thức, dâng lễ vật lên thần linh.<br/>Lễ hội bắt nguồn từ tín ngưỡng lúa rẫy nguyên thủy của người Chơ-ro gắn liền với núi rừng Đông Nam Bộ. Lễ cúng Thần rừng trước kia thường kéo dài trong nhiều ngày đêm. Hiện nay, người dân đã thay đổi nhận thức, nên chỉ tổ chức một đến hai ngày, nhưng vẫn đảm bảo thực hiện đầy đủ các nghi thức, dâng lễ vật lên thần linh.
 </p>
 <div class="entry-content"><div class="post-frame"><img alt="Chuẩn bị bánh cúng lễ (ảnh minh họa)" src="/images/tr2.jpg"/><div class="img-ref">Già làng chuẩn bị đồ cúng lễ. Nguồn : dantocmiennui.baotintuc.vn</div></div></div>
-<h4>• Các hoạt động chính của lễ hội</h4>
+<h4 id="cac-hoat-dong-chinh">• Các hoạt động chính của lễ hội</h4>
 <p>
 phần lễ: ngay từ trước lễ hội, người Châu Ro đã mua sắm, bày biện lễ vật chu đáo; lễ được thực hiện ngoài trời, dưới gốc cây cổ thụ do già làng chọn làm nơi linh thiêng; vật phẩm dâng Thần rừng (lợn, dê) do dân làng tự nguyện đóng góp, để nguyên con, sau khi giết, cạo lông, mổ ruột thì đặt lên bàn tế thần rồi mới xẻ thịt chế biến. Lễ cúng do già làng làm chủ lễ, khấn vái bằng tiếng Chơ Ro, mời Thần Rừng, các vị thần linh chứng giám và mời tổ tiên về dự tiệc cùng dân làng.
 </p>
@@ -92,15 +166,15 @@ Phần lễ :
 Phần hội: Sau phần nghi thức tâm linh, bà con đốt lửa trại, nhảy múa điệu múa cồng chiêng truyền thống, uống rượu cần và tham gia các trò chơi dân gian, tạo nên không khí văn hóa cộng đồng vô cùng sôi động.
 </p>
 <div class="entry-content"><div class="post-frame"><img alt="Phần hội cồng chiêng đêm hội (ảnh minh họa)" src="/images/tr3.jpg"/><div class="img-ref">Người dân nếm thử rượu cần. Nguồn : Tổng hợp</div></div></div>
-<h4>• Ý nghĩa lịch sử và văn hóa Lễ hội Ốp Yang Vri - Cúng Thần Rừng của người Chơ-Ro</h4>
+<h4 id="y-nghia-lich-su">• Ý nghĩa lịch sử và văn hóa Lễ hội Ốp Yang Vri - Cúng Thần Rừng của người Chơ-Ro</h4>
 <p>
 Lễ cúng Thần rừng là nét đẹp văn hóa đậm đà bản sắc dân tộc của người Châu Ro; qua lễ hội, thế hệ trẻ được truyền dạy nét đẹp văn hóa truyền thống của cha ông, để không bị mai một qua thời gian. Lễ hội cũng giáo dục thế hệ trẻ ý thức tôn trọng, bảo vệ rừng và hệ sinh thái.<br/>Lễ cúng Thần rừng là nét đẹp văn hóa đậm đà bản sắc dân tộc của người Châu Ro, qua lễ hội, thế hệ trẻ được truyền dạy nét đẹp văn hóa truyền thống độc đáo cha ông, để không bị mai một qua thời gian. Bên cạnh đó, lễ hội cũng giáo dục thế hệ trẻ ý thức tôn trọng, bảo vệ rừng và hệ sinh thái. Mỗi khu rừng với người Chơ rơ không chỉ mang lại các giá trị về vật chất, tinh thần của cộng đồng mà còn góp phần bảo vệ môi trường sinh thái chung.
 </p>
-<h4>• Đối tượng tôn vinh</h4>
+<h4 id="doi-tuong-ton-vinh">• Đối tượng tôn vinh</h4>
 <p>
 Yang Vri (Thần Rừng).
 </p>
-<h4>• Không gian và kiến trúc</h4>
+<h4 id="khong-gian-kien-truc">• Không gian và kiến trúc</h4>
 <p>
 Không gian tổ chức ngoài trời, dưới gốc cây cổ thụ, thường chọn bìa rừng hoặc cánh đồng hoang sơ (điển hình là cánh đồng Cà Mum, xã Xuân Sơn).
 </p>
@@ -130,7 +204,7 @@ Không gian tổ chức ngoài trời, dưới gốc cây cổ thụ, thường 
 - Tần suất hiện nay - Thần Rừng: đã mai một nhiều do rừng tự nhiên thu hẹp, có nơi 3 năm mới tổ chức một lần | Thần Lúa: duy trì đều đặn hằng năm, được chính quyền phục dựng mạnh mẽ.
 </p>
 <div class="entry-content"><div class="post-frame"><img alt="Giã bột làm bánh cúng lễ (ảnh minh họa)" src="/images/tr4.jpg"/><div class="img-ref">Giã bột làm bánh cúng lễ. Nguồn : Tổng hợp</div></div></div>
-<h4>• Tư liệu tìm hiểu thêm</h4>
+<h4 id="tu-lieu-tim-hieu-them">• Tư liệu tìm hiểu thêm</h4>
 <h5>• Video</h5>
 <p> - Xem thêm: <a href="https://www.youtube.com/watch?v=4G5e98CKvX8" target="_blank" rel="noopener">https://www.youtube.com/watch?v=4G5e98CKvX8</a></p>
 <h5>• Bài viết</h5>
@@ -460,6 +534,27 @@ Không gian tổ chức ngoài trời, dưới gốc cây cổ thụ, thường 
 </main>
 <div class="widget-area col-xs-12 col-sm-4 pull-right" id="secondary">
 <aside class="custom-sidebar">
+
+<!-- MỤC LỤC BÀI VIẾT (OUTLINE) -->
+<div class="table-of-contents-widget">
+  <h3 class="toc-title">MỤC LỤC BÀI VIẾT</h3>
+  <nav class="toc-nav">
+    <ul>
+      <li><a href="#xep-hang-di-tich">• Xếp hạng di tích</a></li>
+      <li><a href="#dia-chi">• Địa chỉ</a></li>
+      <li><a href="#thoi-gian">• Thời gian</a></li>
+      <li><a href="#muc-dinh">• Mục đích</a></li>
+      <li><a href="#lich-su-hinh-thanh">• Lịch sử hình thành</a></li>
+      <li><a href="#cac-hoat-dong-chinh">• Các hoạt động chính của lễ hội</a></li>
+      <li><a href="#y-nghia-lich-su">• Ý nghĩa lịch sử và văn hóa Lễ hội Ốp Yang Vri - Cúng Thần Rừng của người Chơ-Ro</a></li>
+      <li><a href="#doi-tuong-ton-vinh">• Đối tượng tôn vinh</a></li>
+      <li><a href="#khong-gian-kien-truc">• Không gian và kiến trúc</a></li>
+      <li><a href="#diem-doc-dao-rieng">• Điểm độc đáo riêng</a></li>
+      <li><a href="#tu-lieu-tim-hieu-them">• Tư liệu tìm hiểu thêm</a></li>
+    </ul>
+  </nav>
+</div>
+
 <h3 style="font-weight:bold; color:#8b2626 !important;">TRẢI NGHIỆM AR</h3>
 <div style="margin-bottom:15px;">
   <button id="arButton" style="background: #e53935; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">

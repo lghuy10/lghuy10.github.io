@@ -24,6 +24,80 @@
 <link href="/css/style.css" rel="stylesheet"/>
 <link href="/css/kindergarten.css" rel="stylesheet"/>
 <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+<style>
+  /* Cuộn mượt khi click mục lục */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Bù trừ khoảng cách khi cuộn để không bị thanh Navbar che lấp */
+  h4[id] {
+    scroll-margin-top: 140px;
+  }
+
+  /* Khung Mục lục trong Sidebar */
+  .table-of-contents-widget {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    border: 1px solid #e0d5c8;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .toc-title {
+    font-weight: bold;
+    color: #8b2626 !important;
+    font-size: 1.1rem;
+    margin-top: 0;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #8b2626;
+    text-transform: uppercase;
+  }
+
+  .toc-nav ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+
+  .toc-nav li {
+    margin-bottom: 8px;
+  }
+
+  .toc-nav li:last-child {
+    margin-bottom: 0;
+  }
+
+  .toc-nav a {
+    color: #333;
+    text-decoration: none;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    display: block;
+    padding: 5px 8px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .toc-nav a:hover,
+  .toc-nav a:focus {
+    background-color: #fbeee8;
+    color: #e53935;
+    padding-left: 12px;
+  }
+
+  @media (max-width: 767px) {
+    h4[id] {
+      scroll-margin-top: 90px;
+    }
+  }
+</style>
 </head>
 <body><style> .custom-navbar { width: 100%; background: #fff; box-shadow: 3px 3px 0px var(--color-indigo); border-bottom: 1.5px solid #f3f3f3; position: sticky; top: 0; z-index: 1000; font-family: 'Montserrat', 'Open Sans', sans-serif; transition: box-shadow .18s; } .custom-navbar-inner { justify-content: space-between; max-width: 1200px; margin: 0 auto; display: flex; align-items: center; padding: 0 40px; height: 120px; } .custom-navbar-logo { display: flex; align-items: center; gap: 0; text-decoration: none; background: #fff; border-radius: 12px; padding: 0; transition: box-shadow .18s, border .18s; } .custom-navbar-logo img { height: 96px; width: auto; border-radius: 8px; background: #fff; } .custom-navbar-nav { display: flex; align-items: center; gap: 8px; list-style: none; margin: 0; padding: 0; } .custom-navbar-nav > li { position: relative; } .custom-navbar-link { display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px 8px 18px; color: #2f2f2f; font-weight: 600; border-radius: 8px 8px 0 0; background: none; border: none; font-size: 1rem; position: relative; transition: color .18s, background .18s; } .custom-navbar-link::after { content: ''; display: block; position: absolute; left: 18px; right: 18px; bottom: 2px; height: 2.5px; background: linear-gradient(90deg, #e53935 0%, #ff7043 100%); border-radius: 2px; transform: scaleX(0); transition: transform .22s; } .custom-navbar-link:hover, .custom-navbar-link:focus { color: #e53935; background: #f9f9f9; } .custom-navbar-link:hover::after, .custom-navbar-link:focus::after { transform: scaleX(1); } .custom-navbar-dropdown { display: none; position: absolute; left: 0; top: 110%; min-width: 200px; background: #fff; border-radius: 12px; box-shadow: 3px 3px 0px var(--color-indigo); padding: 8px 0; z-index: 1001; border: 1.5px solid #f3f3f3; animation: fadeIn .18s; } .custom-navbar-nav > li:hover > .custom-navbar-dropdown, .custom-navbar-nav > li:focus-within > .custom-navbar-dropdown { display: block; } .custom-navbar-dropdown a { display: flex; align-items: center; gap: 8px; padding: 11px 28px 11px 22px; color: #e53935; font-weight: 500; text-decoration: none; border-radius: 8px; transition: background .16s, color .16s; font-size: 0.98rem; position: relative; } .custom-navbar-dropdown a:hover { background: #fff3f1; color: transparent; } .custom-navbar-dropdown a::before { content: '2'; color: #ff7043; font-size: 1.2em; margin-right: 8px; opacity: 0.7; } .custom-navbar-toggle { display: none; background: none; border: none; color: #e53935; font-size: 2rem; cursor: pointer; margin-left: 12px; border-radius: 8px; padding: 4px 10px; transition: background .18s; } .custom-navbar-toggle:hover { background: #ffe3de; } /* new: menu toggle specific styles to avoid global button overrides */ .menu-icon-btn { /* reset heavy button rules from global styles */ background: transparent !important; border: none !important; box-shadow: 3px 3px 0px var(--color-indigo); color: #ff5722 !important; /* site orange */ font-size: 1.9rem; line-height: 1; padding: 6px 10px; display: none; /* hide by default (desktop) */ align-items: center; justify-content: center; border-radius: 8px; cursor: pointer; transition: background .18s, transform .12s; -webkit-appearance: none; } .menu-icon-btn:hover, .menu-icon-btn:focus { background: #fff3f1; color: #d32f2f !important; outline: none; } .menu-icon-btn:active { transform: translateY(1px) scale(.995); } /* keep the old custom-navbar-toggle selector for any other behavior but avoid generic button styling */ .custom-navbar-toggle { /* minimal shim so scripts querying this class still work */ background: none; border: none; padding: 0; } @media (max-width: 900px) { .custom-navbar-inner { flex-wrap: wrap; height: auto; padding: 0 10px; } /* show the menu button on mobile */ .menu-icon-btn { display: inline-flex; } .custom-navbar-nav { flex-direction: column; align-items: flex-start; width: 100%; background: #fff; border-radius: 0 0 16px 16px; box-shadow: 3px 3px 0px var(--color-indigo); margin-top: 8px; display: none; position: absolute; left: 0; top: 72px; z-index: 1002; border-top: 1.5px solid #f3f3f3; } .custom-navbar-nav.show { display: flex; } .custom-navbar-nav > li { width: 100%; } .custom-navbar-link { color: #e53935; background: none; width: 100%; text-align: left; border-radius: 0; padding: 16px 22px 14px 22px; } .custom-navbar-link::after { left: 22px; right: 22px; bottom: 4px; } .custom-navbar-link:hover { background: #fff3f1; color: #d32f2f; } .custom-navbar-dropdown { position: static; box-shadow: 3px 3px 0px var(--color-indigo); background: #fff; border-radius: 0; min-width: 100%; padding: 0; border: none; } .custom-navbar-dropdown a { padding: 13px 32px; } .custom-navbar-toggle { display: block; } } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } body { background-color: #ebebe8; }
 </style>
@@ -51,28 +125,28 @@
 <div class="entry-content">
 <div class="post-frame"><img alt="Biểu tượng chiếc ghe đầy các loại trái cây trước cổng chào lễ hội. Nguồn : vtv.vn" src="/images/mtc4.png"/><div class="img-ref">Biểu tượng chiếc ghe đầy các loại trái cây trước cổng chào lễ hội. Nguồn : vtv.vn</div></div>
 <h3 style="text-align: left !important; align-self: flex-start !important; width: 100% !important; margin-left: 0 !important;">Bài viết giới thiệu</h3>
-<h4>• Xếp hạng di tích</h4>
+<h4 id="xep-hang-di-tich">• Xếp hạng di tích</h4>
 <p>
 Nằm trong danh sách Top 100 lễ hội biểu tượng Việt Nam. Là sự kiện di sản du lịch văn hóa - nông nghiệp cấp vùng trọng điểm khu vực Đông Nam Bộ.<br/>Lễ hội Mùa trái chín nằm trong danh sách Top 100 lễ hội biểu tượng Việt Nam. Đây là sự kiện di sản du lịch văn hóa - nông nghiệp cấp vùng trọng điểm khu vực Đông Nam Bộ.
 </p>
-<h4>• Địa chỉ</h4>
+<h4 id="dia-chi">• Địa chỉ</h4>
 <p>
 Khu vực Cầu Ngang và bờ kè sông thuộc phường Thuận An, Thành phố Hồ Chí Minh. Không gian kết nối trực tiếp với chuỗi nhà vườn sinh thái rộng hơn 529 ha ven sông Sài Gòn.<br/>
 </p>
-<h4>• Thời gian</h4>
+<h4 id="thoi-gian">• Thời gian</h4>
 <p>
 Tổ chức vào tháng 6 dương lịch, ngày khai mạc luôn trùng vào ngày Tết Đoan Ngọ (mùng 5 tháng 5 âm lịch). Chuỗi sự kiện diễn ra liên tục từ 7 đến 9 ngày trong mùa nông sản chín rộ.<br/>Lễ hội tổ chức vào tháng 6 dương lịch, ngày khai mạc luôn trùng vào ngày Tết Đoan Ngọ (mùng 5 tháng 5 âm lịch). Chuỗi sự kiện diễn ra liên tục từ 7 đến 9 ngày trong mùa nông sản chín rộ.
 </p>
-<h4>• Mục đích</h4>
+<h4 id="muc-dinh">• Mục đích</h4>
 <p>
 Tôn vinh giá trị lao động, thúc đẩy mô hình nông nghiệp sinh thái tuần hoàn.<br/>Bảo tồn, khôi phục thương hiệu lịch sử "Vườn trái cây cổ Lái Thiêu".<br/>Giáo dục nâng cao nhận thức bảo vệ mảng xanh đô thị.<br/>Tạo không gian sinh hoạt văn hóa dân gian, gắn kết tình cảm gia đình.
 </p>
-<h4>• Lịch sử hình thành</h4>
+<h4 id="lich-su-hinh-thanh">• Lịch sử hình thành</h4>
 <p>
 Sự kiện xuất phát từ phong tục ăn mừng mùa hoa quả chín và lễ tạ ơn Thổ thần của cư dân xưa. Từ năm 2013, lễ hội được nâng tầm quy mô lớn cấp vùng và tiếp tục được duy trì bền vững sau khi sáp nhập vào Thành phố Hồ Chí Minh.
 </p>
 <div class="entry-content"><div class="post-frame"><img alt="Hình ảnh người dân tấp nập trước các sạp hàng trái cây trong lễ hội. Nguồn : vietnamtourism.gov.vn" src="/images/mtc1.jpg"/><div class="img-ref">Người dân tấp nập trước sạp hàng trái cây.Nguồn:vietnamtourism.gov.vn</div></div></div>
-<h4>• Các hoạt động chính của lễ hội</h4>
+<h4 id="cac-hoat-dong-chinh">• Các hoạt động chính của lễ hội</h4>
 <p>
 Phần lễ: vinh danh các nghệ nhân làm vườn xuất sắc, khai mạc hội chợ, giải chạy việt dã "Cung đường mùa trái chín".
 </p>
@@ -80,19 +154,19 @@ Phần lễ: vinh danh các nghệ nhân làm vườn xuất sắc, khai mạc h
 Phần hội: tổ chức hơn 120 gian hàng nông sản giá bình ổn, Liên hoan ẩm thực "Ngọt ngào phương Nam", hội thi ảnh nghệ thuật, và hội diễn Đờn ca tài tử hằng đêm.
 </p>
 <div class="entry-content"><div class="post-frame"><img alt="Không gian sân khấu nổi biểu diễn trên rạch Vàm Búng.Nguồn:vamvo.com" src="/images/mtc2.jpg"/><div class="img-ref">Không gian sân khấu nổi biểu diễn trên rạch Vàm Búng.Nguồn:vamvo.com</div></div></div>
-<h4>• Ý nghĩa lịch sử và văn hóa Lễ hội Mùa Trái Chín Lái Thiêu TP.HCM</h4>
+<h4 id="y-nghia-lich-su">• Ý nghĩa lịch sử và văn hóa Lễ hội Mùa Trái Chín Lái Thiêu TP.HCM</h4>
 <p>
 Sự kiện bảo tồn di sản văn hóa phi vật thể Đờn ca tài tử Nam Bộ. Lễ hội giúp học sinh hiểu sâu về lịch sử khẩn hoang, mở cõi và bồi đắp lòng biết ơn công lao canh tác của cha ông.
 </p>
-<h4>• Đối tượng tôn vinh</h4>
+<h4 id="doi-tuong-ton-vinh">• Đối tượng tôn vinh</h4>
 <p>
 Đối tượng tôn vinh cốt lõi là Người nông dân và nông sản bản địa. Trong đó, quả Măng cụt Lái Thiêu - thức quả đạt kỷ lục đặc sản Việt Nam với đặc trưng vỏ mỏng, vị ngọt thanh bùi - là biểu tượng trung tâm.<br/>Đối tượng tôn vinh cốt lõi là Người nông dân và nông sản bản địa. Trong đó, quả Măng cụt Lái Thiêu – thức quả đạt kỷ lục đặc sản Việt Nam với đặc trưng vỏ mỏng, vị ngọt thanh bùi – là biểu tượng trung tâm.
 </p>
-<h4>• Không gian và kiến trúc</h4>
+<h4 id="khong-gian-kien-truc">• Không gian và kiến trúc</h4>
 <p>
 Kiến trúc lễ hội mang đặc trưng sông nước Nam Bộ. Các sân khấu nổi được thiết kế mộc mạc đặt cạnh rạch Vàm Búng, ứng dụng kỹ thuật số ánh sáng mặt nước nhằm tái hiện cảnh giao thương xưa và phản ánh xu hướng đô thị xanh.
 </p>
-<h4>• Điểm độc đáo riêng</h4>
+<h4 id="diem-doc-dao-rieng">• Điểm độc đáo riêng</h4>
 <p>
 - Văn hóa ẩm thực đặc trưng: nổi tiếng với món Gỏi gà măng cụt (kết hợp măng cụt xanh vừa chín tới, giòn bùi với thịt gà thả vườn xé phay), ngoài ra còn có đặc sản gà nướng sầu riêng độc lạ.
 </p>
@@ -118,7 +192,7 @@ Kiến trúc lễ hội mang đặc trưng sông nước Nam Bộ. Các sân kh�
 - Sân khấu nổi trên rạch Vàm Búng: Vở diễn hoạt cảnh được chia làm 5 chương nghệ thuật dàn dựng công phu gồm "Đất lành hội tụ", "Hương sắc Lái Thiêu", "Một khúc tình quê", "Măng cụt - Giáng châu tứ", "Lái Thiêu mùa hẹn".
 </p>
 <div class="entry-content"><div class="post-frame"><img alt="Hình ảnh món đặc sản Gỏi gà măng cụt Lái Thiêu. Nguồn : laodong.vn" src="/images/mtc3.jpg"/><div class="img-ref">Món gỏi gà măng cụt Lái Thiêu. Nguồn: laodong.vn</div></div></div>
-<h4>• Tư liệu tìm hiểu thêm</h4>
+<h4 id="tu-lieu-tim-hieu-them">• Tư liệu tìm hiểu thêm</h4>
 <h5>• Video</h5>
 <p> - Xem thêm: <a href="https://www.youtube.com/watch?v=iDVfQYUOK0I" target="_blank" rel="noopener">https://www.youtube.com/watch?v=iDVfQYUOK0I</a></p>
 <p> - Xem thêm: <a href="https://www.youtube.com/watch?v=wI9XdXKlBhQ" target="_blank" rel="noopener">https://www.youtube.com/watch?v=wI9XdXKlBhQ</a></p>
@@ -449,6 +523,27 @@ Kiến trúc lễ hội mang đặc trưng sông nước Nam Bộ. Các sân kh�
 </main>
 <div class="widget-area col-xs-12 col-sm-4 pull-right" id="secondary">
 <aside class="custom-sidebar">
+
+<!-- MỤC LỤC BÀI VIẾT (OUTLINE) -->
+<div class="table-of-contents-widget">
+  <h3 class="toc-title">MỤC LỤC BÀI VIẾT</h3>
+  <nav class="toc-nav">
+    <ul>
+      <li><a href="#xep-hang-di-tich">• Xếp hạng di tích</a></li>
+      <li><a href="#dia-chi">• Địa chỉ</a></li>
+      <li><a href="#thoi-gian">• Thời gian</a></li>
+      <li><a href="#muc-dinh">• Mục đích</a></li>
+      <li><a href="#lich-su-hinh-thanh">• Lịch sử hình thành</a></li>
+      <li><a href="#cac-hoat-dong-chinh">• Các hoạt động chính của lễ hội</a></li>
+      <li><a href="#y-nghia-lich-su">• Ý nghĩa lịch sử và văn hóa Lễ hội Mùa Trái Chín Lái Thiêu TP.HCM</a></li>
+      <li><a href="#doi-tuong-ton-vinh">• Đối tượng tôn vinh</a></li>
+      <li><a href="#khong-gian-kien-truc">• Không gian và kiến trúc</a></li>
+      <li><a href="#diem-doc-dao-rieng">• Điểm độc đáo riêng</a></li>
+      <li><a href="#tu-lieu-tim-hieu-them">• Tư liệu tìm hiểu thêm</a></li>
+    </ul>
+  </nav>
+</div>
+
 <h3 style="font-weight:bold; color:#8b2626 !important;">TRẢI NGHIỆM AR</h3>
 <div style="margin-bottom:15px;">
   <button id="arButton" style="background: #e53935; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">

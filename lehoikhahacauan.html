@@ -24,6 +24,80 @@
 <link href="/css/style.css" rel="stylesheet"/>
 <link href="/css/kindergarten.css" rel="stylesheet"/>
 <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+<style>
+  /* Cuộn mượt khi click mục lục */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Bù trừ khoảng cách khi cuộn để không bị thanh Navbar che lấp */
+  h4[id] {
+    scroll-margin-top: 140px;
+  }
+
+  /* Khung Mục lục trong Sidebar */
+  .table-of-contents-widget {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    border: 1px solid #e0d5c8;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .toc-title {
+    font-weight: bold;
+    color: #8b2626 !important;
+    font-size: 1.1rem;
+    margin-top: 0;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #8b2626;
+    text-transform: uppercase;
+  }
+
+  .toc-nav ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+
+  .toc-nav li {
+    margin-bottom: 8px;
+  }
+
+  .toc-nav li:last-child {
+    margin-bottom: 0;
+  }
+
+  .toc-nav a {
+    color: #333;
+    text-decoration: none;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    display: block;
+    padding: 5px 8px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .toc-nav a:hover,
+  .toc-nav a:focus {
+    background-color: #fbeee8;
+    color: #e53935;
+    padding-left: 12px;
+  }
+
+  @media (max-width: 767px) {
+    h4[id] {
+      scroll-margin-top: 90px;
+    }
+  }
+</style>
 </head>
 <body><style> .custom-navbar { width: 100%; background: #fff; box-shadow: 3px 3px 0px var(--color-indigo); border-bottom: 1.5px solid #f3f3f3; position: sticky; top: 0; z-index: 1000; font-family: 'Montserrat', 'Open Sans', sans-serif; transition: box-shadow .18s; } .custom-navbar-inner { justify-content: space-between; max-width: 1200px; margin: 0 auto; display: flex; align-items: center; padding: 0 40px; height: 120px; } .custom-navbar-logo { display: flex; align-items: center; gap: 0; text-decoration: none; background: #fff; border-radius: 12px; padding: 0; transition: box-shadow .18s, border .18s; } .custom-navbar-logo img { height: 96px; width: auto; border-radius: 8px; background: #fff; } .custom-navbar-nav { display: flex; align-items: center; gap: 8px; list-style: none; margin: 0; padding: 0; } .custom-navbar-nav > li { position: relative; } .custom-navbar-link { display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px 8px 18px; color: #2f2f2f; font-weight: 600; border-radius: 8px 8px 0 0; background: none; border: none; font-size: 1rem; position: relative; transition: color .18s, background .18s; } .custom-navbar-link::after { content: ''; display: block; position: absolute; left: 18px; right: 18px; bottom: 2px; height: 2.5px; background: linear-gradient(90deg, #e53935 0%, #ff7043 100%); border-radius: 2px; transform: scaleX(0); transition: transform .22s; } .custom-navbar-link:hover, .custom-navbar-link:focus { color: #e53935; background: #f9f9f9; } .custom-navbar-link:hover::after, .custom-navbar-link:focus::after { transform: scaleX(1); } .custom-navbar-dropdown { display: none; position: absolute; left: 0; top: 110%; min-width: 200px; background: #fff; border-radius: 12px; box-shadow: 3px 3px 0px var(--color-indigo); padding: 8px 0; z-index: 1001; border: 1.5px solid #f3f3f3; animation: fadeIn .18s; } .custom-navbar-nav > li:hover > .custom-navbar-dropdown, .custom-navbar-nav > li:focus-within > .custom-navbar-dropdown { display: block; } .custom-navbar-dropdown a { display: flex; align-items: center; gap: 8px; padding: 11px 28px 11px 22px; color: #e53935; font-weight: 500; text-decoration: none; border-radius: 8px; transition: background .16s, color .16s; font-size: 0.98rem; position: relative; } .custom-navbar-dropdown a:hover { background: #fff3f1; color: transparent; } .custom-navbar-dropdown a::before { content: '2'; color: #ff7043; font-size: 1.2em; margin-right: 8px; opacity: 0.7; } .custom-navbar-toggle { display: none; background: none; border: none; color: #e53935; font-size: 2rem; cursor: pointer; margin-left: 12px; border-radius: 8px; padding: 4px 10px; transition: background .18s; } .custom-navbar-toggle:hover { background: #ffe3de; } /* new: menu toggle specific styles to avoid global button overrides */ .menu-icon-btn { /* reset heavy button rules from global styles */ background: transparent !important; border: none !important; box-shadow: 3px 3px 0px var(--color-indigo); color: #ff5722 !important; /* site orange */ font-size: 1.9rem; line-height: 1; padding: 6px 10px; display: none; /* hide by default (desktop) */ align-items: center; justify-content: center; border-radius: 8px; cursor: pointer; transition: background .18s, transform .12s; -webkit-appearance: none; } .menu-icon-btn:hover, .menu-icon-btn:focus { background: #fff3f1; color: #d32f2f !important; outline: none; } .menu-icon-btn:active { transform: translateY(1px) scale(.995); } /* keep the old custom-navbar-toggle selector for any other behavior but avoid generic button styling */ .custom-navbar-toggle { /* minimal shim so scripts querying this class still work */ background: none; border: none; padding: 0; } @media (max-width: 900px) { .custom-navbar-inner { flex-wrap: wrap; height: auto; padding: 0 10px; } /* show the menu button on mobile */ .menu-icon-btn { display: inline-flex; } .custom-navbar-nav { flex-direction: column; align-items: flex-start; width: 100%; background: #fff; border-radius: 0 0 16px 16px; box-shadow: 3px 3px 0px var(--color-indigo); margin-top: 8px; display: none; position: absolute; left: 0; top: 72px; z-index: 1002; border-top: 1.5px solid #f3f3f3; } .custom-navbar-nav.show { display: flex; } .custom-navbar-nav > li { width: 100%; } .custom-navbar-link { color: #e53935; background: none; width: 100%; text-align: left; border-radius: 0; padding: 16px 22px 14px 22px; } .custom-navbar-link::after { left: 22px; right: 22px; bottom: 4px; } .custom-navbar-link:hover { background: #fff3f1; color: #d32f2f; } .custom-navbar-dropdown { position: static; box-shadow: 3px 3px 0px var(--color-indigo); background: #fff; border-radius: 0; min-width: 100%; padding: 0; border: none; } .custom-navbar-dropdown a { padding: 13px 32px; } .custom-navbar-toggle { display: block; } } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } body { background-color: #eae6dc; }
 </style>
@@ -51,28 +125,28 @@
 <div class="entry-content">
 <div class="post-frame"><img alt="Toàn cảnh lễ hội Khai hạ - Cầu an. Nguồn : Tổng hợp" src="/images/khca1.jpg"/><div class="img-ref">Toàn cảnh lễ hội Khai hạ - Cầu an. Nguồn : Tổng hợp</div></div>
 <h3 style="text-align: left !important; align-self: flex-start !important; width: 100% !important; margin-left: 0 !important;">Bài viết giới thiệu</h3>
-<h4>• Xếp hạng di tích</h4>
+<h4 id="xep-hang-di-tich">• Xếp hạng di tích</h4>
 <p>
 Năm 2022, được công nhận là di sản văn hóa phi vật thể quốc gia.
 </p>
-<h4>• Địa chỉ</h4>
+<h4 id="dia-chi">• Địa chỉ</h4>
 <p>
 Lăng Đức Thượng Công Tả Quân Lê Văn Duyệt, số 1 đường Vũ Tùng, phường Gia Định, Thành phố Hồ Chí Minh.<br/>
 </p>
-<h4>• Thời gian</h4>
+<h4 id="thoi-gian">• Thời gian</h4>
 <p>
 Mùng 7 Tết Âm lịch hàng năm.
 </p>
-<h4>• Mục đích</h4>
+<h4 id="muc-dinh">• Mục đích</h4>
 <p>
 Cầu mong mưa thuận gió hòa, quốc thái dân an, và thể hiện lòng biết ơn, tôn kính đối với Tả quân Lê Văn Duyệt - người có công lớn trong việc khai phá, xây dựng và phát triển vùng đất Sài Gòn - Gia Định.<br/>cầu mong mưa thuận gió hòa, quốc thái dân an, và thể hiện lòng biết ơn, tôn kính đối với Tả quân Lê Văn Duyệt, người có công lớn trong việc khai phá, xây dựng và phát triển vùng đất Sài Gòn - Gia Định.
 </p>
-<h4>• Lịch sử hình thành</h4>
+<h4 id="lich-su-hinh-thanh">• Lịch sử hình thành</h4>
 <p>
 Lễ hội xuất phát từ lúc Đức Tả quân Lê Văn Duyệt còn làm Tổng trấn cai quản thành Gia Định. Ông chọn ngày mùng 7 Tết làm ngày Khai hạ - nghi thức kết thúc các hoạt động vui chơi trong Tết Nguyên đán, người dân quay lại cuộc sống thường nhật.<br/>Lễ hội Khai hạ - Cầu an xuất phát từ lúc Đức Tả quân Lê Văn Duyệt còn làm Tổng trấn cai quản thành Gia Định. Ông chọn ngày mùng 7 Tết làm ngày Khai hạ, một nghi thức kết thúc các hoạt động vui chơi trong Tết Nguyên đán, người dân quay lại cuộc sống thường nhật.
 </p>
 <div class="entry-content"><div class="post-frame"><img alt="Nghi thức Khai hạ - Hạ nêu. Nguồn : Tổng hợp" src="/images/khca2.jpg"/><div class="img-ref">Nghi thức Khai hạ - Hạ nêu. Nguồn : Tổng hợp</div></div></div>
-<h4>• Các hoạt động chính của lễ hội</h4>
+<h4 id="cac-hoat-dong-chinh">• Các hoạt động chính của lễ hội</h4>
 <p>
 Phần lễ : Lễ được chia thành nhiều phần trang trọng gồm hạ nêu, khai hạ, khai bút và khai ấn.
 </p>
@@ -83,15 +157,15 @@ Phần hội: nhiều hoạt động nghệ thuật truyền thống: múa lân,
 Điểm mới của lễ hội những năm gần đây là phát động Tết trồng cây. vừa kế thừa tục lệ động thổ, tịch điền sau Tết, vừa lan tỏa thông điệp bảo vệ môi trường trong không gian đô thị.
 </p>
 <div class="entry-content"><div class="post-frame"><img alt="Ban Quý tế thực hiện nghi thức rước lễ vào đền thờ. Nguồn : vov.vn" src="/images/khca3.jpg"/><div class="img-ref">Ban Quý tế thực hiện nghi thức rước lễ vào đền thờ. Nguồn : vov.vn</div></div></div>
-<h4>• Ý nghĩa lịch sử và văn hóa Lễ hội Khai hạ - Cầu an tại Lăng Tả quân Lê Văn Duyệt</h4>
+<h4 id="y-nghia-lich-su">• Ý nghĩa lịch sử và văn hóa Lễ hội Khai hạ - Cầu an tại Lăng Tả quân Lê Văn Duyệt</h4>
 <p>
 Không chỉ là sự kiện văn hóa, tín ngưỡng đặc thù riêng của vùng đất Gia Định - Sài Gòn xưa, mà còn là dịp để người dân thể hiện lòng biết ơn, tưởng nhớ công lao của Tả quân Lê Văn Duyệt trong công cuộc khai hoang, mở đất phương Nam, thu hút rất đông người dân địa phương và khách thập phương đến chiêm bái. Lăng Đức thượng công (Lăng Ông Bà Chiểu) xây dựng năm 1848 dưới thời vua Thiệu Trị, là "trái tim của ký ức tập thể" vùng đất Gia Định - Sài Gòn, nơi hội tụ các giá trị tâm linh, kiến trúc và văn hóa truyền thống của người dân Nam Bộ qua gần hai thế kỷ.<br/>Lễ hội Khai hạ - Cầu an tại Lăng Ông Bà Chiểu không chỉ là một sự kiện văn hóa, tín ngưỡng đặc thù riêng của vùng đất Gia Định - Sài Gòn xưa, mà còn là dịp để người dân thể hiện lòng biết ơn, tưởng nhớ đến công lao của Tả quân Lê Văn Duyệt - vị Tổng trấn Gia Định có nhiều đóng góp trong công cuộc khai hoang, mở đất phương Nam -  thu hút rất đông lượng người dân địa phương và khách thập phương đến chiêm bái.<br/>Lăng Đức thượng công còn gọi là Lăng Ông Bà Chiểu được xây dựng vào năm 1848 dưới thời vua Thiệu Trị để tưởng nhớ Tả Quân Lê Văn Duyệt. Lăng không chỉ đơn thuần là một di tích lịch sử hay một ngôi đền thờ tự; đó là trái tim của ký ức tập thể vùng đất Gia Định - Sài Gòn, nơi hội tụ các giá trị tâm linh, kiến trúc và văn hóa truyền thống của người dân Nam Bộ qua gần hai thế kỷ. Trải qua bao thăng trần của thời gian, lăng vẫn  đứng vững tại Thành phố Hồ Chí Minh như một biểu tượng của lòng chính trực và khát vọng thái bình.
 </p>
-<h4>• Đối tượng tôn vinh</h4>
+<h4 id="doi-tuong-ton-vinh">• Đối tượng tôn vinh</h4>
 <p>
 Đức Tả quân Lê Văn Duyệt (1764-1832) - nhân vật lịch sử lỗi lạc, sinh ra trong một gia đình nông dân tại làng Hòa Khánh (nay thuộc Cái Bè, Tiền Giang). Dưới triều vua Gia Long và Minh Mạng, ông hai lần giữ chức Tổng trấn Gia Định Thành, cai quản toàn bộ 5 trấn phương Nam; thực hiện chính sách khuyến nông, mở mang giao thương, giữ gìn an ninh biên giới. Người dân Nam Bộ tôn vinh ông là vị tướng "tận trung báo quốc, tận hiếu với dân".<br/>Đức Tả quân Lê Văn Duyệt (1764–1832) là một nhân vật lịch sử lỗi lạc, người đã đóng vai trò then chốt trong công cuộc định hình cương vực và phát triển kinh tế vùng đất phía Nam. Sinh ra trong một gia đình nông dân tại làng Hòa Khánh (nay thuộc Cái Bè, Tiền Giang).<br/>Dưới triều vua Gia Long và Minh Mạng, ông hai lần giữ chức Tổng trấn Gia Định Thành, cai quản toàn bộ 5 trấn phương Nam. Với tư duy quản trị tiến bộ, ông đã thực hiện chính sách khuyến nông, mở mang giao thương và giữ gìn an ninh biên giới, giúp vùng đất Gia Định trở thành một trung tâm kinh tế sầm uất và thịnh vượng. Do đó, người dân Nam Bộ luôn đời đời ghi nhớ công đức của vị tướng "tận trung báo quốc, tận hiếu với dân" này.
 </p>
-<h4>• Điểm độc đáo riêng</h4>
+<h4 id="diem-doc-dao-rieng">• Điểm độc đáo riêng</h4>
 <p>
 - Nơi đây nổi tiếng linh thiêng về cầu công danh, sự nghiệp - bắt nguồn từ uy tín và quyền năng "tiền trảm hậu tấu" của Tả quân khi còn tại thế; người dân tin rằng tinh thần quả cảm, trí tuệ mẫn tiệp của ông vẫn phù trợ cho người có chí cầu tiến, mong thăng tiến quan lộ hoặc thành công thương trường. Nhiều loại hình sân khấu (hát bội, cải lương) hiện vẫn dàn dựng các vở diễn nghiêm túc về ông như "Lê Công kỳ án", "Người mang 9 án tử", "Trung thần".
 </p>
@@ -102,7 +176,7 @@ Không chỉ là sự kiện văn hóa, tín ngưỡng đặc thù riêng của 
 - Người dân tin rằng, tinh thần quả cảm và trí tuệ mẫn tiệp của ông vẫn luôn hiện hữu để phù trợ cho những ai có chí cầu tiến, mong muốn thăng tiến trong quan lộ hoặc thành công trong thương trường
 </p>
 <div class="entry-content"><div class="post-frame"><img alt="Người dân nô nức dâng hương đến Đức Tả quân. Nguồn : Tổng hợp" src="/images/khca4.jpg"/><div class="img-ref">Người dân nô nức dâng hương đến Đức Tả quân. Nguồn : Tổng hợp</div></div></div>
-<h4>• Tư liệu tìm hiểu thêm</h4>
+<h4 id="tu-lieu-tim-hieu-them">• Tư liệu tìm hiểu thêm</h4>
 <h5>• Video</h5>
 <p> - Xem thêm: <a href="https://youtu.be/OUHv15NMl8w" target="_blank" rel="noopener">https://youtu.be/OUHv15NMl8w</a></p>
 <p> - Xem thêm: <a href="https://youtu.be/POhVLT9kMrQ?si=CFshgTY6MuYtgO2d" target="_blank" rel="noopener">https://youtu.be/POhVLT9kMrQ?si=CFshgTY6MuYtgO2d</a></p>
@@ -438,6 +512,26 @@ Không chỉ là sự kiện văn hóa, tín ngưỡng đặc thù riêng của 
 </main>
 <div class="widget-area col-xs-12 col-sm-4 pull-right" id="secondary">
 <aside class="custom-sidebar">
+
+<!-- MỤC LỤC BÀI VIẾT (OUTLINE) -->
+<div class="table-of-contents-widget">
+  <h3 class="toc-title">MỤC LỤC BÀI VIẾT</h3>
+  <nav class="toc-nav">
+    <ul>
+      <li><a href="#xep-hang-di-tich">• Xếp hạng di tích</a></li>
+      <li><a href="#dia-chi">• Địa chỉ</a></li>
+      <li><a href="#thoi-gian">• Thời gian</a></li>
+      <li><a href="#muc-dinh">• Mục đích</a></li>
+      <li><a href="#lich-su-hinh-thanh">• Lịch sử hình thành</a></li>
+      <li><a href="#cac-hoat-dong-chinh">• Các hoạt động chính của lễ hội</a></li>
+      <li><a href="#y-nghia-lich-su">• Ý nghĩa lịch sử và văn hóa Lễ hội Khai hạ - Cầu an tại Lăng Tả quân Lê Văn Duyệt</a></li>
+      <li><a href="#doi-tuong-ton-vinh">• Đối tượng tôn vinh</a></li>
+      <li><a href="#diem-doc-dao-rieng">• Điểm độc đáo riêng</a></li>
+      <li><a href="#tu-lieu-tim-hieu-them">• Tư liệu tìm hiểu thêm</a></li>
+    </ul>
+  </nav>
+</div>
+
 <h3 style="font-weight:bold; color:#8b2626 !important;">TRẢI NGHIỆM AR</h3>
 <div style="margin-bottom:15px;">
   <button id="arButton" style="background: #e53935; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">

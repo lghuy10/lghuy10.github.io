@@ -24,8 +24,83 @@
 <link href="/css/style.css" rel="stylesheet"/>
 <link href="/css/kindergarten.css" rel="stylesheet"/>
 <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+<style>
+  /* Cuộn mượt khi click mục lục */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Bù trừ khoảng cách khi cuộn để không bị thanh Navbar che lấp */
+  h4[id] {
+    scroll-margin-top: 140px;
+  }
+
+  /* Khung Mục lục trong Sidebar */
+  .table-of-contents-widget {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    border: 1px solid #e0d5c8;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .toc-title {
+    font-weight: bold;
+    color: #8b2626 !important;
+    font-size: 1.1rem;
+    margin-top: 0;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #8b2626;
+    text-transform: uppercase;
+  }
+
+  .toc-nav ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+
+  .toc-nav li {
+    margin-bottom: 8px;
+  }
+
+  .toc-nav li:last-child {
+    margin-bottom: 0;
+  }
+
+  .toc-nav a {
+    color: #333;
+    text-decoration: none;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    display: block;
+    padding: 5px 8px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .toc-nav a:hover,
+  .toc-nav a:focus {
+    background-color: #fbeee8;
+    color: #e53935;
+    padding-left: 12px;
+  }
+
+  @media (max-width: 767px) {
+    h4[id] {
+      scroll-margin-top: 90px;
+    }
+  }
+</style>
 </head>
-<body><style> .custom-navbar { width: 100%; background: #fff; box-shadow: 3px 3px 0px var(--color-indigo); border-bottom: 1.5px solid #f3f3f3; position: sticky; top: 0; z-index: 1000; font-family: 'Montserrat', 'Open Sans', sans-serif; transition: box-shadow .18s; } .custom-navbar-inner { justify-content: space-between; max-width: 1200px; margin: 0 auto; display: flex; align-items: center; padding: 0 40px; height: 120px; } .custom-navbar-logo { display: flex; align-items: center; gap: 0; text-decoration: none; background: #fff; border-radius: 12px; padding: 0; transition: box-shadow .18s, border .18s; } .custom-navbar-logo img { height: 96px; width: auto; border-radius: 8px; background: #fff; } .custom-navbar-nav { display: flex; align-items: center; gap: 8px; list-style: none; margin: 0; padding: 0; } .custom-navbar-nav > li { position: relative; } .custom-navbar-link { display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px 8px 18px; color: #2f2f2f; font-weight: 600; border-radius: 8px 8px 0 0; background: none; border: none; font-size: 1rem; position: relative; transition: color .18s, background .18s; } .custom-navbar-link::after { content: ''; display: block; position: absolute; left: 18px; right: 18px; bottom: 2px; height: 2.5px; background: linear-gradient(90deg, #e53935 0%, #ff7043 100%); border-radius: 2px; transform: scaleX(0); transition: transform .22s; } .custom-navbar-link:hover, .custom-navbar-link:focus { color: #e53935; background: #f9f9f9; } .custom-navbar-link:hover::after, .custom-navbar-link:focus::after { transform: scaleX(1); } .custom-navbar-dropdown { display: none; position: absolute; left: 0; top: 110%; min-width: 200px; background: #fff; border-radius: 12px; box-shadow: 3px 3px 0px var(--color-indigo); padding: 8px 0; z-index: 1001; border: 1.5px solid #f3f3f3; animation: fadeIn .18s; } .custom-navbar-nav > li:hover > .custom-navbar-dropdown, .custom-navbar-nav > li:focus-within > .custom-navbar-dropdown { display: block; } .custom-navbar-dropdown a { display: flex; align-items: center; gap: 8px; padding: 11px 28px 11px 22px; color: #e53935; font-weight: 500; text-decoration: none; border-radius: 8px; transition: background .16s, color .16s; font-size: 0.98rem; position: relative; } .custom-navbar-dropdown a:hover { background: #fff3f1; color: transparent; } .custom-navbar-dropdown a::before { content: '2'; color: #ff7043; font-size: 1.2em; margin-right: 8px; opacity: 0.7; } .custom-navbar-toggle { display: none; background: none; border: none; color: #e53935; font-size: 2rem; cursor: pointer; margin-left: 12px; border-radius: 8px; padding: 4px 10px; transition: background .18s; } .custom-navbar-toggle:hover { background: #ffe3de; } /* new: menu toggle specific styles to avoid global button overrides */ .menu-icon-btn { /* reset heavy button rules from global styles */ background: transparent !important; border: none !important; box-shadow: 3px 3px 0px var(--color-indigo); color: #ff5722 !important; /* site orange */ font-size: 1.9rem; line-height: 1; padding: 6px 10px; display: none; /* hide by default (desktop) */ align-items: center; justify-content: center; border-radius: 8px; cursor: pointer; transition: background .18s, transform .12s; -webkit-appearance: none; } .menu-icon-btn:hover, .menu-icon-btn:focus { background: #fff3f1; color: #d32f2f !important; outline: none; } .menu-icon-btn:active { transform: translateY(1px) scale(.995); } /* keep the old custom-navbar-toggle selector for any other behavior but avoid generic button styling */ .custom-navbar-toggle { /* minimal shim so scripts querying this class still work */ background: none; border: none; padding: 0; } @media (max-width: 900px) { .custom-navbar-inner { flex-wrap: wrap; height: auto; padding: 0 10px; } /* show the menu button on mobile */ .menu-icon-btn { display: inline-flex; } .custom-navbar-nav { flex-direction: column; align-items: flex-start; width: 100%; background: #fff; border-radius: 0 0 16px 16px; box-shadow: 3px 3px 0px var(--color-indigo); margin-top: 8px; display: none; position: absolute; left: 0; top: 72px; z-index: 1002; border-top: 1.5px solid #f3f3f3; } .custom-navbar-nav.show { display: flex; } .custom-navbar-nav > li { width: 100%; } .custom-navbar-link { color: #e53935; background: none; width: 100%; text-align: left; border-radius: 0; padding: 16px 22px 14px 22px; } .custom-navbar-link::after { left: 22px; right: 22px; bottom: 4px; } .custom-navbar-link:hover { background: #fff3f1; color: #d32f2f; } .custom-navbar-dropdown { position: static; box-shadow: 3px 3px 0px var(--color-indigo); background: #fff; border-radius: 0; min-width: 100%; padding: 0; border: none; } .custom-navbar-dropdown a { padding: 13px 32px; } .custom-navbar-toggle { display: block; } } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } body { background-color: #e9d8b8; }
+<body><style> .custom-navbar { width: 100%; background: #fff; box-shadow: 3px 3px 0px var(--color-indigo); border-bottom: 1.5px solid #f3f3f3; position: sticky; top: 0; z-index: 1000; font-family: 'Montserrat', 'Open Sans', sans-serif; transition: box-shadow .18s; } .custom-navbar-inner { justify-content: space-between; max-width: 1200px; margin: 0 auto; display: flex; align-items: center; padding: 0 40px; height: 120px; } .custom-navbar-logo { display: flex; align-items: center; gap: 0; text-decoration: none; background: #fff; border-radius: 12px; padding: 0; transition: box-shadow .18s, border .18s; } .custom-navbar-logo img { height: 96px; width: auto; border-radius: 8px; background: #fff; } .custom-navbar-nav { display: flex; align-items: center; gap: 8px; list-style: none; margin: 0; padding: 0; } .custom-navbar-nav > li { position: relative; } .custom-navbar-link { display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px 8px 18px; color: #2f2f2f; font-weight: 600; border-radius: 8px 8px 0 0; background: none; border: none; font-size: 1rem; position: relative; transition: color .18s, background .18s; } .custom-navbar-link::after { content: ''; display: block; position: absolute; left: 18px; right: 18px; bottom: 2px; height: 2.5px; background: linear-gradient(90deg, #e53935 0%, #ff7043 100%); border-radius: 2px; transform: scaleX(0); transition: transform .22s; } .custom-navbar-link:hover, .custom-navbar-link:focus { color: #e53935; background: #f9f9f9; } .custom-navbar-link:hover::after, .custom-navbar-link:focus::after { transform: scaleX(1); } .custom-navbar-dropdown { display: none; position: absolute; left: 0; top: 110%; min-width: 200px; background: #fff; border-radius: 12px; box-shadow: 3px 3px 0px var(--color-indigo); padding: 8px 0; z-index: 1001; border: 1.5px solid #f3f3f3; animation: fadeIn .18s; } .custom-navbar-nav > li:hover > .custom-navbar-dropdown, .custom-navbar-nav > li:focus-within > .custom-navbar-dropdown { display: block; } .custom-navbar-dropdown a { display: flex; align-items: center; gap: 8px; padding: 11px 28px 11px 22px; color: #e53935; font-weight: 500; text-decoration: none; border-radius: 8px; transition: background .16s, color .16s; font-size: 0.98rem; position: relative; } .custom-navbar-dropdown a:hover { background: #fff3f1; color: transparent; } .custom-navbar-dropdown a::before { content: '‚2'; color: #ff7043; font-size: 1.2em; margin-right: 8px; opacity: 0.7; } .custom-navbar-toggle { display: none; background: none; border: none; color: #e53935; font-size: 2rem; cursor: pointer; margin-left: 12px; border-radius: 8px; padding: 4px 10px; transition: background .18s; } .custom-navbar-toggle:hover { background: #ffe3de; } /* new: menu toggle specific styles to avoid global button overrides */ .menu-icon-btn { /* reset heavy button rules from global styles */ background: transparent !important; border: none !important; box-shadow: 3px 3px 0px var(--color-indigo); color: #ff5722 !important; /* site orange */ font-size: 1.9rem; line-height: 1; padding: 6px 10px; display: none; /* hide by default (desktop) */ align-items: center; justify-content: center; border-radius: 8px; cursor: pointer; transition: background .18s, transform .12s; -webkit-appearance: none; } .menu-icon-btn:hover, .menu-icon-btn:focus { background: #fff3f1; color: #d32f2f !important; outline: none; } .menu-icon-btn:active { transform: translateY(1px) scale(.995); } /* keep the old custom-navbar-toggle selector for any other behavior but avoid generic button styling */ .custom-navbar-toggle { /* minimal shim so scripts querying this class still work */ background: none; border: none; padding: 0; } @media (max-width: 900px) { .custom-navbar-inner { flex-wrap: wrap; height: auto; padding: 0 10px; } /* show the menu button on mobile */ .menu-icon-btn { display: inline-flex; } .custom-navbar-nav { flex-direction: column; align-items: flex-start; width: 100%; background: #fff; border-radius: 0 0 16px 16px; box-shadow: 3px 3px 0px var(--color-indigo); margin-top: 8px; display: none; position: absolute; left: 0; top: 72px; z-index: 1002; border-top: 1.5px solid #f3f3f3; } .custom-navbar-nav.show { display: flex; } .custom-navbar-nav > li { width: 100%; } .custom-navbar-link { color: #e53935; background: none; width: 100%; text-align: left; border-radius: 0; padding: 16px 22px 14px 22px; } .custom-navbar-link::after { left: 22px; right: 22px; bottom: 4px; } .custom-navbar-link:hover { background: #fff3f1; color: #d32f2f; } .custom-navbar-dropdown { position: static; box-shadow: 3px 3px 0px var(--color-indigo); background: #fff; border-radius: 0; min-width: 100%; padding: 0; border: none; } .custom-navbar-dropdown a { padding: 13px 32px; } .custom-navbar-toggle { display: block; } } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } body { background-color: #e9d8b8; }
 </style>
 <style>
   body { background-color: #eee7db; }
@@ -51,28 +126,28 @@
 <div class="entry-content">
 <div class="post-frame"><img alt="Chùa Bà Thiên Hậu ngày khai hội. Nguồn : Tổng hợp" src="/images/cbth1.png"/><div class="img-ref">Chùa Bà Thiên Hậu ngày khai hội. Nguồn : Tổng hợp</div></div>
 <h3 style="text-align: left !important; align-self: flex-start !important; width: 100% !important; margin-left: 0 !important;">Bài viết giới thiệu</h3>
-<h4>• Xếp hạng di tích</h4>
+<h4 id="xep-hang-di-tich">• Xếp hạng di tích</h4>
 <p>
 Lễ hội dân gian lớn nhất vùng Đông Nam Bộ, được xếp hạng di sản du lịch tâm linh cấp vùng trọng điểm. Chùa được công nhận Di tích Lịch sử - Văn hóa cấp Quốc gia năm 1993.<br/>Lễ hội Chùa Bà Thiên Hậu là Lễ hội dân gian lớn nhất vùng Đông Nam Bộ. Sự kiện được xếp hạng di sản du lịch tâm linh cấp vùng trọng điểm.
 </p>
-<h4>• Địa chỉ</h4>
+<h4 id="dia-chi">• Địa chỉ</h4>
 <p>
 Chùa Bà Thiên Hậu: Cơ sở 1 (Chùa Bà truyền thống) số 4 đường Nguyễn Du và Cơ sở 2 Lô K6A, đường Lê Hoàn, phường Bình Dương, Thành phố Hồ Chí Minh.<br/>
 </p>
-<h4>• Thời gian</h4>
+<h4 id="thoi-gian">• Thời gian</h4>
 <p>
 Tổ chức hàng năm vào tháng Giêng âm lịch, liên tục từ mùng 9 đến hết ngày rằm tháng Giêng (Tết Nguyên tiêu).<br/>Lễ hội tổ chức hàng năm vào tháng Giêng âm lịch. Chuỗi sự kiện diễn ra liên tục từ mùng 9 đến hết ngày rằm tháng Giêng (Tết Nguyên tiêu).
 </p>
-<h4>• Mục đích</h4>
+<h4 id="muc-dinh">• Mục đích</h4>
 <p>
 Cầu nguyện quốc thái dân an, gia đạo bình an.<br/>Thắt chặt tình đoàn kết giữa các cộng đồng dân cư.<br/>Lan tỏa giá trị nhân văn qua các hoạt động thiện nguyện.<br/>Giáo dục học sinh gìn giữ nét đẹp văn hóa truyền thống.
 </p>
-<h4>• Lịch sử hình thành</h4>
+<h4 id="lich-su-hinh-thanh">• Lịch sử hình thành</h4>
 <p>
 Chùa Bà Bình Dương được xây dựng vào khoảng năm 1883, bởi cộng đồng người Hoa từ Trung Quốc di cư đến. Năm 1993, chùa được công nhận là Di tích Lịch sử - Văn hóa cấp Quốc gia. Lễ hội được hình thành ngay từ khi ngôi miếu ra đời và được nâng tầm quy mô qua từng năm. Ban đầu, lễ hội là dịp tế lễ nội bộ của các hội quán người Hoa. Trải qua thời gian, lễ hội dung hòa sâu sắc với văn hóa Nam Bộ, biến thành ngày hội xuân lớn chung của cả người Việt, người Hoa và du khách thập phương để cầu một năm mưa thuận gió hòa, làm ăn phát đạt.<br/>Chùa Bà Bình Dương được xây dựng vào khoảng năm 1883, bởi cộng đồng người Hoa từ Trung Quốc di cư đến.  Năm 1993, chùa được công nhận là Di tích Lịch sử - Văn hóa cấp Quốc gia càng khẳng định vị thế của một di sản văn hóa quý giá. Lễ hội Chùa Bà Thiên Hậu (thường gọi là lễ hội Chùa Bà Bình Dương) được hình thành ngay từ khi ngôi miếu ra đời và được nâng tầm quy mô qua từng năm. Ban đầu, lễ hội là dịp tế lễ nội bộ của các hội quán người Hoa. Trải qua thời gian, lễ hội dung hòa sâu sắc với văn hóa Nam Bộ, biến thành ngày hội xuân lớn chung của cả người Việt, người Hoa và du khách thập phương để cầu một năm mưa thuận gió hòa, làm ăn phát đạt
 </p>
 <div class="entry-content"><div class="post-frame"><img alt="Rước kiệu Bà tuần du truyền thống. Nguồn : Tổng hợp" src="/images/cbth2.jpg"/><div class="img-ref">Rước kiệu Bà tuần du truyền thống. Nguồn : Tổng hợp</div></div></div>
-<h4>• Các hoạt động chính của lễ hội</h4>
+<h4 id="cac-hoat-dong-chinh">• Các hoạt động chính của lễ hội</h4>
 <p>
 Phần lễ: nghi thức tắm Bà vào đêm mùng 8, dâng hương tạ ơn thần linh và nghi thức rước kiệu Bà tuần du truyền thống.
 </p>
@@ -80,19 +155,19 @@ Phần lễ: nghi thức tắm Bà vào đêm mùng 8, dâng hương tạ ơn th
 Phần hội: Đấu giá đèn lồng thánh hiển, liên hoan diễu hành lân sư rồng quy mô lớn, biểu diễn nghệ thuật đường phố và ẩm thực đường phố: các gian hàng bày bán nhiều món ăn truyền thống của người Việt – Hoa.
 </p>
 <div class="entry-content"><div class="post-frame"><img alt="Người dân dâng hương cầu an. Nguồn : Tổng hợp" src="/images/cbth3.jpg"/><div class="img-ref">Người dân dâng hương cầu an. Nguồn : Tổng hợp</div></div></div>
-<h4>• Ý nghĩa lịch sử và văn hóa Lễ hội Chùa Bà Thiên Hậu TP.HCM</h4>
+<h4 id="y-nghia-lich-su">• Ý nghĩa lịch sử và văn hóa Lễ hội Chùa Bà Thiên Hậu TP.HCM</h4>
 <p>
 Sự kiện bảo tồn di sản văn hóa, nghệ thuật gốm miếu Quảng Đông. Lễ hội minh chứng cho tiến trình giao thoa văn hóa lâu đời giữa người Việt và người Hoa.
 </p>
-<h4>• Đối tượng tôn vinh</h4>
+<h4 id="doi-tuong-ton-vinh">• Đối tượng tôn vinh</h4>
 <p>
 Thiên Hậu Thánh Mẫu (tên thật là Lâm Mặc Nương, sống tại Phúc Kiến, Trung Quốc thế kỷ X) - vị nữ thần có khả năng tiên tri thiên văn, thủy triều, chuyên xuất thần cứu giúp tàu thuyền gặp nạn, được nhân dân suy tôn làm thần bảo hộ biển cả, hộ mệnh cho những chuyến hải hành. Lễ hội cũng vinh danh tính nhân ái của cộng đồng địa phương.<br/>Đối tượng tôn vinh tối cao là Thiên Hậu Thánh Mẫu (tên thật là Lâm Mặc Nương, sống tại Phúc Kiến, Trung Quốc thế kỷ X). Bà là vị nữ thần có khả năng tiên tri thiên văn, thủy triều, chuyên xuất thần cứu giúp tàu thuyền gặp nạn và được nhân dân suy tôn làm thần bảo hộ biển cả, hộ mệnh cho những chuyến hải hành. Lễ hội cũng vinh danh tính nhân ái của cộng đồng địa phương.
 </p>
-<h4>• Không gian và kiến trúc</h4>
+<h4 id="khong-gian-kien-truc">• Không gian và kiến trúc</h4>
 <p>
 Chùa Bà Thiên Hậu được xây theo kiểu kiến trúc chữ "Tam" cổ kính. Toàn bộ công trình gồm ba dãy nhà liền kề với mái ngói âm dương uốn cong vút, phía trước hiên treo hàng nghìn vòng nhang lớn tạo không gian thiêng liêng đặc trưng.<br/>Chùa Bà Thiên Hậu được xây theo kiểu kiến trúc chữ “Tam” cổ kính. Toàn bộ công trình gồm ba dãy nhà liền kề với mái ngói âm dương uốn cong vút, phía trước hiên treo hàng nghìn vòng nhang lớn tạo không gian thiêng liêng đặc trưng.
 </p>
-<h4>• Điểm độc đáo riêng</h4>
+<h4 id="diem-doc-dao-rieng">• Điểm độc đáo riêng</h4>
 <p>
 - Lễ hội của lòng nhân ái: nổi tiếng cả nước với danh hiệu "Lễ hội nghĩa tình" khi người dân tự phát cấp nước uống, đồ ăn nhẹ, phát nhang và vá xe hoàn toàn miễn phí cho du khách thập phương.
 </p>
@@ -106,7 +181,7 @@ Chùa Bà Thiên Hậu được xây theo kiểu kiến trúc chữ "Tam" cổ k
 - Nghi thức đấu giá đèn lồng: Du khách và doanh nghiệp tham gia đấu giá 9 chiếc lồng đèn thánh hiển để cầu lộc làm ăn, Ban tổ chức quyên góp toàn bộ hàng tỷ đồng tiền đấu giá vào quỹ từ thiện cứu trợ xã hội.
 </p>
 <div class="entry-content"><div class="post-frame"><img alt="Hoạt động thiện nguyện phát đồ ăn uống. Nguồn : Tổng hợp" src="/images/cbth4.jpg"/><div class="img-ref">Hoạt động thiện nguyện phát đồ ăn uống. Nguồn : Tổng hợp</div></div></div>
-<h4>• Tư liệu tìm hiểu thêm</h4>
+<h4 id="tu-lieu-tim-hieu-them">• Tư liệu tìm hiểu thêm</h4>
 <h5>• <span style="color: #8b2626 !important;">Video</span></h5>
 <p> - Xem thêm: <a href="https://www.youtube.com/watch?v=4u835ZqB6A0" target="_blank" rel="noopener">https://www.youtube.com/watch?v=4u835ZqB6A0</a></p>
 <p> - Xem thêm: <a href="https://www.youtube.com/watch?v=e9YN7sbCnTk" target="_blank" rel="noopener">https://www.youtube.com/watch?v=e9YN7sbCnTk</a></p>
@@ -439,6 +514,27 @@ Chùa Bà Thiên Hậu được xây theo kiểu kiến trúc chữ "Tam" cổ k
 </main>
 <div class="widget-area col-xs-12 col-sm-4 pull-right" id="secondary">
 <aside class="custom-sidebar">
+
+<!-- MỤC LỤC BÀI VIẾT (OUTLINE) -->
+<div class="table-of-contents-widget">
+  <h3 class="toc-title">MỤC LỤC BÀI VIẾT</h3>
+  <nav class="toc-nav">
+    <ul>
+      <li><a href="#xep-hang-di-tich">• Xếp hạng di tích</a></li>
+      <li><a href="#dia-chi">• Địa chỉ</a></li>
+      <li><a href="#thoi-gian">• Thời gian</a></li>
+      <li><a href="#muc-dinh">• Mục đích</a></li>
+      <li><a href="#lich-su-hinh-thanh">• Lịch sử hình thành</a></li>
+      <li><a href="#cac-hoat-dong-chinh">• Các hoạt động chính</a></li>
+      <li><a href="#y-nghia-lich-su">• Ý nghĩa lịch sử &amp; văn hóa</a></li>
+      <li><a href="#doi-tuong-ton-vinh">• Đối tượng tôn vinh</a></li>
+      <li><a href="#khong-gian-kien-truc">• Không gian &amp; kiến trúc</a></li>
+      <li><a href="#diem-doc-dao-rieng">• Điểm độc đáo riêng</a></li>
+      <li><a href="#tu-lieu-tim-hieu-them">• Tư liệu tìm hiểu thêm</a></li>
+    </ul>
+  </nav>
+</div>
+
 <h3 style="font-weight:bold;color: #8b2626 !important ;">TRẢI NGHIỆM AR</h3>
 <div style="margin-bottom:15px;">
   <button id="arButton" style="background: #e53935; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
