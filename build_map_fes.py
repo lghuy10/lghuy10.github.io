@@ -25,7 +25,7 @@ festivals = [
         "vr": "non"
     },
     {
-        "name": "Lễ hội Nguyên Tiêu",
+        "name": "Lễ hội Tết Nguyên Tiêu",
         "page": "lehoinguyentieu.html",
         "category": "congdonghoa",
         "category_vi": "Lễ hội cộng đồng Hoa",
@@ -36,7 +36,7 @@ festivals = [
         "vr": "non"
     },
     {
-        "name": "Lễ hội Thần Rừng",
+        "name": "Lễ hội Thần Rừng Ốp Yang Vri",
         "page": "lehoithanrung.html",
         "category": "danhocthieuso",
         "category_vi": "Lễ hội dân tộc thiểu số",
@@ -58,7 +58,7 @@ festivals = [
         "vr": "non"
     },
     {
-        "name": "Lễ hội Cúng Thần Lúa",
+        "name": "Lễ hội Cúng Thần Lúa Ốp Yang Va",
         "page": "lehoicungthanlua.html",
         "category": "danhocthieuso",
         "category_vi": "Lễ hội dân tộc thiểu số",
@@ -69,7 +69,7 @@ festivals = [
         "vr": "non"
     },
     {
-        "name": "Lễ hội Mùa Trái Chín Lái Thiêu",
+        "name": "Lễ hội Lái Thiêu Mùa Trái Chín",
         "page": "lehoimuatraichin.html",
         "category": "nongnghiep",
         "category_vi": "Lễ hội nông nghiệp",
@@ -91,7 +91,7 @@ festivals = [
         "vr": "non"
     },
     {
-        "name": "Lễ Hội Nghinh Ông Tam Thắng Vũng Tàu",
+        "name": "Lễ Hội Nghinh Ông Thắng Tam Vũng Tàu",
         "page": "lehoinghinongtamthang.html",
         "category": "venbien",
         "category_vi": "Lễ hội ven biển",
