@@ -2259,10 +2259,11 @@ function setActiveMarker(m) {
 
   }).addTo(map);
 
-  L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
-
-    attribution: '&copy; OpenStreetMap contributors'
-
+  // Bản đồ giao thông Google Maps (Có nhãn tiếng Việt hl=vi)
+  L.tileLayer('https://{s}.google.com/vt/lyrs=m&hl=vi&x={x}&y={y}&z={z}', {
+      maxZoom: 20,
+      subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+      attribution: '&copy; Google Maps'
   }).addTo(map);
 
   const markerCluster = L.markerClusterGroup({
