@@ -3606,6 +3606,8 @@ marker.bindPopup(buildPopupHtml(item), {
     if (changed) savePulsedMap(pulsedMap);
   }
 
+  let __lastBadgeSnapshotKey = null; // (thêm bởi Claude) chống gửi trùng snapshot khi số liệu không đổi
+
   function refreshProgressUI() {
     const total = data.filter(it => it.festId).length;
     const done = countUnlocked();
@@ -3615,11 +3617,36 @@ marker.bindPopup(buildPopupHtml(item), {
     if (barEl) barEl.style.width = (total ? (done / total * 100) : 0) + '%';
 
     const listEl = document.getElementById('badge-panel-list');
+    let docCount = 0, quizCount = 0;
     if (listEl) {
       listEl.innerHTML = data.filter(it => it.festId).map(it => {
         const b = getBadge(it.festId);
+        if (b.doc) docCount++;
+        if (b.quiz) quizCount++;
         return `<div class="badge-row"><span>${escapeHtml ? escapeHtml(it.name) : it.name}</span><span class="badge-icons">${b.doc ? '📖' : '⬜'} ${b.quiz ? '📝' : '⬜'}</span></div>`;
       }).join('');
+    } else {
+      // (thêm bởi Claude) panel chưa render ra DOM lúc này -> vẫn tính docCount/quizCount để gửi snapshot đúng
+      data.filter(it => it.festId).forEach(it => {
+        const b = getBadge(it.festId);
+        if (b.doc) docCount++;
+        if (b.quiz) quizCount++;
+      });
+    }
+
+    // (thêm bởi Claude) Gửi snapshot tiến trình huy hiệu lên analytics — chỉ khi số liệu thực sự đổi
+    // so với lần gửi gần nhất trong phiên xem này, tránh queue bị lặp lại vô ích.
+    if (window.trackEvent) {
+      const snapshotKey = total + '|' + done + '|' + docCount + '|' + quizCount;
+      if (snapshotKey !== __lastBadgeSnapshotKey) {
+        __lastBadgeSnapshotKey = snapshotKey;
+        window.trackEvent('badge_snapshot', {
+          total_festivals: total,
+          unlocked_tiles: done,
+          doc_completed_count: docCount,
+          quiz_completed_count: quizCount
+        });
+      }
     }
 
     if (total && done === total) celebrateFullCompletion();
@@ -4610,6 +4637,7 @@ document.addEventListener('MSFullscreenChange', handleFullscreenChange);
 <script src="/vendor/fancybox/js/jquery.fancybox.js" type="text/javascript"></script>
 
 <script src="/vendor/fancybox/js/custom.fancybox.js" type="text/javascript"></script>
+<script src="/js/tracking.js"></script>
 
 <script>
 (function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(n376l6zw68x77ok2ol1odmbcuipo0e11)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="RWs8Ai0Z5O9j2FbB8NqOc";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
@@ -4901,6 +4929,7 @@ jQuery('.fancybox').fancybox();
     finalized = false;
     document.getElementById('speedrun-overlay').classList.remove('active');
     startWidget();
+    if (window.trackEvent) window.trackEvent('speedrun_join');
   }
 
   function showWelcomeModal() {

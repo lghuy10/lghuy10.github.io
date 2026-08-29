@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 import fetch from "node-fetch";
 import commentsRouter from "./comments.js";
 import speedrunRouter from "./speedrun.js";
+import analyticsRouter from "./analytics.js";
 import http from "http";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -260,6 +261,7 @@ app.post("/ask", async (req, res) => {
 
 app.use("/comments", commentsRouter);
 app.use("/speedrun", speedrunRouter);
+app.use("/analytics", analyticsRouter);
 
 app.get("/", (_req, res) => {
   res.send("Backend is running ✅");
