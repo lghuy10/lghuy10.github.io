@@ -17,11 +17,7 @@
 // Tự động ghi nhận 'page_view' ngay khi file này load, không cần gọi gì thêm.
 
 (function () {
-  var API_BASE =
-    window.ANALYTICS_API_BASE ||
-    (location.hostname === "localhost" || location.hostname === "127.0.0.1"
-      ? "http://localhost:5500"
-      : "https://backend-production-1a0d.up.railway.app");
+  var API_BASE = "https://backend-production-1a0d.up.railway.app";
 
   var SESSION_KEY = "festival_analytics_session_v1"; // định danh người dùng ẩn danh, sống lâu dài
   var QUEUE_KEY = "festival_analytics_queue_v1";      // hàng đợi sự kiện CHƯA gửi
