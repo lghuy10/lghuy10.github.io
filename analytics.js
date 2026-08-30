@@ -16,6 +16,13 @@ import pool from "./db.js";
 const router = express.Router();
 let schemaReady = null;
 
+// (thêm bởi Claude) sendBeacon (tracking.js) gửi body dạng "text/plain" để tránh CORS preflight
+// (xem giải thích chi tiết trong tracking.js). Middleware này đọc riêng loại Content-Type đó thành
+// chuỗi thô -> handler bên dưới JSON.parse lại. Request "application/json" (từ đường fetch dự
+// phòng khi trình duyệt không có sendBeacon) đã được express.json()/bodyParser.json() ở server.js
+// xử lý từ trước, req.body lúc đó đã là object sẵn nên không bị ảnh hưởng.
+router.use(express.text({ type: "text/plain", limit: "1mb" }));
+
 async function ensureSchema() {
   if (schemaReady) return schemaReady;
   schemaReady = (async () => {
@@ -57,7 +64,7 @@ router.post("/track", async (req, res) => {
   const client = await pool.connect();
   try {
     await ensureSchema();
-    const body = req.body || {};
+    const body = typeof req.body === "string" ? JSON.parse(req.body || "{}") : (req.body || {});
     const sessionId = String(body.session_id || "").trim().slice(0, 64);
     const deviceType = cleanDeviceType(body.device_type);
     const events = Array.isArray(body.events) ? body.events : [];
