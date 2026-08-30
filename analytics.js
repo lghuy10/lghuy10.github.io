@@ -111,6 +111,10 @@ router.post("/track", async (req, res) => {
 
 // GET /analytics/summary — số liệu tổng hợp thô (chưa có dashboard UI, dùng để kiểm tra/xây dashboard sau)
 router.get("/summary", async (_req, res) => {
+  // (thêm bởi Claude) Đây là số liệu thống kê ĐỘNG, luôn cần dữ liệu mới nhất mỗi lần gọi —
+  // ép trình duyệt không được lưu cache, tránh tình trạng F5 mãi vẫn thấy số liệu cũ.
+  res.set("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
+  res.set("Pragma", "no-cache");
   try {
     await ensureSchema();
 
