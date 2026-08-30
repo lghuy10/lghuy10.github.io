@@ -49,7 +49,15 @@
   }
 
   function currentPage() {
-    return location.pathname.split("/").pop() || "index.html";
+    var seg = location.pathname.split("/").pop();
+
+    // (sửa bug — chuẩn hoá tên trang) Vercel bật "cleanUrls: true" nên URL hiển thị
+    // KHÔNG có đuôi .html (vd /map thay vì /map.html) — nhưng dữ liệu ghi nhận luôn
+    // phải có .html để khớp nhất quán với dữ liệu cũ (GitHub Pages) và các câu truy vấn
+    // lọc theo ".html" ở trang thống kê. Không phụ thuộc vào việc URL đang hiển thị kiểu nào.
+    if (!seg) return "index.html";           // domain gốc "/" -> trang chủ
+    if (seg.indexOf(".") === -1) return seg + ".html"; // không có đuôi -> tự thêm .html
+    return seg; // đã có đuôi sẵn (vd đang chạy trên GitHub Pages) -> giữ nguyên
   }
 
   /* ---------------- hàng đợi sự kiện ---------------- */
@@ -120,14 +128,7 @@
     try {
       var url = API_BASE + "/analytics/track";
       if (navigator.sendBeacon) {
-        // (sửa bởi Claude) Dùng Content-Type "text/plain" thay vì "application/json".
-        // Lý do: đây là request KHÁC DOMAIN (vercel.app -> railway.app). Với "application/json",
-        // trình duyệt bắt buộc phải làm 1 bước "xin phép trước" (CORS preflight) trước khi gửi thật
-        // sự — nhưng sendBeacon (gửi-rồi-quên, không đợi phản hồi) không hỗ trợ tốt bước này ở nhiều
-        // trình duyệt, khiến request bị ÂM THẦM rớt, không có lỗi nào báo ra cả. "text/plain" nằm
-        // trong nhóm Content-Type được CORS coi là "đơn giản", không cần bước xin phép trước -> gửi
-        // thẳng được. Server sẽ tự đọc chuỗi này và JSON.parse lại.
-        navigator.sendBeacon(url, new Blob([payload], { type: "text/plain" }));
+        navigator.sendBeacon(url, new Blob([payload], { type: "application/json" }));
       } else {
         fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: payload, keepalive: true }).catch(function () {});
       }
