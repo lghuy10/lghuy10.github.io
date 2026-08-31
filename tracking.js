@@ -1,10 +1,10 @@
 // tracking.js — Nhúng file này vào MỌI trang HTML (home-1.html, map.html, quiz.html, lehoi*.html...)
 // bằng <script src="/js/tracking.js"></script>.
 //
-// CƠ CHẾ: khác với việc gửi ngay từng sự kiện, file này GOM tất cả sự kiện của phiên duyệt web
-// (có thể trải dài qua nhiều tab/nhiều trang) vào 1 hàng đợi trong localStorage, và CHỈ GỬI 1 LẦN
-// DUY NHẤT bằng navigator.sendBeacon khi người dùng đóng HẾT các tab đang mở của trang web này —
-// dùng đúng cơ chế "đăng ký tab còn sống" (tab registry + heartbeat) mà speedrun-widget.js đã dùng.
+// CƠ CHẾ: gom sự kiện của phiên duyệt (có thể trải dài nhiều trang trong CÙNG 1 tab) vào 1 hàng
+// đợi trong localStorage, rồi gửi lên server bằng navigator.sendBeacon ngay khi tab đó bị ẩn đi
+// hoặc đóng lại (KHÔNG còn chờ "đóng hết mọi tab" như bản trước — cách đó dễ bị kẹt dữ liệu nếu
+// có tab cũ đóng theo cách trình duyệt không kịp báo).
 //
 // Cách dùng ở các trang khác, sau khi đã load file này:
 //   window.trackEvent('quiz_start', { quizId })
@@ -21,12 +21,7 @@
 
   var SESSION_KEY = "festival_analytics_session_v1"; // định danh người dùng ẩn danh, sống lâu dài
   var QUEUE_KEY = "festival_analytics_queue_v1";      // hàng đợi sự kiện CHƯA gửi
-  var TABS_KEY = "festival_analytics_open_tabs_v1";   // registry các tab đang mở (dùng chung mọi trang)
-  var HEARTBEAT_MS = 5000;
-  var STALE_MS = 120000; // tab bị trình duyệt "bóp nghẹt" khi chạy nền vẫn được coi là còn sống trong 2 phút
-
   var tabId = "tab-" + Date.now() + "-" + Math.random().toString(36).slice(2, 9);
-  var heartbeatInterval = null;
 
   function getSessionId() {
     try {
@@ -85,34 +80,6 @@
   }
   window.trackEvent = trackEvent;
 
-  /* ---------------- registry các tab đang mở (giống speedrun-widget.js) ---------------- */
-
-  function readTabRegistry() {
-    try { return JSON.parse(localStorage.getItem(TABS_KEY)) || {}; } catch (e) { return {}; }
-  }
-  function writeTabRegistry(reg) {
-    try { localStorage.setItem(TABS_KEY, JSON.stringify(reg)); } catch (e) {}
-  }
-  function heartbeat() {
-    var reg = readTabRegistry();
-    var now = Date.now();
-    reg[tabId] = now;
-    Object.keys(reg).forEach(function (id) { if (now - reg[id] > STALE_MS) delete reg[id]; });
-    writeTabRegistry(reg);
-  }
-  function removeSelfFromRegistry() {
-    var reg = readTabRegistry();
-    delete reg[tabId];
-    writeTabRegistry(reg);
-    return reg;
-  }
-  function anyOtherTabAlive(reg) {
-    var now = Date.now();
-    return Object.keys(reg).some(function (id) {
-      return id !== tabId && (now - reg[id]) <= STALE_MS;
-    });
-  }
-
   /* ---------------- gửi hàng đợi lên server (1 lần, khi đóng hết tab) ---------------- */
 
   function flushQueue() {
@@ -138,17 +105,23 @@
   }
 
   function handlePageLeaving() {
-    var reg = removeSelfFromRegistry();
-    if (!anyOtherTabAlive(reg)) flushQueue();
+    // (sửa bug — bỏ cơ chế "chờ đóng hết tab") Trước đây chỉ gửi khi KHÔNG còn tab nào khác
+    // "còn sống" — nhưng nếu có 1 tab cũ bị đóng theo cách trình duyệt không kịp báo (đóng cả
+    // cửa sổ, tắt máy đột ngột, vuốt tắt app...), dấu vết của nó vẫn nằm trong registry tới
+    // STALE_MS (2 phút), khiến tab hiện tại tưởng nhầm "còn tab khác" rồi bỏ qua không gửi gì cả.
+    // Giờ đơn giản hơn: hễ rời trang là gửi luôn dữ liệu của CHÍNH tab đó — mỗi lần chỉ tốn
+    // 1 request rất nhẹ (sendBeacon), không cần chờ đợi hay đoán trạng thái tab khác nữa.
+    flushQueue();
   }
 
   window.addEventListener("pagehide", handlePageLeaving);
   window.addEventListener("beforeunload", handlePageLeaving);
 
-  // nhịp tim ngay lúc tab bị ẩn đi (chuyển tab khác) để registry có mốc thời gian mới nhất
-  // trước khi trình duyệt có thể bóp nghẹt setInterval của tab nền
+  // Gửi luôn dữ liệu ngay lúc tab bị ẩn đi (chuyển tab khác, khóa màn hình điện thoại...) —
+  // đây là thời điểm đáng tin cậy hơn cả "unload" trên nhiều trình duyệt di động, vì
+  // "pagehide"/"beforeunload" đôi khi không kịp chạy khi người dùng tắt hẳn ứng dụng.
   document.addEventListener("visibilitychange", function () {
-    if (document.visibilityState === "hidden") heartbeat();
+    if (document.visibilityState === "hidden") flushQueue();
   });
 
   // lưới an toàn: nếu 1 phiên duyệt web kéo dài rất lâu (nhiều giờ) mà chưa đóng tab nào,
@@ -160,8 +133,6 @@
   }, SAFETY_FLUSH_MS);
 
   function init() {
-    heartbeat();
-    heartbeatInterval = setInterval(heartbeat, HEARTBEAT_MS);
     trackEvent("page_view");
   }
 
