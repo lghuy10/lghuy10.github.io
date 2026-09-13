@@ -16,6 +16,13 @@ import pool from "./db.js";
 const router = express.Router();
 let schemaReady = null;
 
+// (thêm bởi Claude) sendBeacon (tracking.js) gửi body dạng "text/plain" để tránh CORS preflight
+// (xem giải thích chi tiết trong tracking.js). Middleware này đọc riêng loại Content-Type đó thành
+// chuỗi thô -> handler bên dưới JSON.parse lại. Request "application/json" (từ đường fetch dự
+// phòng khi trình duyệt không có sendBeacon) đã được express.json()/bodyParser.json() ở server.js
+// xử lý từ trước, req.body lúc đó đã là object sẵn nên không bị ảnh hưởng.
+router.use(express.text({ type: "text/plain", limit: "1mb" }));
+
 async function ensureSchema() {
   if (schemaReady) return schemaReady;
   schemaReady = (async () => {
@@ -57,7 +64,7 @@ router.post("/track", async (req, res) => {
   const client = await pool.connect();
   try {
     await ensureSchema();
-    const body = req.body || {};
+    const body = typeof req.body === "string" ? JSON.parse(req.body || "{}") : (req.body || {});
     const sessionId = String(body.session_id || "").trim().slice(0, 64);
     const deviceType = cleanDeviceType(body.device_type);
     const events = Array.isArray(body.events) ? body.events : [];
@@ -104,6 +111,10 @@ router.post("/track", async (req, res) => {
 
 // GET /analytics/summary — số liệu tổng hợp thô (chưa có dashboard UI, dùng để kiểm tra/xây dashboard sau)
 router.get("/summary", async (_req, res) => {
+  // (thêm bởi Claude) Đây là số liệu thống kê ĐỘNG, luôn cần dữ liệu mới nhất mỗi lần gọi —
+  // ép trình duyệt không được lưu cache, tránh tình trạng F5 mãi vẫn thấy số liệu cũ.
+  res.set("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
+  res.set("Pragma", "no-cache");
   try {
     await ensureSchema();
 
@@ -163,16 +174,27 @@ router.get("/summary", async (_req, res) => {
     const bs = badgeStats.rows[0];
 
     res.json({
-      unique_visitors: uniqueVisitors.rows[0].n,
-      top_pages: topPages.rows,
-      top_articles: topArticles.rows,
-      device_breakdown: deviceBreakdown.rows,
-      map_open_rate_pct: pct(mapPageSessions.rows[0].n),
-      badge_total_doc: bs.total_doc_badges,
-      badge_total_quiz: bs.total_quiz_badges,
-      tile_revealed_rate_pct: pct(bs.sessions_with_at_least_1_tile),
-      all_quizzes_complete_rate_pct: pct(bs.sessions_all_quizzes_done),
-      speedrun_join_rate_pct: pct(speedrunJoinSessions.rows[0].n),
+      "Tổng số người truy cập (unique visitors)": uniqueVisitors.rows[0].n,
+
+      "Trang được xem nhiều nhất": topPages.rows.map(r => ({ trang: r.page, luot_xem: r.views })),
+      "Bài viết (lehoi*.html) được đọc nhiều nhất": topArticles.rows.map(r => ({ bai_viet: r.page, luot_doc: r.views })),
+
+      "Thiết bị truy cập": deviceBreakdown.rows.map(r => ({
+        loai_thiet_bi: r.device_type,
+        so_nguoi: r.n,
+        phan_tram: total > 0 ? Math.round((r.n / total) * 1000) / 10 : 0
+      })),
+
+      "% người đã bấm vào trang Bản đồ": pct(mapPageSessions.rows[0].n),
+
+      "Tổng huy hiệu Tài liệu (📖) đã cấp": bs.total_doc_badges,
+      "Tổng huy hiệu Quiz (📝) đã cấp": bs.total_quiz_badges,
+
+      "Số người khai phá được ít nhất 1 mảnh bản đồ": bs.sessions_with_at_least_1_tile,
+      "Số người chơi hết toàn bộ quiz": bs.sessions_all_quizzes_done,
+      "Số người tham gia chế độ Đấu hạng (Speedrun)": speedrunJoinSessions.rows[0].n,
+
+      "_ghi_chu": "Các số % được tính trên tổng " + total + " người truy cập đã ghi nhận được."
     });
   } catch (err) {
     console.error("[analytics] GET /summary error:", err);
