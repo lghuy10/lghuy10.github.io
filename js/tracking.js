@@ -1,10 +1,10 @@
 // tracking.js — Nhúng file này vào MỌI trang HTML (home-1.html, map.html, quiz.html, lehoi*.html...)
 // bằng <script src="/js/tracking.js"></script>.
 //
-// CƠ CHẾ: khác với việc gửi ngay từng sự kiện, file này GOM tất cả sự kiện của phiên duyệt web
-// (có thể trải dài qua nhiều tab/nhiều trang) vào 1 hàng đợi trong localStorage, và CHỈ GỬI 1 LẦN
-// DUY NHẤT bằng navigator.sendBeacon khi người dùng đóng HẾT các tab đang mở của trang web này —
-// dùng đúng cơ chế "đăng ký tab còn sống" (tab registry + heartbeat) mà speedrun-widget.js đã dùng.
+// CƠ CHẾ: gom sự kiện của phiên duyệt (có thể trải dài nhiều trang trong CÙNG 1 tab) vào 1 hàng
+// đợi trong localStorage, rồi gửi lên server bằng navigator.sendBeacon ngay khi tab đó bị ẩn đi
+// hoặc đóng lại (KHÔNG còn chờ "đóng hết mọi tab" như bản cũ — cách đó dễ bị kẹt dữ liệu nếu có
+// tab cũ đóng theo cách trình duyệt không kịp báo, khiến các tab khác tưởng nhầm "còn tab sống").
 //
 // Cách dùng ở các trang khác, sau khi đã load file này:
 //   window.trackEvent('quiz_start', { quizId })
@@ -21,12 +21,6 @@
 
   var SESSION_KEY = "festival_analytics_session_v1"; // định danh người dùng ẩn danh, sống lâu dài
   var QUEUE_KEY = "festival_analytics_queue_v1";      // hàng đợi sự kiện CHƯA gửi
-  var TABS_KEY = "festival_analytics_open_tabs_v1";   // registry các tab đang mở (dùng chung mọi trang)
-  var HEARTBEAT_MS = 5000;
-  var STALE_MS = 120000; // tab bị trình duyệt "bóp nghẹt" khi chạy nền vẫn được coi là còn sống trong 2 phút
-
-  var tabId = "tab-" + Date.now() + "-" + Math.random().toString(36).slice(2, 9);
-  var heartbeatInterval = null;
 
   function getSessionId() {
     try {
@@ -49,7 +43,15 @@
   }
 
   function currentPage() {
-    return location.pathname.split("/").pop() || "index.html";
+    var seg = location.pathname.split("/").pop();
+
+    // (sửa bug — chuẩn hoá tên trang) Vercel bật "cleanUrls: true" nên URL hiển thị
+    // KHÔNG có đuôi .html (vd /map thay vì /map.html) — nhưng dữ liệu ghi nhận luôn
+    // phải có .html để khớp nhất quán, tránh 1 trang bị tách thành 2 tên khác nhau
+    // trong thống kê ("map" và "map.html"). Không phụ thuộc URL đang hiển thị kiểu nào.
+    if (!seg) return "index.html";                      // domain gốc "/" -> trang chủ
+    if (seg.indexOf(".") === -1) return seg + ".html";  // không có đuôi -> tự thêm .html
+    return seg;                                          // đã có đuôi sẵn -> giữ nguyên
   }
 
   /* ---------------- hàng đợi sự kiện ---------------- */
@@ -77,35 +79,7 @@
   }
   window.trackEvent = trackEvent;
 
-  /* ---------------- registry các tab đang mở (giống speedrun-widget.js) ---------------- */
-
-  function readTabRegistry() {
-    try { return JSON.parse(localStorage.getItem(TABS_KEY)) || {}; } catch (e) { return {}; }
-  }
-  function writeTabRegistry(reg) {
-    try { localStorage.setItem(TABS_KEY, JSON.stringify(reg)); } catch (e) {}
-  }
-  function heartbeat() {
-    var reg = readTabRegistry();
-    var now = Date.now();
-    reg[tabId] = now;
-    Object.keys(reg).forEach(function (id) { if (now - reg[id] > STALE_MS) delete reg[id]; });
-    writeTabRegistry(reg);
-  }
-  function removeSelfFromRegistry() {
-    var reg = readTabRegistry();
-    delete reg[tabId];
-    writeTabRegistry(reg);
-    return reg;
-  }
-  function anyOtherTabAlive(reg) {
-    var now = Date.now();
-    return Object.keys(reg).some(function (id) {
-      return id !== tabId && (now - reg[id]) <= STALE_MS;
-    });
-  }
-
-  /* ---------------- gửi hàng đợi lên server (1 lần, khi đóng hết tab) ---------------- */
+  /* ---------------- gửi hàng đợi lên server ---------------- */
 
   function flushQueue() {
     var q = readQueue();
@@ -120,7 +94,15 @@
     try {
       var url = API_BASE + "/analytics/track";
       if (navigator.sendBeacon) {
-        navigator.sendBeacon(url, new Blob([payload], { type: "application/json" }));
+        // (vá lại — ĐỪNG đổi về "application/json") Đây là request KHÁC DOMAIN
+        // (vercel.app -> railway.app). Với "application/json", trình duyệt bắt buộc phải
+        // làm 1 bước "xin phép trước" (CORS preflight) trước khi gửi thật sự — nhưng
+        // sendBeacon (gửi-rồi-quên, không đợi phản hồi) không hỗ trợ tốt bước này ở nhiều
+        // trình duyệt, khiến request bị ÂM THẦM rớt, không có lỗi nào báo ra cả.
+        // "text/plain" nằm trong nhóm Content-Type "đơn giản" của CORS, không cần bước xin
+        // phép trước -> gửi thẳng được. Server (analytics.js) tự đọc chuỗi này rồi JSON.parse
+        // lại — xem router.use(express.text(...)) bên đó.
+        navigator.sendBeacon(url, new Blob([payload], { type: "text/plain" }));
       } else {
         fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: payload, keepalive: true }).catch(function () {});
       }
@@ -130,20 +112,22 @@
   }
 
   function handlePageLeaving() {
-    var reg = removeSelfFromRegistry();
-    if (!anyOtherTabAlive(reg)) flushQueue();
+    // Hễ rời trang (ẩn tab / đóng tab / chuyển trang) là gửi luôn dữ liệu của CHÍNH tab đó —
+    // không cần chờ đợi hay đoán trạng thái các tab khác. Mỗi lần chỉ tốn 1 request rất nhẹ.
+    flushQueue();
   }
 
   window.addEventListener("pagehide", handlePageLeaving);
   window.addEventListener("beforeunload", handlePageLeaving);
 
-  // nhịp tim ngay lúc tab bị ẩn đi (chuyển tab khác) để registry có mốc thời gian mới nhất
-  // trước khi trình duyệt có thể bóp nghẹt setInterval của tab nền
+  // Gửi luôn dữ liệu ngay lúc tab bị ẩn đi (chuyển tab khác, khóa màn hình điện thoại...) —
+  // đây là thời điểm đáng tin cậy hơn cả "unload" trên nhiều trình duyệt di động, vì
+  // "pagehide"/"beforeunload" đôi khi không kịp chạy khi người dùng tắt hẳn ứng dụng.
   document.addEventListener("visibilitychange", function () {
-    if (document.visibilityState === "hidden") heartbeat();
+    if (document.visibilityState === "hidden") flushQueue();
   });
 
-  // lưới an toàn: nếu 1 phiên duyệt web kéo dài rất lâu (nhiều giờ) mà chưa đóng tab nào,
+  // lưới an toàn: nếu 1 phiên duyệt web kéo dài rất lâu (nhiều giờ) mà chưa ẩn/đóng tab lần nào,
   // vẫn gửi định kỳ để giảm rủi ro mất dữ liệu nếu trình duyệt bị tắt đột ngột (crash, mất điện...)
   var SAFETY_FLUSH_MS = 10 * 60 * 1000; // 10 phút
   setInterval(function () {
@@ -152,8 +136,6 @@
   }, SAFETY_FLUSH_MS);
 
   function init() {
-    heartbeat();
-    heartbeatInterval = setInterval(heartbeat, HEARTBEAT_MS);
     trackEvent("page_view");
   }
 

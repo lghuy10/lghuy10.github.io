@@ -2,8 +2,10 @@
 // Cùng phong cách với speedrun.js: tự tạo bảng nếu chưa có (ensureSchema), dùng chung pool Postgres.
 //
 // CƠ CHẾ GỬI: trình duyệt (tracking.js) KHÔNG gửi từng sự kiện riêng lẻ ngay lúc xảy ra. Nó gom
-// lại thành 1 hàng đợi và chỉ gửi 1 LẦN DUY NHẤT (bằng sendBeacon) khi người dùng đóng hết tất cả
-// các tab liên quan đến web — nên POST /analytics/track nhận 1 MẢNG "events".
+// lại thành 1 hàng đợi và gửi lên bằng sendBeacon ngay khi 1 tab bị ẩn đi hoặc đóng lại (mỗi tab
+// tự gửi phần của mình khi rời trang, KHÔNG còn chờ "đóng hết mọi tab" như thiết kế ban đầu — cách
+// đó dễ bị kẹt dữ liệu nếu có tab cũ đóng theo cách trình duyệt không kịp báo) — nên POST
+// /analytics/track nhận 1 MẢNG "events" mỗi lần gọi, có thể được gọi nhiều lần trong 1 phiên duyệt.
 //
 // CƠ CHẾ HUY HIỆU: không lấy dữ liệu trực tiếp từ quiz.html/lehoi*.html. Mỗi khi map.html dựng lại
 // bảng tiến trình (badge-panel), nó gửi 1 "snapshot" toàn bộ trạng thái huy hiệu hiện tại (đọc từ
@@ -58,7 +60,7 @@ function cleanDeviceType(d) {
   return ["desktop", "mobile", "tablet"].includes(v) ? v : "unknown";
 }
 
-// POST /analytics/track — nhận 1 LÔ sự kiện, gom từ lúc mở web tới lúc đóng hết tab
+// POST /analytics/track — nhận 1 LÔ sự kiện (mỗi lần 1 tab bị ẩn/đóng lại gửi 1 lô của riêng nó)
 // Body: { session_id, device_type, events: [{ event_type, page, data, ts }, ...] }
 router.post("/track", async (req, res) => {
   const client = await pool.connect();
