@@ -149,4 +149,73 @@ router.get("/classes/top", async (req, res) => {
   }
 });
 
+// GET /speedrun/full — dữ liệu ĐẦY ĐỦ cho trang "Xem bảng xếp hạng đầy đủ":
+//   - individuals: TOÀN BỘ người chơi (không giới hạn), xếp hạng toàn trường
+//   - classes: TOÀN BỘ nhóm/lớp, mỗi nhóm kèm sẵn danh sách thành viên đã xếp hạng
+//     RIÊNG TRONG NHÓM đó (rank_in_class) — dùng RANK() OVER PARTITION BY để tính hạng
+//     ngay trong SQL, cùng tiêu chí với /top: huy hiệu giảm dần rồi thời gian tăng dần.
+router.get("/full", async (req, res) => {
+  try {
+    await ensureSchema();
+
+    const [classSummary, memberRows, individualsResult] = await Promise.all([
+      pool.query(`
+        SELECT
+          class_group_key,
+          (array_agg(class_name ORDER BY updated_at DESC))[1] AS class_name,
+          SUM(badge_count)::int AS total_badges,
+          SUM(time_seconds)::int AS total_time_seconds,
+          COUNT(*)::int AS participant_count
+        FROM speedrun_results
+        GROUP BY class_group_key
+        ORDER BY total_badges DESC, total_time_seconds ASC
+      `),
+      pool.query(`
+        SELECT
+          class_group_key, name, badge_count, progress_count, time_seconds, updated_at,
+          RANK() OVER (
+            PARTITION BY class_group_key
+            ORDER BY badge_count DESC, time_seconds ASC
+          ) AS rank_in_class
+        FROM speedrun_results
+        ORDER BY class_group_key, rank_in_class
+      `),
+      pool.query(`
+        SELECT name, class_name, badge_count, progress_count, time_seconds, updated_at
+        FROM speedrun_results
+        ORDER BY badge_count DESC, time_seconds ASC
+      `),
+    ]);
+
+    // Gom thành viên theo từng nhóm (class_group_key) để gắn vào đúng nhóm bên dưới
+    const membersByClass = {};
+    for (const m of memberRows.rows) {
+      if (!membersByClass[m.class_group_key]) membersByClass[m.class_group_key] = [];
+      membersByClass[m.class_group_key].push({
+        name: m.name,
+        badge_count: m.badge_count,
+        progress_count: m.progress_count,
+        time_seconds: m.time_seconds,
+        rank_in_class: m.rank_in_class,
+      });
+    }
+
+    const classes = classSummary.rows.map((c) => ({
+      class_name: c.class_name,
+      total_badges: c.total_badges,
+      total_time_seconds: c.total_time_seconds,
+      participant_count: c.participant_count,
+      members: membersByClass[c.class_group_key] || [],
+    }));
+
+    res.json({
+      individuals: individualsResult.rows,
+      classes,
+    });
+  } catch (err) {
+    console.error("[speedrun] GET /full error:", err);
+    res.status(500).json({ error: "Database error" });
+  }
+});
+
 export default router;

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Bảng xếp hạng đầy đủ — Đấu hạng Speedrun</title>
+<link rel="icon" type="image/png" href="./images/favicon.png?">
+<link href="/css/global.css" rel="stylesheet"/>
+<link href="/css/font-awesome.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap" rel="stylesheet"/>
+<style>
+  body { background: #fdf6ec; font-family: 'Be Vietnam Pro', 'Montserrat', sans-serif; margin: 0; color: #2f2f2f; }
+
+  .lb-topbar { background: #fff; border-bottom: 1.5px solid #f1ece2; box-shadow: 3px 3px 0px var(--color-indigo, #6b4226); }
+  .lb-topbar-inner { max-width: 1000px; margin: 0 auto; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; }
+  .lb-back { color: #8b2626; font-weight: 700; text-decoration: none; font-size: 14px; display: inline-flex; align-items: center; gap: 6px; }
+  .lb-back:hover { text-decoration: underline; }
+  .lb-topbar-title { font-weight: 900; font-size: 15px; color: #2f2f2f; }
+
+  .lb-wrap { max-width: 1000px; margin: 0 auto; padding: 40px 20px 70px; }
+  .lb-maintitle { text-align: center; font-size: 28px; font-weight: 900; color: #8b2626; margin: 0 0 6px; }
+  .lb-mainsubtitle { text-align: center; color: #888; font-size: 14.5px; margin: 0 0 40px; }
+
+  .lb-section { margin-bottom: 44px; }
+  .lb-section-title { font-size: 18px; font-weight: 800; color: #8b2626; margin: 0 0 4px; display: flex; align-items: center; gap: 8px; }
+  .lb-section-subtitle { color: #999; font-size: 13px; margin: 0 0 14px; }
+
+  .lb-card { background: #fff; border-radius: 14px; box-shadow: 4px 4px 0px var(--color-indigo, #6b4226); overflow: hidden; }
+
+  /* --- bảng cá nhân --- */
+  .lb-row { display: grid; grid-template-columns: 48px 1fr 90px 100px 90px; align-items: center; gap: 8px; padding: 13px 18px; border-bottom: 1px solid #f1ece2; }
+  .lb-row:last-child { border-bottom: none; }
+  .lb-row.lb-header { background: #fbeee0; font-size: 11px; text-transform: uppercase; letter-spacing: .4px; color: #a06b3f; font-weight: 800; }
+  .lb-rank { font-weight: 900; font-size: 16px; text-align: center; color: #8b2626; }
+  .lb-rank.rank-1 { color: #d4af37; font-size: 20px; }
+  .lb-rank.rank-2 { color: #9c9c9c; font-size: 19px; }
+  .lb-rank.rank-3 { color: #b06a3a; font-size: 18px; }
+  .lb-name { font-weight: 700; font-size: 13.5px; }
+  .lb-class { font-size: 12px; color: #999; font-weight: 500; }
+  .lb-badges, .lb-time, .lb-progress, .lb-participants { text-align: center; font-size: 12.5px; font-weight: 700; color: #333; }
+  .lb-empty { text-align: center; padding: 30px 18px; color: #999; font-size: 13.5px; }
+
+  /* --- bảng nhóm (bấm mở rộng) --- */
+  .lb-class-row { display: grid; grid-template-columns: 48px 1fr 100px 100px 28px; align-items: center; gap: 8px; padding: 14px 18px; cursor: pointer; border-bottom: 1px solid #f1ece2; user-select: none; transition: background .12s; }
+  .lb-class-row:hover { background: #fef9f1; }
+  .lb-class-row .lb-chevron { text-align: center; color: #b06a3a; font-size: 13px; transition: transform .18s; }
+  .lb-class-row.open .lb-chevron { transform: rotate(90deg); }
+  .lb-class-block:last-child .lb-class-row { border-bottom: none; }
+  .lb-class-block.open .lb-class-row { border-bottom: 1px solid #f1ece2; }
+
+  .lb-members { display: none; background: #fdf9f2; padding: 4px 18px 14px 66px; }
+  .lb-class-block.open .lb-members { display: block; }
+  .lb-member-row { display: grid; grid-template-columns: 34px 1fr 80px 90px 80px; align-items: center; gap: 8px; padding: 8px 4px; font-size: 12.5px; border-bottom: 1px dashed #efe4d3; }
+  .lb-member-row:last-child { border-bottom: none; }
+  .lb-member-rank { font-weight: 800; color: #8b2626; text-align: center; }
+  .lb-member-rank.rank-1 { color: #d4af37; }
+  .lb-member-rank.rank-2 { color: #9c9c9c; }
+  .lb-member-rank.rank-3 { color: #b06a3a; }
+  .lb-member-name { font-weight: 600; color: #2f2f2f; }
+
+  @media (max-width: 640px) {
+    .lb-row { grid-template-columns: 34px 1fr 60px; grid-template-areas: "rank name badges" "rank class time"; row-gap: 3px; }
+    .lb-row.lb-header { display: none; }
+    .lb-progress { display: none; }
+    .lb-rank { grid-area: rank; }
+    .lb-name { grid-area: name; }
+    .lb-class { grid-area: class; text-align: left; }
+    .lb-badges { grid-area: badges; }
+    .lb-time { grid-area: time; text-align: right; font-size: 11.5px; color: #888; font-weight: 500; }
+
+    .lb-class-row { grid-template-columns: 34px 1fr 60px 22px; }
+    .lb-participants { display: none; }
+    .lb-members { padding-left: 18px; }
+    .lb-member-row { grid-template-columns: 26px 1fr 56px; grid-template-areas: "rank name badges" "rank name2 time"; row-gap: 2px; }
+    .lb-member-rank { grid-area: rank; }
+    .lb-member-name { grid-area: name; }
+    .lb-member-progress { display: none; }
+    .lb-member-time { grid-area: time; text-align: right; color: #888; font-weight: 500; }
+  }
+</style>
+</head>
+<body>
+
+<div class="lb-topbar">
+  <div class="lb-topbar-inner">
+    <a class="lb-back" href="/home-1.html">← Quay lại trang chủ</a>
+    <span class="lb-topbar-title">🏆 Bảng xếp hạng đầy đủ</span>
+  </div>
+</div>
+
+<div class="lb-wrap">
+  <h1 class="lb-maintitle">Đấu hạng — Speedrun</h1>
+  <p class="lb-mainsubtitle">Toàn bộ kết quả, không giới hạn — cá nhân và từng thành viên trong mỗi nhóm</p>
+
+  <div class="lb-section">
+    <h2 class="lb-section-title">👤 Cá nhân — toàn bộ</h2>
+    <p class="lb-section-subtitle">Ưu tiên số huy hiệu, sau đó thời gian hoàn thành</p>
+    <div class="lb-card">
+      <div class="lb-row lb-header">
+        <div>#</div><div>Người chơi</div><div>Huy hiệu</div><div>Tiến trình</div><div>Thời gian</div>
+      </div>
+      <div id="lb-individuals">
+        <div class="lb-empty">Đang tải...</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="lb-section">
+    <h2 class="lb-section-title">🏫 Nhóm — toàn bộ</h2>
+    <p class="lb-section-subtitle">Bấm vào 1 nhóm để xem toàn bộ thành viên và thứ hạng trong nhóm đó</p>
+    <div class="lb-card" id="lb-classes">
+      <div class="lb-empty">Đang tải...</div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var SPEEDRUN_API = 'https://backend-production-1a0d.up.railway.app/speedrun';
+
+  function fmtTime(sec) {
+    sec = Math.max(0, Math.round(sec || 0));
+    var h = Math.floor(sec / 3600);
+    var m = String(Math.floor((sec % 3600) / 60)).padStart(2, '0');
+    var s = String(sec % 60).padStart(2, '0');
+    return h > 0 ? (h + ':' + m + ':' + s) : (m + ':' + s);
+  }
+
+  function escapeHtml(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (ch) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch];
+    });
+  }
+
+  // Huy chương cho hạng 1-3, còn lại hiện số thứ tự bình thường
+  function medalOrRank(rank) {
+    if (rank === 1) return '🥇';
+    if (rank === 2) return '🥈';
+    if (rank === 3) return '🥉';
+    return String(rank);
+  }
+  function rankClass(rank) {
+    if (rank === 1) return 'rank-1';
+    if (rank === 2) return 'rank-2';
+    if (rank === 3) return 'rank-3';
+    return '';
+  }
+
+  function renderIndividuals(rows) {
+    var el = document.getElementById('lb-individuals');
+    if (!Array.isArray(rows) || rows.length === 0) {
+      el.innerHTML = '<div class="lb-empty">Chưa có ai hoàn thành lượt Speedrun nào.</div>';
+      return;
+    }
+    el.innerHTML = rows.map(function (r, i) {
+      var rank = i + 1;
+      return (
+        '<div class="lb-row">' +
+          '<div class="lb-rank ' + rankClass(rank) + '">' + medalOrRank(rank) + '</div>' +
+          '<div>' +
+            '<div class="lb-name">' + escapeHtml(r.name) + '</div>' +
+            '<div class="lb-class">Nhóm ' + escapeHtml(r.class_name) + '</div>' +
+          '</div>' +
+          '<div class="lb-badges">🎖️ ' + r.badge_count + '/20</div>' +
+          '<div class="lb-progress">🧩 ' + r.progress_count + '/10</div>' +
+          '<div class="lb-time">⏱️ ' + fmtTime(r.time_seconds) + '</div>' +
+        '</div>'
+      );
+    }).join('');
+  }
+
+  function renderMembers(members) {
+    if (!Array.isArray(members) || members.length === 0) {
+      return '<div class="lb-empty" style="padding:14px 4px;">Chưa có thành viên nào.</div>';
+    }
+    return members.map(function (m) {
+      var rank = m.rank_in_class;
+      return (
+        '<div class="lb-member-row">' +
+          '<div class="lb-member-rank ' + rankClass(rank) + '">' + medalOrRank(rank) + '</div>' +
+          '<div class="lb-member-name">' + escapeHtml(m.name) + '</div>' +
+          '<div class="lb-member-badges">🎖️ ' + m.badge_count + '/20</div>' +
+          '<div class="lb-member-progress">🧩 ' + m.progress_count + '/10</div>' +
+          '<div class="lb-member-time">⏱️ ' + fmtTime(m.time_seconds) + '</div>' +
+        '</div>'
+      );
+    }).join('');
+  }
+
+  function renderClasses(classes) {
+    var el = document.getElementById('lb-classes');
+    if (!Array.isArray(classes) || classes.length === 0) {
+      el.innerHTML = '<div class="lb-empty">Chưa có nhóm nào tham gia.</div>';
+      return;
+    }
+    el.innerHTML = classes.map(function (c, i) {
+      var rank = i + 1;
+      return (
+        '<div class="lb-class-block">' +
+          '<div class="lb-class-row">' +
+            '<div class="lb-rank ' + rankClass(rank) + '">' + medalOrRank(rank) + '</div>' +
+            '<div>' +
+              '<div class="lb-name">Nhóm ' + escapeHtml(c.class_name) + '</div>' +
+              '<div class="lb-participants" style="text-align:left; color:#999; font-weight:500;">' + c.participant_count + ' bạn tham gia</div>' +
+            '</div>' +
+            '<div class="lb-badges">🎖️ ' + c.total_badges + '</div>' +
+            '<div class="lb-time">⏱️ ' + fmtTime(c.total_time_seconds) + '</div>' +
+            '<div class="lb-chevron">▶</div>' +
+          '</div>' +
+          '<div class="lb-members">' + renderMembers(c.members) + '</div>' +
+        '</div>'
+      );
+    }).join('');
+
+    // Bấm vào 1 dòng nhóm -> mở/đóng danh sách thành viên của đúng nhóm đó
+    Array.prototype.forEach.call(el.querySelectorAll('.lb-class-row'), function (row) {
+      row.addEventListener('click', function () {
+        var block = row.closest('.lb-class-block');
+        block.classList.toggle('open');
+        row.classList.toggle('open');
+      });
+    });
+  }
+
+  fetch(SPEEDRUN_API + '/full')
+    .then(function (res) { return res.json(); })
+    .then(function (data) {
+      renderIndividuals(data.individuals);
+      renderClasses(data.classes);
+    })
+    .catch(function (err) {
+      console.warn('[leaderboard-full] load failed', err);
+      document.getElementById('lb-individuals').innerHTML = '<div class="lb-empty">Không tải được bảng xếp hạng lúc này.</div>';
+      document.getElementById('lb-classes').innerHTML = '<div class="lb-empty">Không tải được bảng xếp hạng lúc này.</div>';
+    });
+})();
+</script>
+
+</body>
+</html>

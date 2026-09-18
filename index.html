@@ -399,6 +399,8 @@
   .speedrun-lb-cta { text-align: center; margin-top: 24px; }
   .speedrun-lb-cta a { display: inline-block; background: #8b2626; color: #fff !important; font-weight: 800; padding: 13px 32px; border-radius: 30px; text-decoration: none; box-shadow: 3px 3px 0px var(--color-indigo); transition: transform .15s; }
   .speedrun-lb-cta a:hover { transform: translateY(-2px); }
+  .speedrun-lb-cta-secondary { display: inline-block; margin-left: 12px; background: #fff !important; color: #8b2626 !important; border: 2px solid #8b2626; font-weight: 800; padding: 11px 30px; border-radius: 30px; text-decoration: none; transition: transform .15s, background .15s; }
+  .speedrun-lb-cta-secondary:hover { transform: translateY(-2px); background: #fff3f1 !important; }
   @media (max-width: 640px) {
     .speedrun-lb-row { grid-template-columns: 32px 1fr 56px; grid-template-areas: "rank name badges" "rank class time"; row-gap: 2px; }
     .speedrun-lb-row.speedrun-lb-row-class { grid-template-columns: 32px 1fr 56px; grid-template-areas: "rank name badges" "rank name2 time"; }
@@ -444,6 +446,7 @@
 </div>
 <div class="speedrun-lb-cta">
 <a href="/map.html?mode=speedrun">⚡ Thử ngay</a>
+<a class="speedrun-lb-cta-secondary" href="/leaderboard-full.html">📋 Xem bảng đầy đủ</a>
 </div>
 </div>
 </section>
